@@ -12,7 +12,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("SplashScreen.fxml"));
 			primaryStage.setScene(new Scene(root));
 	        primaryStage.setResizable(false);
 	        primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("logoLogin.png")));

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="101.0" prefWidth="277.0" style="-fx-background-color: #218E58;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SplashController">
+   <effect>
+      <DropShadow color="#1b1eeb" />
+   </effect>
+   <children>
+      <VBox alignment="CENTER" prefHeight="103.0" prefWidth="279.0">
+         <children>
+            <Label text="CARGANDO" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <ProgressBar id="progressBar" fx:id="progressBar" prefHeight="32.0" prefWidth="242.0" progress="0.0" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

@@ -6,16 +6,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
-import java.util.ResourceBundle;
 
 import org.json.JSONObject;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -51,10 +48,10 @@ public class LoginController{
     //URL
 	private static final String POST_URL = "http://127.0.0.1:4040/auth/signIn";
 
-    
+    public static String token;
     
     @FXML
-    public void handleButtonAction(MouseEvent event) throws IOException {
+    public void handleButtonAction(MouseEvent event) throws IOException, InterruptedException {
     	
     	jsonReq=getCredentials();
     	System.out.println(jsonReq.toString());
@@ -85,7 +82,7 @@ public class LoginController{
     	
     }
 
-    private void Login(HttpURLConnection con,MouseEvent event) throws UnsupportedEncodingException, IOException {
+    private void Login(HttpURLConnection con,MouseEvent event) throws UnsupportedEncodingException, IOException, InterruptedException {
     	BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
         StringBuilder response=new StringBuilder();
         String resline=null;
@@ -93,18 +90,10 @@ public class LoginController{
         	response.append(resline.toString().trim());
         }
         String[] arrRes=response.toString().split("\"",5);
-        System.out.println(arrRes[3]);
+        token=arrRes[3];
         try {
-
             //add you loading or delays - ;-)
-            Node node = (Node) event.getSource();
-            Stage stage = (Stage) node.getScene().getWindow();
-            //stage.setMaximized(true);
-            stage.close();
-            Scene scene = new Scene(FXMLLoader.load(getClass().getResource("Sample.fxml")));
-            stage.setScene(scene);
-            stage.show();
-
+            changeStage(event);
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
         }
@@ -122,7 +111,16 @@ public class LoginController{
     	return json;
     }
     	
-    	
+    private void changeStage(MouseEvent event) throws IOException {
+    	Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        //stage.setMaximized(true);
+        stage.close();
+        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("SplashScreen.fxml")));
+        stage.setScene(scene);
+        stage.show();
+    }
+    
     private void setLblError(Color color, String text) {
         lblErrors.setTextFill(color);
         lblErrors.setText(text);
@@ -144,6 +142,10 @@ public class LoginController{
     	Stage stage=(Stage)btnMinizeWindow.getScene().getWindow();
     	stage.setIconified(true);
     }
-	
-	
+
+    public String getoken() {
+    	return token;
+    }
+    
+    
 }

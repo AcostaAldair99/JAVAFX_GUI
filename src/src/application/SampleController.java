@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SampleController implements Initializable{
+	private String token;
 	
 	@FXML
     private VBox pnItems = null;
@@ -60,11 +61,10 @@ public class SampleController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Node[] nodes = new Node[10];
-        for (int i = 0; i < nodes.length; i++) {
-            try {
-
-                final int j = i;
+    	LoginController swe=new LoginController();
+    	token=swe.getoken();
+    	System.out.println("This is from Sample Controller: \n"+token);
+        /* final int j = i;
                 nodes[i] = FXMLLoader.load(getClass().getResource("Item.fxml"));
 
                 //give the items some effect
@@ -79,7 +79,7 @@ public class SampleController implements Initializable{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
     }
 
