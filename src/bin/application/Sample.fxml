@@ -51,7 +51,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="btnActas" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="ACTAS">
+                  <Button fx:id="btnActas" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="AGREGAR ACTAS">
                      <padding>
                         <Insets left="50.0" />
                      </padding>
@@ -147,25 +147,136 @@
             </VBox>
             <StackPane fx:id="paneMain" prefHeight="576.0" prefWidth="874.0">
                <children>
-                  <Pane fx:id="actasPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: red;">
+                  <Pane fx:id="actasPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                      <children>
-                        <Label text="ACTAS" />
+                        <VBox prefHeight="576.0" prefWidth="874.0">
+                           <children>
+                              <Pane prefHeight="88.0" prefWidth="874.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="24.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="AGREGAR ACTA">
+                                       <font>
+                                          <Font size="26.0" />
+                                       </font>
+                                    </Label>
+                                    <Button fx:id="btnMinizeWindow111" layoutX="835.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@styles/loginStyle.css" text="-">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="491.0" prefWidth="874.0">
+                                 <children>
+                                    <VBox layoutX="14.0" prefHeight="489.0" prefWidth="414.0">
+                                       <children>
+                                          <TextField prefHeight="25.0" prefWidth="723.0" promptText="Nombre del Alumno">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <VBox.margin>
+                                                <Insets bottom="20.0" top="20.0" />
+                                             </VBox.margin>
+                                          </TextField>
+                                          <TextField layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="723.0" promptText="Matricula del Alumno">
+                                             <VBox.margin>
+                                                <Insets bottom="20.0" top="20.0" />
+                                             </VBox.margin>
+                                          </TextField>
+                                          <TextField layoutX="10.0" layoutY="35.0" prefHeight="25.0" prefWidth="723.0" promptText="Carrera del Alumno">
+                                             <VBox.margin>
+                                                <Insets bottom="20.0" top="20.0" />
+                                             </VBox.margin>
+                                          </TextField>
+                                          <TextField layoutX="10.0" layoutY="60.0" prefHeight="25.0" prefWidth="723.0" promptText="Plan del Alumno">
+                                             <VBox.margin>
+                                                <Insets bottom="20.0" top="20.0" />
+                                             </VBox.margin>
+                                          </TextField>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </VBox>
                      </children></Pane>
-                  <Pane fx:id="sinoidalesPane" prefHeight="576.0" prefWidth="879.0" style="-fx-background-color: blue;">
+                  <Pane fx:id="sinoidalesPane" prefHeight="576.0" prefWidth="879.0" style="-fx-background-color: white;">
                      <children>
-                        <Label text="SINOIDALES" />
+                        <VBox prefHeight="576.0" prefWidth="874.0">
+                           <children>
+                              <Pane prefHeight="136.0" prefWidth="874.0">
+                                 <children>
+                                    <Button fx:id="btnAgregarActa1" layoutX="22.0" layoutY="66.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Sinoidal" />
+                                    <Label layoutX="14.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="SINOIDALES">
+                                       <font>
+                                          <Font size="26.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField layoutX="522.0" layoutY="42.0" prefHeight="25.0" prefWidth="243.0" promptText="Buscar" />
+                                    <ImageView fitHeight="17.0" fitWidth="26.0" layoutX="742.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/icons8_Search_52px.png" />
+                                       </image>
+                                    </ImageView>
+                                    <HBox layoutX="801.0" layoutY="-1.0" prefHeight="30.0" prefWidth="36.0" />
+                                    <Button fx:id="btnMinizeWindow1" layoutX="836.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@styles/loginStyle.css" text="-">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="btnAgregarActa11" layoutX="772.0" layoutY="36.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Buscar" />
+                                 </children>
+                              </Pane>
+                              <TableView fx:id="tableSinoidales" prefHeight="489.0" prefWidth="874.0" />
+                           </children>
+                        </VBox>
                      </children></Pane>
-                  <Pane fx:id="ceremoniasPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: yellow;">
+                  <Pane fx:id="ceremoniasPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                      <children>
-                        <Label text="CEREMONIAS" />
+                        <VBox prefHeight="576.0" prefWidth="874.0">
+                           <children>
+                              <Pane prefHeight="136.0" prefWidth="874.0">
+                                 <children>
+                                    <Button fx:id="btnAgregarActa11" layoutX="22.0" layoutY="66.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Crear Ceremonia" />
+                                    <Label layoutX="14.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="CEREMONIAS">
+                                       <font>
+                                          <Font size="26.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField layoutX="522.0" layoutY="42.0" prefHeight="25.0" prefWidth="243.0" promptText="Buscar" />
+                                    <ImageView fitHeight="17.0" fitWidth="26.0" layoutX="742.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/icons8_Search_52px.png" />
+                                       </image>
+                                    </ImageView>
+                                    <HBox layoutX="801.0" layoutY="-1.0" prefHeight="30.0" prefWidth="36.0" />
+                                    <Button fx:id="btnMinizeWindow11" layoutX="836.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@styles/loginStyle.css" text="-">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="btnAgregarActa111" layoutX="772.0" layoutY="36.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Buscar" />
+                                 </children>
+                              </Pane>
+                              <TableView fx:id="tableCeremonias" prefHeight="489.0" prefWidth="874.0" />
+                           </children>
+                        </VBox>
                      </children>
                   </Pane>
-                  <Pane fx:id="foldersPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: yellow;">
+                  <Pane fx:id="foldersPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: yellow;" visible="false">
                      <children>
                         <Label text="FOLDERS" />
                      </children>
                   </Pane>
-                  <Pane fx:id="configuracionPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: orange;">
+                  <Pane fx:id="configuracionPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: orange;" visible="false">
                      <children>
                         <Label text="CONFIGURACION" />
                      </children>
@@ -174,15 +285,15 @@
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>
-                              <Pane prefHeight="102.0" prefWidth="874.0">
+                              <Pane prefHeight="110.0" prefWidth="874.0">
                                  <children>
-                                    <Label layoutX="14.0" layoutY="34.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="ACTAS SINOIDALES">
+                                    <Label layoutX="14.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="ACTAS SINOIDALES">
                                        <font>
                                           <Font size="26.0" />
                                        </font>
                                     </Label>
-                                    <TextField layoutX="557.0" layoutY="41.0" prefHeight="25.0" prefWidth="286.0" promptText="Buscar" />
-                                    <ImageView fitHeight="17.0" fitWidth="26.0" layoutX="819.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
+                                    <TextField layoutX="517.0" layoutY="43.0" prefHeight="25.0" prefWidth="258.0" promptText="Buscar" />
+                                    <ImageView fitHeight="17.0" fitWidth="26.0" layoutX="749.0" layoutY="47.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../images/icons8_Search_52px.png" />
                                        </image>
@@ -196,9 +307,14 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Button>
+                                    <Button fx:id="btnAgregarActa" layoutX="14.0" layoutY="62.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="106.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Acta">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor></Button>
+                                    <Button fx:id="btnAgregarActa2" layoutX="783.0" layoutY="37.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Buscar" />
                                  </children>
                               </Pane>
-                              <TableView fx:id="tableActas" prefHeight="489.0" prefWidth="874.0" />
+                              <TableView fx:id="tableActas" prefHeight="462.0" prefWidth="874.0" />
                            </children>
                         </VBox>
                      </children>

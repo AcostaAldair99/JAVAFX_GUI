@@ -21,6 +21,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Actas;
+import models.Ceremonias;
+import models.Sinoidales;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -37,14 +39,14 @@ import java.util.ResourceBundle;
 
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class SampleController implements Initializable{
 	
-	//API REQUEST AND RESPONSE HANDLERS
-	private static final String GET_ACTAS_URL = "http://127.0.0.1:4040/api/certificates";
-		
+	//API REQUEST AND RESPONSE HANDLERS		
 	private String token;
 
 	@FXML
@@ -75,6 +77,15 @@ public class SampleController implements Initializable{
     private Button btnSinoidales;
     
     @FXML
+    private Button btnAgregarActa;
+    
+    @FXML
+    private Button btnAgregarSinoidal;
+    
+    @FXML
+    private Button btnBuscar;
+    
+    @FXML
     private Pane inicioPane;
     @FXML
     private Pane actasPane;
@@ -96,35 +107,66 @@ public class SampleController implements Initializable{
     @FXML
     private TableView<Actas> tableActas;
         
+    @FXML
+    private TableView<Sinoidales> tableSinoidales;
+    
+    @FXML
+    private TableView<Ceremonias> tableCeremonias;
+    
     LoginController lc=new LoginController();
    
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     	LoginController swe=new LoginController();
     	token=swe.getoken();
-	  	fillTable();
+    	setTableViewActas();
+    	setTableViewSinoidales();
+    	setTableViewCeremony();
+    	try {
+			fillTableActas();
+		} catch (JsonProcessingException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
-    protected void splitData(Actas a,String delimeter) {
+    protected String splitData(String date,String delimeter) {
     	String[] data;
-    	data=a.getDate_limit_fk().split(delimeter);
-    	a.setDate_limit_fk(data[0]);
-    	//return data[1];
+    	data=date.split(delimeter);
+    	return String.valueOf(data[0]);
     }
     
-    public void handleClicks(ActionEvent actionEvent) {
+    public void handleClicks(ActionEvent actionEvent) throws InterruptedException {
       if (actionEvent.getSource() == btnInicio) {
-    	  	fillTable();
+    	  	try {
+				fillTableActas();
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             inicioPane.toFront();
         }
-        if (actionEvent.getSource() == btnActas) {
+        if (actionEvent.getSource() == btnActas || actionEvent.getSource() == btnAgregarActa) {
             actasPane.toFront();
         }
         if (actionEvent.getSource() == btnSinoidales) {
+        	try {
+				fillTableSinoidales();
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             sinoidalesPane.toFront();
         }
         if(actionEvent.getSource()==btnCeremonia)
         {
+        	try {
+				fillTableCeremony();
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             ceremoniasPane.toFront();
         }
         
@@ -150,55 +192,94 @@ public class SampleController implements Initializable{
     	Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Cerrar Sesion", "¿Seguro que quieres cerrar sesion?");
     	Optional<ButtonType> result = alert.showAndWait();
     	if (result.get() == ButtonType.OK){
-    		System.out.println("Vamonos");
+    		Stage stage=(Stage)btnLogout.getScene().getWindow();
+        	stage.close();
+    		
     	} else {
     		System.out.println("Nos quedamos");
     	}
     	
     }
     
-    private void fillTable() {
+    private void fillTableActas() throws JsonMappingException, JsonProcessingException, InterruptedException {
     	tableActas.getItems().clear();
-    	List<Actas> actas=getActasRequest(0);
-  		if(actas == null) {
+    	List<Actas> actas=handleResponseActas("http://127.0.0.1:4040/api/certificates");
+  		/*if(actas == null) {
   			lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
-  		}
-  		setTableView();
+  		}*/
+  		
   		for(Actas a:actas) {
-  			splitData(a,"T");
+  			a.setDate_limit_fk(splitData(a.getDate_limit_fk(),"T"));
   			tableActas.getItems().add(a);
   		}
     }
     
     
-    protected List<Actas> getActasRequest(int intentos) {
-    	List<Actas> listActas=null;;
+    private void fillTableSinoidales() throws JsonMappingException, JsonProcessingException, InterruptedException {
+    	tableSinoidales.getItems().clear();
+    	List<Sinoidales> sinoidales=handleResponseSinoidales("http://127.0.0.1:4040/api/sinoidales");
+    	for(Sinoidales s:sinoidales) {
+  			//splitData(,"T");
+  			tableSinoidales.getItems().add(s);
+  		}
+    }
+    
+    private void fillTableCeremony() throws JsonMappingException, JsonProcessingException, InterruptedException {
+    	tableCeremonias.getItems().clear();
+    	List<Ceremonias> ceremonias=handleResponseCeremony("http://127.0.0.1:4040/api/ceremonies");
+    	for(Ceremonias s:ceremonias) {
+  			s.setDate(splitData(s.getDate(), "T"));
+  			tableCeremonias.getItems().add(s);
+  		}
+    }
+    
+    protected List<Actas> handleResponseActas(String URL) throws JsonMappingException, JsonProcessingException, InterruptedException {
+    	HttpResponse<String> response=getRequest(0,URL);
+    	List<Actas> listActas=null;
+    	ObjectMapper objectMapper = new ObjectMapper();
+		listActas = objectMapper.readValue(response.body(), new TypeReference<List<Actas>>(){});
+        return listActas;
+    }
+    
+    
+    protected List<Sinoidales> handleResponseSinoidales(String URL) throws JsonMappingException, JsonProcessingException, InterruptedException{
+    	HttpResponse<String> response=getRequest(0,URL);
+    	List<Sinoidales> listSinoidales=null;
+    	ObjectMapper objectMapper = new ObjectMapper();
+		listSinoidales = objectMapper.readValue(response.body(), new TypeReference<List<Sinoidales>>(){});
+        return listSinoidales;
+    }
+    
+    protected List<Ceremonias> handleResponseCeremony(String URL) throws InterruptedException, JsonMappingException, JsonProcessingException{
+    	HttpResponse<String> response=getRequest(0,URL);
+    	List<Ceremonias> listCeremonias=null;
+    	ObjectMapper objectMapper = new ObjectMapper();
+		listCeremonias = objectMapper.readValue(response.body(), new TypeReference<List<Ceremonias>>(){});
+        return listCeremonias;
+    }
+    
+    
+    protected HttpResponse<String> getRequest(int intentos, String URL) throws InterruptedException{
+    	HttpResponse<String> response=null;
+    	try {
     	HttpClient client=HttpClient.newHttpClient();
         HttpRequest req=(HttpRequest) HttpRequest.newBuilder()
         .setHeader("Content-Type","application/json")
         .setHeader("x-access-token", token)
-        .uri(URI.create(GET_ACTAS_URL))
+        .uri(URI.create(URL))
         .build();
-        try {
-			HttpResponse<String> response = client.send(req,HttpResponse.BodyHandlers.ofString());
-			ObjectMapper objectMapper = new ObjectMapper();
-			listActas = objectMapper.readValue(response.body(), new TypeReference<List<Actas>>(){});
-		} catch (IOException | InterruptedException e) {
-			if (intentos > 5) {
-				System.out.println(intentos);
-				return getActasRequest(intentos+1);
-			}
-			e.printStackTrace();
-		}
-        return listActas;
+		response = client.send(req,HttpResponse.BodyHandlers.ofString());
+        }catch(IOException | InterruptedException e) {
+        	if(intentos < 5) {
+        		System.out.println(intentos);
+    			return getRequest(intentos+1,URL);
+        	}
+        	lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
+        	e.printStackTrace();
+        }
+        return response;
     }
     
-   
-    @FXML
-    protected void handleCloseAction(ActionEvent event) {
-    	Stage stage=(Stage)btnCloseWindow.getScene().getWindow();
-    	stage.close();
-    }
     
     
     @FXML
@@ -208,7 +289,7 @@ public class SampleController implements Initializable{
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
-	public void setTableView() {
+	public void setTableViewActas() {
     	TableColumn idActaColumn = new TableColumn("Id Acta");
     	idActaColumn.setCellValueFactory(new PropertyValueFactory<>("id_actas"));
     	idActaColumn.setStyle( "-fx-alignment: center;");
@@ -243,7 +324,7 @@ public class SampleController implements Initializable{
     	signaturesColumn.setStyle( "-fx-alignment: center;");
     	signaturesColumn.setSortable(false);
     	signaturesColumn.setResizable(false);
-    	signaturesColumn.setMinWidth(100);
+    	signaturesColumn.setMinWidth(150);
 
     	
     	TableColumn  dateLimitColumn= new TableColumn("Fecha Limite");
@@ -264,4 +345,96 @@ public class SampleController implements Initializable{
     	tableActas.getColumns().addAll(idActaColumn,nameColumn,idStudentColumn,idFolderColumn,dateLimitColumn,ceremonyColumn,signaturesColumn);
     }
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void setTableViewSinoidales() {
+		TableColumn idSinoidal = new TableColumn("Id");
+		idSinoidal.setCellValueFactory(new PropertyValueFactory<>("id_sinoidales"));
+		idSinoidal.setStyle( "-fx-alignment: center;");
+		idSinoidal.setSortable(false);
+		idSinoidal.setResizable(false);
+		
+    	TableColumn FirstName = new TableColumn("Nombre");
+    	FirstName.setCellValueFactory(new PropertyValueFactory<>("first_Name"));
+    	FirstName.setStyle( "-fx-alignment: center;");
+    	FirstName.setSortable(false);
+    	FirstName.setResizable(false);
+    	
+    	TableColumn  secondName= new TableColumn("Apellidos");
+    	secondName.setCellValueFactory(new PropertyValueFactory<>("second_Name"));
+    	secondName.setStyle( "-fx-alignment: center;");
+    	secondName.setSortable(false);
+    	secondName.setResizable(false);
+    	//secondName.setMinWidth(200);
+
+    	TableColumn  idProfessor= new TableColumn("Matricula");
+    	idProfessor.setCellValueFactory(new PropertyValueFactory<>("id_professor"));
+    	idProfessor.setStyle( "-fx-alignment: center;");
+    	idProfessor.setSortable(false);
+    	idProfessor.setResizable(false);
+
+    	
+    	TableColumn  emailColumn= new TableColumn("Email");
+    	emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+    	emailColumn.setStyle( "-fx-alignment: center;");
+    	emailColumn.setSortable(false);
+    	emailColumn.setResizable(false);
+    	emailColumn.setMinWidth(200);
+    	
+    	TableColumn  areaColumn= new TableColumn("Area");
+    	areaColumn.setCellValueFactory(new PropertyValueFactory<>("area"));
+    	areaColumn.setStyle( "-fx-alignment: center;");
+    	areaColumn.setSortable(false);
+    	areaColumn.setResizable(false);
+    	areaColumn.setMinWidth(150);
+
+    	
+    	TableColumn  telefonoColumn= new TableColumn("Telefono");
+    	telefonoColumn.setCellValueFactory(new PropertyValueFactory<>("telephone"));
+    	telefonoColumn.setStyle( "-fx-alignment: center;");
+    	telefonoColumn.setSortable(false);
+    	telefonoColumn.setResizable(false);
+    	telefonoColumn.setMinWidth(100);
+    	
+    	TableColumn  disponibilityColumn= new TableColumn("Disponibilidad");
+    	disponibilityColumn.setCellValueFactory(new PropertyValueFactory<>("disponibility"));
+    	disponibilityColumn.setStyle( "-fx-alignment: center;");
+    	disponibilityColumn.setSortable(false);
+    	disponibilityColumn.setResizable(false);
+    	disponibilityColumn.setMaxWidth(50);
+    	
+    	TableColumn  activeColumn= new TableColumn("Activo");
+    	activeColumn.setCellValueFactory(new PropertyValueFactory<>("isActive"));
+    	activeColumn.setStyle( "-fx-alignment: center;");
+    	activeColumn.setSortable(false);
+    	activeColumn.setResizable(false);
+    	activeColumn.setMaxWidth(50);
+    	
+    	tableSinoidales.getColumns().addAll(idSinoidal,FirstName,secondName,idProfessor,emailColumn,areaColumn,telefonoColumn,disponibilityColumn,activeColumn);
+    }
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void setTableViewCeremony() {
+		TableColumn idCeremony = new TableColumn("Id");
+		idCeremony.setCellValueFactory(new PropertyValueFactory<>("id_ceremony"));
+		idCeremony.setStyle( "-fx-alignment: center;");
+		idCeremony.setSortable(false);
+		idCeremony.setResizable(false);
+		
+    	TableColumn dateLimit = new TableColumn("Fecha Limite");
+    	dateLimit.setCellValueFactory(new PropertyValueFactory<>("date"));
+    	dateLimit.setStyle( "-fx-alignment: center;");
+    	dateLimit.setSortable(false);
+    	dateLimit.setResizable(false);
+    	dateLimit.setMinWidth(200);
+    	
+    	TableColumn  cicleColumn= new TableColumn("Ciclo");
+    	cicleColumn.setCellValueFactory(new PropertyValueFactory<>("cicle"));
+    	cicleColumn.setStyle( "-fx-alignment: center;");
+    	cicleColumn.setSortable(false);
+    	cicleColumn.setResizable(false);
+    	cicleColumn.setMinWidth(200);
+
+  
+    	tableCeremonias.getColumns().addAll(idCeremony,dateLimit,cicleColumn);
+    }
 }
