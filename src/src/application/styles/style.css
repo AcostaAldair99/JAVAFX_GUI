@@ -1,0 +1,84 @@
+/* .button
+{
+-fx-background-color : #05071F;
+-fx-text-fill : #e7e5e5;
+}
+.button:hover{
+-fx-background-color : #10165F;
+}
+.button:pressed
+{
+-fx-background-color : #1620A1;
+}
+
+
+
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #218E58;
+    -fx-background-radius: 5em;
+}
+
+.scroll-pane > .corner {
+    -fx-background-color: black;
+}*/
+.scroll-pane {
+    -fx-background-color: #218E58;
+}
+
+
+.buttonMenu{
+-fx-background-color : #218E58;
+-fx-text-fill : #ffff;
+-fx-padding: 10, 2, 2, 2;
+-fx-font-weight:bold;
+-fx-font-family:fantasy;
+
+}
+.buttonMenu:hover{
+-fx-background-color : #0d3923;
+}
+.buttonMenu:pressed
+{
+-fx-background-color : #218E58;
+}
+
+.icon{
+	-fx-background-color: transparent;
+	-fx-padding: 2, 2, 2, 2;
+}
+
+.buttonclose{
+	-fx-background-color:transparent;
+	-fx-font-weight:bold;
+	-fx-text-fill : black;
+}
+.buttonclose:hover{
+	-fx-background-color:#ffff;
+	-fx-font-weight:bold;
+}
+
+.searchinput{
+	-fx-border-radius:2em;
+}
+
+tablecolumn{
+	-fx-background-color : #218E58;
+	-fx-alignment: center-right;
+}

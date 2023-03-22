@@ -12,7 +12,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("SplashScreen.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
 			primaryStage.setScene(new Scene(root));
 	        primaryStage.setResizable(false);
 	        primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("logoLogin.png")));
@@ -20,17 +20,6 @@ public class Main extends Application {
 	        //set stage borderless
 	        primaryStage.initStyle(StageStyle.UNDECORATED);
 	        
-	        //drag it here
-	        /*root.setOnMousePressed(event -> {
-	            x = event.getSceneX();
-	            y = event.getSceneY();
-	        });
-	        root.setOnMouseDragged(event -> {
-
-	            primaryStage.setX(event.getScreenX() - x);
-	            primaryStage.setY(event.getScreenY() - y);
-
-	        });*/
 	        primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

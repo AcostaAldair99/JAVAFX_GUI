@@ -1,12 +1,11 @@
 package application;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 import org.json.JSONObject;
 
@@ -15,9 +14,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -26,7 +30,7 @@ import javafx.stage.Stage;
 public class LoginController{
 
 	//JSON OBJECT TO REQUEST AND RESPONSE
-	private JSONObject jsonReq;
+	private JSONObject jsonReq,jsonRes;
 	@FXML
     private Button btnCloseWindow;
 	
@@ -47,57 +51,72 @@ public class LoginController{
 
     //URL
 	private static final String POST_URL = "http://127.0.0.1:4040/auth/signIn";
-
+	
+	
     public static String token;
     
-    @FXML
+
+   
     public void handleButtonAction(MouseEvent event) throws IOException, InterruptedException {
-    	
     	jsonReq=getCredentials();
-    	System.out.println(jsonReq.toString());
+    	
     	if(!jsonReq.isEmpty()) {
     		lblErrors.setText("");
-    		URL urlob=new URL(POST_URL);
-        	HttpURLConnection con=(HttpURLConnection) urlob.openConnection();
-        	con.setDoOutput(true);
-        	con.setRequestMethod("POST");
-            con.setRequestProperty("Content-type", "application/json");
-            con.setRequestProperty("Accept", "application/json");
-            con.connect();
-            
-            byte[] outputBytes=jsonReq.toString().getBytes("UTF-8");
-            OutputStream os=con.getOutputStream();
-            os.write(outputBytes);
-            os.close();
-            
-            
-            if(con.getResponseCode()==404) {
+    		
+    		HttpResponse<String> response=PostRequest(0);
+    		if(response == null) {
+    			Alert alert=runAlert(AlertType.ERROR,"Error de Conexión","Revisa tu conexión a internet, no pudimos comunicarnos con el Servidor");
+    			alert.showAndWait();
+    		}
+            if(response.statusCode()==404) {
         		setLblError(Color.RED,"Usuario o contraseña Invalida");
-            }else if(con.getResponseCode()==200){
-                Login(con,event);
-            }else if(con.getResponseCode() == 500) {
+            }else if(response.statusCode()==200){
+                setAuthToken(response.body());
+            	changeStage(event);
+            }else if(response.statusCode() == 500) {
         		setLblError(Color.RED,"Error en el Servidor contacte con el Administrador");
-            }	    
+            }	     		
     	}
     	
     }
 
-    private void Login(HttpURLConnection con,MouseEvent event) throws UnsupportedEncodingException, IOException, InterruptedException {
-    	BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
-        StringBuilder response=new StringBuilder();
-        String resline=null;
-        while((resline = br.readLine()) != null) {
-        	response.append(resline.toString().trim());
-        }
-        String[] arrRes=response.toString().split("\"",5);
-        token=arrRes[3];
-        try {
-            //add you loading or delays - ;-)
-            changeStage(event);
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
-        }
+    public Alert runAlert(AlertType type,String title,String header) {
+    	Alert alertShowInfo = new Alert(type);
+    	Stage dialogStage = (Stage) alertShowInfo.getDialogPane().getScene().getWindow();
+        dialogStage.getIcons().add(new Image(this.getClass().getResourceAsStream("logoLogin.png"))); 
+        alertShowInfo.setTitle(title);
+        alertShowInfo.setHeaderText(header);
+        return alertShowInfo;
     }
+    
+    
+    private HttpResponse<String> PostRequest(int intentos) throws InterruptedException {
+    	HttpResponse<String> response = null;
+    	try {
+	    	HttpClient client=HttpClient.newHttpClient();
+	        HttpRequest req=(HttpRequest) HttpRequest.newBuilder()
+	        .setHeader("Content-Type","application/json")
+	        .uri(URI.create(POST_URL))
+	        .POST(HttpRequest.BodyPublishers.ofString(jsonReq.toString()))
+	        .build();        
+			response= client.send(req,HttpResponse.BodyHandlers.ofString());
+			return response;
+		} catch (IOException | InterruptedException e) {
+			if(intentos < 5) {
+				Thread.sleep(2000);
+				System.out.println(intentos);
+				return PostRequest(intentos+1);
+			}
+	//		e.printStackTrace();
+		}
+    	return response;
+    }
+    
+    private void setAuthToken(String responseBody) {
+    	String[] arrRes=responseBody.toString().split("\"",5);
+    	token=arrRes[3];
+    }
+    
 
     private JSONObject getCredentials() {
     	JSONObject json=new JSONObject();
@@ -124,7 +143,6 @@ public class LoginController{
     private void setLblError(Color color, String text) {
         lblErrors.setTextFill(color);
         lblErrors.setText(text);
-        System.out.println(text);
     }
     
     
@@ -147,5 +165,7 @@ public class LoginController{
     	return token;
     }
     
+    
+ 
     
 }
