@@ -51,9 +51,23 @@
 -fx-font-family:fantasy;
 
 }
+
+.buttonMenu-danger{
+-fx-background-color :  #D61b1b;
+-fx-text-fill : #ffff;
+-fx-padding: 10, 2, 2, 2;
+-fx-font-weight:bold;
+-fx-font-family:fantasy;
+}
+
 .buttonMenu:hover{
 -fx-background-color : #0d3923;
 }
+
+.buttonMenu-danger:hover{
+-fx-background-color : #941010;
+}
+
 .buttonMenu:pressed
 {
 -fx-background-color : #218E58;

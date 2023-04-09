@@ -1,12 +1,15 @@
 package application;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Alert;
@@ -22,6 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Actas;
 import models.Ceremonias;
+import models.Folder;
 import models.Sinoidales;
 
 import java.io.IOException;
@@ -48,15 +52,19 @@ public class SampleController implements Initializable{
 	
 	//API REQUEST AND RESPONSE HANDLERS		
 	private String token;
+	Alert alert;
 
 	@FXML
     private Button btnCloseWindow;
 	
 	@FXML
-    private Button btnMinizeWindow;
+    private Button btnMinizeWindow,btnAgregarSinoidales;
 	
 	@FXML
-	private Button btnCeremonia;
+	private ComboBox<String> cbSinoidales,cbFolders,cbCeremonias;
+	
+	@FXML
+	private Button btnCeremonia,btnCrearActa,btnAsignarSinoidal,btnEliminarSinoidal;
     
 	@FXML
 	private Button btnFolder;
@@ -112,6 +120,8 @@ public class SampleController implements Initializable{
     
     @FXML
     private TableView<Ceremonias> tableCeremonias;
+    @FXML
+    private ListView<String> listSinoidales;
     
     LoginController lc=new LoginController();
    
@@ -149,6 +159,12 @@ public class SampleController implements Initializable{
         }
         if (actionEvent.getSource() == btnActas || actionEvent.getSource() == btnAgregarActa) {
             actasPane.toFront();
+            try {
+				setComboboxActas();
+			} catch (JsonProcessingException | InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
         if (actionEvent.getSource() == btnSinoidales) {
         	try {
@@ -185,8 +201,80 @@ public class SampleController implements Initializable{
             logOut();
         }
         
-  }
-
+        if(actionEvent.getSource() == btnAsignarSinoidal) {
+        	addSelectSinoidales();
+        }
+  
+        if(actionEvent.getSource() == btnEliminarSinoidal) {
+        	deleteSelectedSinoidal();
+        }
+        
+        if(actionEvent.getSource() == btnCrearActa) {
+        	
+        }
+        
+    }
+    
+    private void deleteSelectedSinoidal() {
+    	MultipleSelectionModel<String> selected = listSinoidales.getSelectionModel();
+    	if(selected.getSelectedItem() != null) {
+    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Eliminar Sinoidal", "¿Seguro que quieres desasignar esta acta al sinoidal?");
+        	Optional<ButtonType> result = alert.showAndWait();
+        	if (result.get() == ButtonType.OK){
+        		cbSinoidales.getItems().add(selected.getSelectedItem());
+        		listSinoidales.getItems().remove(selected.getSelectedIndex());
+        		if(listSinoidales.getItems().size() == 0 ) {
+        			btnEliminarSinoidal.setDisable(true);
+        		}
+        	}
+    	}else {
+    		alert = lc.runAlert(AlertType.ERROR,"Error Sinoidales","Selecciona un elemento de la lista para eliminar");
+			alert.showAndWait();
+    	}
+    }
+    
+    private void addSelectSinoidales() {
+    	SingleSelectionModel<String> id = cbSinoidales.getSelectionModel();
+    	if(id.getSelectedItem() != null ) {
+    		if(listSinoidales.getItems().size() < 3) {
+    			listSinoidales.getItems().add(id.getSelectedItem());
+    			cbSinoidales.getItems().remove(id.getSelectedIndex());
+    			btnEliminarSinoidal.setDisable(false);
+    		}else {
+    			alert = lc.runAlert(AlertType.ERROR,"Error Sinoidales","Ya seleccionaste los 3 sinoidales necesarios");
+    			alert.showAndWait();
+    		}
+    	}else {
+    		alert = lc.runAlert(AlertType.ERROR,"Error Sinoidal","Selecciona un Sinoidal para asignarlo al Acta");
+    		alert.showAndWait();
+    	}
+    }
+    
+    private void setComboboxActas() throws JsonMappingException, JsonProcessingException, InterruptedException {
+    	listSinoidales.getItems().clear();
+    	cbFolders.getItems().clear();
+    	cbCeremonias.getItems().clear();
+    	cbSinoidales.getItems().clear();
+    	cbFolders.setPromptText("Selecciona un Folder");
+    	cbCeremonias.setPromptText("Selecciona la Ceremonia");
+    	cbSinoidales.setPromptText("Selecciona el sinoidal");
+    	String sample;
+    	List<Sinoidales> sinoidales=handleResponseSinoidales("http://127.0.0.1:4040/api/sinoidales");
+    	List<Folder> folders = handleResponseFolder("http://127.0.0.1:4040/api/folders");
+    	List<Ceremonias> ceremonias=handleResponseCeremony("http://127.0.0.1:4040/api/ceremonies");
+    	for(Folder f : folders) {
+    		cbFolders.getItems().add(f.getId_case().toString());
+    	}
+    	
+    	for(Sinoidales s: sinoidales) {
+    		sample = s.getFirst_Name() + " " + s.getSecond_Name();
+    		cbSinoidales.getItems().add(sample);
+    	}
+    	
+    	for(Ceremonias c: ceremonias) {
+    		cbCeremonias.getItems().add(c.getId_ceremony().toString());
+    	}
+    }
   
     private void logOut() {
     	Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Cerrar Sesion", "¿Seguro que quieres cerrar sesion?");
@@ -207,7 +295,6 @@ public class SampleController implements Initializable{
   		/*if(actas == null) {
   			lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
   		}*/
-  		
   		for(Actas a:actas) {
   			a.setDate_limit_fk(splitData(a.getDate_limit_fk(),"T"));
   			tableActas.getItems().add(a);
@@ -242,6 +329,14 @@ public class SampleController implements Initializable{
     }
     
     
+    protected List<Folder> handleResponseFolder(String URL) throws InterruptedException, JsonMappingException, JsonProcessingException{
+    	HttpResponse<String> res = getRequest(0,URL);
+    	List<Folder> listFolder = null;
+    	ObjectMapper om = new ObjectMapper();
+		listFolder = om.readValue(res.body(), new TypeReference<List<Folder>>(){});
+		return listFolder;
+    }
+    
     protected List<Sinoidales> handleResponseSinoidales(String URL) throws JsonMappingException, JsonProcessingException, InterruptedException{
     	HttpResponse<String> response=getRequest(0,URL);
     	List<Sinoidales> listSinoidales=null;
@@ -274,7 +369,8 @@ public class SampleController implements Initializable{
         		System.out.println(intentos);
     			return getRequest(intentos+1,URL);
         	}
-        	lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
+        	alert = lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
+        	alert.showAndWait();
         	e.printStackTrace();
         }
         return response;
