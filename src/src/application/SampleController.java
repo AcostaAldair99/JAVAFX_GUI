@@ -1,17 +1,22 @@
 package application;
 
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -22,7 +27,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 import models.Actas;
 import models.Ceremonias;
 import models.Folder;
@@ -36,7 +44,13 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -58,13 +72,16 @@ public class SampleController implements Initializable{
     private Button btnCloseWindow;
 	
 	@FXML
-    private Button btnMinizeWindow,btnAgregarSinoidales;
+    private Button btnMinizeWindow,btnAgregarSinoidales,btnCrearSinoidal,btnCrearFolder;
 	
 	@FXML
-	private ComboBox<String> cbSinoidales,cbFolders,cbCeremonias;
+	private ComboBox<String> cbSinoidales,cbFolders,cbCeremonias,cbCarreras,cbCiclo,cbEstantes;
 	
 	@FXML
-	private Button btnCeremonia,btnCrearActa,btnAsignarSinoidal,btnEliminarSinoidal;
+	private DatePicker datePickerCeremonia;
+	
+	@FXML
+	private Button btnCeremonia,btnCrearActa,btnAsignarSinoidal,btnEliminarSinoidal,btnCrearCeremonia;
     
 	@FXML
 	private Button btnFolder;
@@ -98,7 +115,7 @@ public class SampleController implements Initializable{
     @FXML
     private Pane actasPane;
     @FXML
-    private Pane sinoidalesPane;
+    private Pane sinoidalesPane,addSinoidales;
     
     @FXML
     private Pane ceremoniasPane;
@@ -120,12 +137,21 @@ public class SampleController implements Initializable{
     
     @FXML
     private TableView<Ceremonias> tableCeremonias;
+    
+    @FXML
+    private TableView<Folder>tableFolders;
+    
     @FXML
     private ListView<String> listSinoidales;
     
     LoginController lc=new LoginController();
-   
-
+    
+    @FXML
+    private TextField txtNameStudent,txtIdStudent,txtPlanStudent;
+    @FXML
+    private TextField txtNombreSinoidal,txtApellidosSinoidal,txtIdSinoidal,txtEmailSinoidal,txtTelefonoSinoidal,txtCoordinacionSinoidal;
+    
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     	LoginController swe=new LoginController();
@@ -133,6 +159,7 @@ public class SampleController implements Initializable{
     	setTableViewActas();
     	setTableViewSinoidales();
     	setTableViewCeremony();
+    	setTableViewFolders();
     	try {
 			fillTableActas();
 		} catch (JsonProcessingException | InterruptedException e) {
@@ -147,7 +174,7 @@ public class SampleController implements Initializable{
     	return String.valueOf(data[0]);
     }
     
-    public void handleClicks(ActionEvent actionEvent) throws InterruptedException {
+    public void handleClicks(ActionEvent actionEvent) throws InterruptedException, JsonMappingException, JsonProcessingException {
       if (actionEvent.getSource() == btnInicio) {
     	  	try {
 				fillTableActas();
@@ -160,6 +187,7 @@ public class SampleController implements Initializable{
         if (actionEvent.getSource() == btnActas || actionEvent.getSource() == btnAgregarActa) {
             actasPane.toFront();
             try {
+            	clearFormActas();
 				setComboboxActas();
 			} catch (JsonProcessingException | InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -178,7 +206,9 @@ public class SampleController implements Initializable{
         if(actionEvent.getSource()==btnCeremonia)
         {
         	try {
+        		setFormCeremonia();
 				fillTableCeremony();
+				filltableFolder();
 			} catch (JsonProcessingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -204,14 +234,285 @@ public class SampleController implements Initializable{
         if(actionEvent.getSource() == btnAsignarSinoidal) {
         	addSelectSinoidales();
         }
+        
+        if(actionEvent.getSource()==btnAgregarSinoidal) {
+        	clearFormSinoidales();
+        	addSinoidales.toFront();
+        }
   
         if(actionEvent.getSource() == btnEliminarSinoidal) {
         	deleteSelectedSinoidal();
         }
         
         if(actionEvent.getSource() == btnCrearActa) {
-        	
+        	createActa();
+        	inicioPane.toFront();
         }
+        if(actionEvent.getSource()==btnCrearSinoidal) {
+        	createSinoidal();
+        }
+        
+        if(actionEvent.getSource()==btnCrearCeremonia) {
+        	createCeremonia();
+        }
+        
+        if(actionEvent.getSource()==btnCrearFolder) {
+        	createFolder();
+        }
+        
+    }
+    
+    private void createFolder() throws InterruptedException, JsonMappingException, JsonProcessingException {
+    	if(validateComboBox(cbEstantes,"Estantes")) {
+    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Folder", "¿Seguro que quieres crear este nuevo folder en el sistema?");
+        	Optional<ButtonType> result = alert.showAndWait();
+        	if(result.get() == ButtonType.OK) {
+        		JSONObject j = new JSONObject();
+        		j.put("case",cbEstantes.getValue());
+        		
+        		System.out.println(j);
+        		HttpResponse<String> res = postRequest(0,"http://127.0.0.1:4040/api/folders",j);
+        		if(res == null||res.statusCode() !=201) {
+        			alert=lc.runAlert(AlertType.ERROR, "ERROR Folder", "Hubo un error al momento de crear el Folder, verifica tu conexión a internet.\nStatus: "+res.statusCode());
+            		alert.show();
+        		}else {
+        			filltableFolder();
+        			alert=lc.runAlert(AlertType.INFORMATION, "Folder CREADO", "El nuevo Folder ha sido creado exitosamente.");
+            		alert.show();
+        		}
+        	}
+    	}
+    	
+    	
+    }
+    
+    
+    private void createActa() throws InterruptedException, JsonMappingException, JsonProcessingException{
+    	if(validateTextField(txtNameStudent,"El valor del campo nombre es nulo o numerico","\"^\\\\p{L}+(?: \\\\p{L}+)*$",255) && 
+    			validateTextField(txtIdStudent,"El valor del campo matricula es nulo o contiene letras","^\\d*\\.?\\d+$",10) && 
+    			validateTextField(txtPlanStudent,"El valor del campo plan de estudios es nulo o contiene letras","^\\d*\\.?\\d+$",3) &&
+    			validateComboBox(cbCeremonias,"Ceremonias") &&
+    			validateComboBox(cbFolders,"Folder") &&
+    			validateComboBox(cbCarreras,"carreras") &&
+    			validateListSinoidales(listSinoidales)) {
+    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Acta", "¿Seguro que quieres crear esta acta?");
+        	Optional<ButtonType> result = alert.showAndWait();
+        	if (result.get() == ButtonType.OK){
+        		JSONObject json=new JSONObject();
+        		json.put("name_Student",txtNameStudent.getText());
+        		json.put("id_Student", txtIdStudent.getText());
+        		json.put("degree_plan", txtPlanStudent.getText());
+        		json.put("id_ceremony", cbCeremonias.getValue());
+        		json.put("id_Folder", cbFolders.getValue());
+        		json.put("degree", cbCarreras.getValue());
+        		json.put("signatures", 0);
+        		ObservableList<String>sinoidalesAsign = listSinoidales.getItems();
+        		HttpResponse<String> res = postRequest(0,"http://127.0.0.1:4040/api/certificates",json);
+        		String s[]=res.body().split("[.!:;?{}]");
+        		if(res.statusCode() == 201) {
+        			for(String a: sinoidalesAsign) {
+            			String[] x=a.split("-");
+            			res = postRequest(0,"http://127.0.0.1:4040/api/certificates/addSinoidales/"+s[2]+"/"+cbCeremonias.getValue()+"/"+x[0],json);
+            			//System.out.println(res);
+            		}
+        			if(res.statusCode() == 201) {
+        				res = postRequest(0,"http://127.0.0.1:4040/api/folders/addActa/"+cbFolders.getValue(),json);
+        				if(res.statusCode()!=201) {
+        					alert=lc.runAlert(AlertType.ERROR, "ERROR ACTA", "Hubo un error al momento de crear el acta, verifica tu conexión a internet\nStatus: "+res.statusCode());
+                    		alert.show();
+        				}
+        			}
+        		}else {
+        			alert=lc.runAlert(AlertType.ERROR, "ERROR ACTA", "Hubo un error al momento de crear el acta, verifica tu conexión a internet\nStatus: "+res.statusCode());
+            		alert.show();
+        		}
+        		
+        	}
+    		
+    	}
+    }
+    
+    private void clearFormActas() {
+    	txtNameStudent.clear();
+    	txtIdStudent.clear();
+    	txtPlanStudent.clear();
+    	
+    }
+    
+    private void clearFormSinoidales() {
+    	txtNombreSinoidal.clear();
+    	txtApellidosSinoidal.clear();
+    	txtIdSinoidal.clear();
+    	txtEmailSinoidal.clear();
+    	txtTelefonoSinoidal.clear();
+    	txtCoordinacionSinoidal.clear();
+    }
+    
+    private void createSinoidal() throws InterruptedException, JsonMappingException, JsonProcessingException {
+    	if(validateTextField(txtNombreSinoidal,"El valor del campo nombre es nulo o numerico","^\\p{L}+(?: \\p{L}+)*$",255) && 
+    			validateTextField(txtApellidosSinoidal,"El valor del campo apellidos es nulo o numerico","^\\p{L}+(?: \\p{L}+)*$",255) &&
+    			validateTextField(txtIdSinoidal,"El valor del campo matricula es nulo o numerico","^\\d*\\.?\\d+$",10)&&
+    			validateTextField(txtEmailSinoidal,"El valor del campo es nulo o contiene letras",".*(?:@.*)?",255) &&
+    			validateTextField(txtTelefonoSinoidal,"El valor en el campo telefono es nulo o contiene letras","^\\d*\\.?\\d+$",10)&&
+    			validateTextField(txtCoordinacionSinoidal,"El valor del coordinación es nulo o contiene letras","^\\p{L}+(?: \\p{L}+)*$",255)){
+    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Acta", "¿Seguro que quieres crear esta acta?");
+        	Optional<ButtonType> result = alert.showAndWait();
+        	if(result.get()==ButtonType.OK) {
+        		JSONObject js = new JSONObject();
+        		js.put("first_Name", txtNombreSinoidal.getText());
+        		js.put("second_Name", txtApellidosSinoidal.getText());
+        		js.put("id_professor", txtIdSinoidal.getText());
+        		js.put("email", txtEmailSinoidal.getText());
+        		js.put("area", txtCoordinacionSinoidal.getText());
+        		js.put("telephone", txtTelefonoSinoidal.getText());
+        		js.put("disponibility",1);
+        		js.put("isActive",1);
+        		HttpResponse<String> response = postRequest(0,"http://127.0.0.1:4040/api/sinoidales",js);
+        		if( response == null || response.statusCode()!=201) {
+        			alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinoidal, verifica tu conexión a internet.\nStatus: "+response.statusCode());
+            		alert.show();
+        		}else {
+        			fillTableSinoidales();
+        			sinoidalesPane.toFront();
+        			alert=lc.runAlert(AlertType.INFORMATION, "SINOIDAL CREADO", "El nuevo Sinoidal ha sido creado exitosamente.");
+            		alert.show();
+        		}
+        	}
+    	}
+    }
+   
+    private void createCeremonia() throws InterruptedException, JsonMappingException, JsonProcessingException {
+    	if(datePickerCeremonia.getValue()!=null) {
+    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Ceremonia", "¿Seguro que quieres crear esta ceremonia con fecha del "+datePickerCeremonia.getValue()+" ?");
+        	Optional<ButtonType> result = alert.showAndWait();
+        	if(result.get() == ButtonType.OK) {
+        		JSONObject json = new JSONObject();
+        		json.put("date",datePickerCeremonia.getValue());
+        		json.put("cicle", getCicle(datePickerCeremonia.getValue()));
+        		HttpResponse<String> res = postRequest(0,"http://127.0.0.1:4040/api/ceremonies",json);
+        		if(res.statusCode()!=201) {
+        			alert=lc.runAlert(AlertType.ERROR, "ERROR CEREMONIA", "Hubo un error al momento de crear la ceremonia, verifica tu conexión a internet\nStatus: "+res.statusCode());
+            		alert.show();
+        		}else {
+    				fillTableCeremony();
+        			alert=lc.runAlert(AlertType.ERROR, "CEREMONIA CREADA", "Se creo la ceremonia de manera exitosa !\nComienza a asignar actas a la nueva ceremonia");
+            		alert.show();
+        		}
+        	}
+    	}else {
+    		alert=lc.runAlert(AlertType.ERROR, "ERROR FECHA", "Ingresa un valor en el campo fecha");
+    		alert.show();
+    	}
+    }
+    
+	private String getCicle(LocalDate date_limit){
+		ChronoLocalDate dt= LocalDate.parse("2023-06-01");
+    	if(date_limit.isAfter(dt)) {
+    		return "ENE-JUN";
+    	}else {
+    		return "AGO-DIC";
+    	}
+    }
+    
+	private HttpResponse<String> postRequest(int intentos,String URL,JSONObject jsonBody) throws InterruptedException{
+    	HttpResponse<String> response = null;
+    	try {
+	    	HttpClient client=HttpClient.newHttpClient();
+	        HttpRequest req=(HttpRequest) HttpRequest.newBuilder()
+	        .setHeader("Content-Type","application/json")
+	        .setHeader("x-access-token", token)
+	        .uri(URI.create(URL))
+	        .POST(HttpRequest.BodyPublishers.ofString(jsonBody.toString()))
+	        .build();        
+			response= client.send(req,HttpResponse.BodyHandlers.ofString());
+			return response;
+		} catch (IOException | InterruptedException e) {
+			if(intentos < 5) {
+				Thread.sleep(2000);
+				return postRequest(intentos+1,URL,jsonBody);
+			}
+	//		e.printStackTrace();
+		}
+    	return response;
+    }
+
+    private boolean validateListSinoidales(ListView<String> listSinoidales) {
+    	if(listSinoidales.getItems().size() == 3) {
+    		return true;
+    	}else {
+    		Alert alert=lc.runAlert(AlertType.ERROR, "ERROR SINOISALES", "No se han asignado todos los 3 sinoidales\n necesarios para crear el Acta");
+    		alert.show();
+    		cbSinoidales.requestFocus();
+    	}
+    	return false;
+    }
+    
+    private boolean validateComboBox(ComboBox<String> cb,String message) {
+    	if((cb.getSelectionModel().getSelectedItem()!=null)) {
+    		return true;
+    	}else {
+    		Alert alert=lc.runAlert(AlertType.ERROR, "ERROR", "No haz seleccionado ninguna opcion de "+message);
+    		alert.show();
+    	}
+    	return false;
+    }
+    
+    private boolean validateTextField(TextField txt,String message,String regex,int maxlenght) {
+    	if(txt.getText().length()>0 && txt.getText().matches(regex) && txt.getText().length() <= maxlenght ) {
+    		return true;
+    	}else{
+    		Alert alert=lc.runAlert(AlertType.ERROR, "ERROR", "Datos no Validos\n"+message);
+    		alert.show();
+    		txt.clear();
+    		txt.requestFocus();
+    	}
+    	return false;
+    }
+    
+    private void setFormCeremonia() {
+    	for(int i=1;i<=10;i++) {
+    		cbEstantes.getItems().add(String.valueOf(i));
+    	}
+    	Callback<DatePicker, DateCell> callB = new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(final DatePicker param) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty); //To change body of generated methods, choose Tools | Templates.
+                        LocalDate today = LocalDate.now();
+                        setDisable(empty || item.compareTo(today) < 0);
+                    }
+
+                };
+            }
+
+        };
+        datePickerCeremonia.setDayCellFactory(callB);
+    	
+       /* datePickerCeremonia.setConverter(new StringConverter<LocalDate>() {
+        	String patt = "yyyy-MM-dd";
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(patt);
+			@Override
+			public LocalDate fromString(String string) {
+				if (string != null && !string.isEmpty()) {
+		             return LocalDate.parse(string, dateFormatter);
+		         } else {
+		             return null;
+		         }
+				
+			}
+			
+			@Override
+			public String toString(LocalDate date) {
+				if (date != null) {
+		             return dateFormatter.format(date);
+		         } else {
+		             return "";
+		         }
+			}
+
+        });*/
         
     }
     
@@ -251,6 +552,16 @@ public class SampleController implements Initializable{
     }
     
     private void setComboboxActas() throws JsonMappingException, JsonProcessingException, InterruptedException {
+    	cbCarreras.getItems().addAll("IAS",
+    			"IB",
+    			"IA",
+    			"IEA",
+    			"IEC",
+    			"IMT",
+    			"IMA",
+    			"IME",
+    			"ITS","IMA","IME"
+    			);
     	listSinoidales.getItems().clear();
     	cbFolders.getItems().clear();
     	cbCeremonias.getItems().clear();
@@ -263,11 +574,11 @@ public class SampleController implements Initializable{
     	List<Folder> folders = handleResponseFolder("http://127.0.0.1:4040/api/folders");
     	List<Ceremonias> ceremonias=handleResponseCeremony("http://127.0.0.1:4040/api/ceremonies");
     	for(Folder f : folders) {
-    		cbFolders.getItems().add(f.getId_case().toString());
+    		cbFolders.getItems().add(f.getId_folder().toString());
     	}
     	
     	for(Sinoidales s: sinoidales) {
-    		sample = s.getFirst_Name() + " " + s.getSecond_Name();
+    		sample =s.getId_sinoidales()+"-"+s.getFirst_Name() + " " + s.getSecond_Name();
     		cbSinoidales.getItems().add(sample);
     	}
     	
@@ -283,22 +594,22 @@ public class SampleController implements Initializable{
     		Stage stage=(Stage)btnLogout.getScene().getWindow();
         	stage.close();
     		
-    	} else {
-    		System.out.println("Nos quedamos");
     	}
-    	
     }
+    
     
     private void fillTableActas() throws JsonMappingException, JsonProcessingException, InterruptedException {
     	tableActas.getItems().clear();
     	List<Actas> actas=handleResponseActas("http://127.0.0.1:4040/api/certificates");
-  		/*if(actas == null) {
+  		if(actas == null) {
   			lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
-  		}*/
-  		for(Actas a:actas) {
-  			a.setDate_limit_fk(splitData(a.getDate_limit_fk(),"T"));
-  			tableActas.getItems().add(a);
+  		}else {
+  			for(Actas a:actas) {
+  	  			a.setDate_limit_fk(splitData(a.getDate_limit_fk(),"T"));
+  	  			tableActas.getItems().add(a);
+  	  		}
   		}
+  		
     }
     
     
@@ -320,12 +631,22 @@ public class SampleController implements Initializable{
   		}
     }
     
+    private void filltableFolder() throws JsonMappingException, JsonProcessingException, InterruptedException {
+    	tableFolders.getItems().clear();
+    	List<Folder> folders = handleResponseFolder("http://127.0.0.1:4040/api/folders");
+    	for(Folder f : folders) {
+    		tableFolders.getItems().add(f);
+    	}
+    }
+    
     protected List<Actas> handleResponseActas(String URL) throws JsonMappingException, JsonProcessingException, InterruptedException {
     	HttpResponse<String> response=getRequest(0,URL);
     	List<Actas> listActas=null;
-    	ObjectMapper objectMapper = new ObjectMapper();
-		listActas = objectMapper.readValue(response.body(), new TypeReference<List<Actas>>(){});
-        return listActas;
+    	if(response.statusCode()==201) {
+        	ObjectMapper objectMapper = new ObjectMapper();
+    		listActas = objectMapper.readValue(response.body(), new TypeReference<List<Actas>>(){});
+    	}
+    	return listActas;
     }
     
     
@@ -375,7 +696,6 @@ public class SampleController implements Initializable{
         }
         return response;
     }
-    
     
     
     @FXML
@@ -448,7 +768,7 @@ public class SampleController implements Initializable{
 		idSinoidal.setStyle( "-fx-alignment: center;");
 		idSinoidal.setSortable(false);
 		idSinoidal.setResizable(false);
-		
+		idSinoidal.setMinWidth(50);
     	TableColumn FirstName = new TableColumn("Nombre");
     	FirstName.setCellValueFactory(new PropertyValueFactory<>("first_Name"));
     	FirstName.setStyle( "-fx-alignment: center;");
@@ -489,7 +809,7 @@ public class SampleController implements Initializable{
     	telefonoColumn.setStyle( "-fx-alignment: center;");
     	telefonoColumn.setSortable(false);
     	telefonoColumn.setResizable(false);
-    	telefonoColumn.setMinWidth(100);
+    	telefonoColumn.setMinWidth(80);
     	
     	TableColumn  disponibilityColumn= new TableColumn("Disponibilidad");
     	disponibilityColumn.setCellValueFactory(new PropertyValueFactory<>("disponibility"));
@@ -498,12 +818,12 @@ public class SampleController implements Initializable{
     	disponibilityColumn.setResizable(false);
     	disponibilityColumn.setMaxWidth(50);
     	
-    	TableColumn  activeColumn= new TableColumn("Activo");
+    	TableColumn  activeColumn= new TableColumn("");
     	activeColumn.setCellValueFactory(new PropertyValueFactory<>("isActive"));
     	activeColumn.setStyle( "-fx-alignment: center;");
     	activeColumn.setSortable(false);
     	activeColumn.setResizable(false);
-    	activeColumn.setMaxWidth(50);
+    	activeColumn.setMaxWidth(47);
     	
     	tableSinoidales.getColumns().addAll(idSinoidal,FirstName,secondName,idProfessor,emailColumn,areaColumn,telefonoColumn,disponibilityColumn,activeColumn);
     }
@@ -528,9 +848,37 @@ public class SampleController implements Initializable{
     	cicleColumn.setStyle( "-fx-alignment: center;");
     	cicleColumn.setSortable(false);
     	cicleColumn.setResizable(false);
-    	cicleColumn.setMinWidth(200);
+    	cicleColumn.setMinWidth(144);
 
   
     	tableCeremonias.getColumns().addAll(idCeremony,dateLimit,cicleColumn);
     }
+
+	@SuppressWarnings("unchecked")
+	public void setTableViewFolders() {
+		@SuppressWarnings("rawtypes")
+		TableColumn idFolder = new TableColumn("Id");
+		idFolder.setCellValueFactory(new PropertyValueFactory<>("id_folder"));
+		idFolder.setStyle( "-fx-alignment: center;");
+		idFolder.setSortable(false);
+		idFolder.setResizable(false);
+		idFolder.setMinWidth(100);
+		@SuppressWarnings("rawtypes")
+		TableColumn  caseColumn= new TableColumn("Estante");
+		caseColumn.setCellValueFactory(new PropertyValueFactory<>("id_case"));
+		caseColumn.setStyle( "-fx-alignment: center;");
+		caseColumn.setSortable(false);
+		caseColumn.setResizable(false);
+		caseColumn.setMinWidth(164);
+		
+		TableColumn  actasNumColumn= new TableColumn("Numero de Actas");
+		actasNumColumn.setCellValueFactory(new PropertyValueFactory<>("actas_num"));
+		actasNumColumn.setStyle( "-fx-alignment: center;");
+		actasNumColumn.setSortable(false);
+		actasNumColumn.setResizable(false);
+		actasNumColumn.setMinWidth(140);
+		
+		tableFolders.getColumns().addAll(idFolder,caseColumn,actasNumColumn);
+		
+	}
 }

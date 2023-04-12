@@ -60,6 +60,19 @@
 -fx-font-family:fantasy;
 }
 
+.buttonMenu-update{
+-fx-background-color :  #55A9DD;
+-fx-text-fill : #ffff;
+-fx-padding: 10, 2, 2, 2;
+-fx-font-weight:bold;
+-fx-font-family:fantasy;
+	
+}
+
+.buttonMenu-update:hover{
+	-fx-background-color : #0d3923;
+}
+
 .buttonMenu:hover{
 -fx-background-color : #0d3923;
 }
@@ -96,3 +109,22 @@ tablecolumn{
 	-fx-background-color : #218E58;
 	-fx-alignment: center-right;
 }
+
+.table-view *.scroll-bar:horizontal *.increment-button,
+.table-view *.scroll-bar:horizontal *.decrement-button {
+  -fx-background-color: null;
+  -fx-background-radius: 0;
+  -fx-background-insets: 0;
+  -fx-padding: 0;
+}
+
+.table-view *.scroll-bar:horizontal *.increment-arrow,
+.table-view *.scroll-bar:horizontal *.decrement-arrow {
+  -fx-background-color: null;
+  -fx-background-radius: 0;
+  -fx-background-insets: 0;
+  -fx-padding: 0;
+  -fx-shape: null;
+}
+
+

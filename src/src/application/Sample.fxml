@@ -4,6 +4,7 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableView?>
@@ -149,7 +150,7 @@
             </VBox>
             <StackPane fx:id="paneMain" prefHeight="576.0" prefWidth="874.0">
                <children>
-                  <Pane fx:id="actasPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                  <Pane fx:id="actasPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" visible="false">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>
@@ -181,26 +182,29 @@
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField prefHeight="40.0" prefWidth="723.0" promptText="Nombre del Alumno">
+                                                <TextField fx:id="txtNameStudent" prefHeight="40.0" prefWidth="723.0" promptText="Nombre del Alumno">
                                                    <VBox.margin>
                                                       <Insets bottom="20.0" top="20.0" />
                                                    </VBox.margin>
                                                 </TextField>
-                                                <TextField layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="414.0" promptText="Matricula del Alumno">
+                                                <TextField fx:id="txtIdStudent" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="414.0" promptText="Matricula del Alumno">
                                                    <VBox.margin>
                                                       <Insets bottom="20.0" top="20.0" />
                                                    </VBox.margin>
                                                 </TextField>
-                                                <TextField layoutX="10.0" layoutY="35.0" prefHeight="40.0" prefWidth="723.0" promptText="Carrera del Alumno">
-                                                   <VBox.margin>
-                                                      <Insets bottom="20.0" top="20.0" />
-                                                   </VBox.margin>
-                                                </TextField>
-                                                <TextField layoutX="10.0" layoutY="60.0" prefHeight="40.0" prefWidth="723.0" promptText="Plan del Alumno">
+                                                <TextField fx:id="txtPlanStudent" accessibleText="/^(\s*|\d+)$/" layoutX="10.0" layoutY="60.0" prefHeight="40.0" prefWidth="723.0" promptText="Plan del Alumno">
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
                                                 </TextField>
+                                                <ComboBox fx:id="cbCarreras" prefHeight="25.0" prefWidth="218.0" promptText="Selecciona la Carrera del Alumno">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                   <VBox.margin>
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin>
+                                                </ComboBox>
                                                 <HBox prefHeight="56.0" prefWidth="390.0">
                                                    <children>
                                                       <ComboBox fx:id="cbCeremonias" prefHeight="25.0" prefWidth="177.0" promptText="Selecciona la Ceremonia">
@@ -289,13 +293,16 @@
                            </children>
                         </VBox>
                      </children></Pane>
-                  <Pane fx:id="sinoidalesPane" prefHeight="576.0" prefWidth="879.0" style="-fx-background-color: white;" visible="false">
+                  <Pane fx:id="sinoidalesPane" prefHeight="576.0" prefWidth="879.0" style="-fx-background-color: white;">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>
                               <Pane prefHeight="136.0" prefWidth="874.0">
                                  <children>
-                                    <Button fx:id="btnAgregarActa1" layoutX="22.0" layoutY="66.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Sinoidal" />
+                                    <Button fx:id="btnAgregarSinoidal" layoutX="22.0" layoutY="66.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Sinoidal">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor></Button>
                                     <Label layoutX="14.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="SINOIDALES">
                                        <font>
                                           <Font size="26.0" />
@@ -319,24 +326,106 @@
                                     <Button fx:id="btnAgregarActa11" layoutX="772.0" layoutY="36.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Buscar" />
                                  </children>
                               </Pane>
-                              <TableView fx:id="tableSinoidales" prefHeight="489.0" prefWidth="874.0" />
+                              <Pane prefHeight="467.0" prefWidth="874.0">
+                                 <children>
+                                    <TableView fx:id="tableSinoidales" layoutX="13.0" prefHeight="448.0" prefWidth="849.0" />
+                                 </children>
+                              </Pane>
                            </children>
                         </VBox>
                      </children></Pane>
-                  <Pane fx:id="ceremoniasPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" visible="false">
+                  <Pane fx:id="addSinoidales1" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>
-                              <Pane prefHeight="136.0" prefWidth="874.0">
+                              <Pane prefHeight="88.0" prefWidth="874.0">
                                  <children>
-                                    <Button fx:id="btnAgregarActa11" layoutX="22.0" layoutY="66.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Crear Ceremonia" />
-                                    <Label layoutX="14.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="CEREMONIAS">
+                                    <Label layoutX="14.0" layoutY="24.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="CREAR SINOIDAL">
                                        <font>
                                           <Font size="26.0" />
                                        </font>
                                     </Label>
-                                    <TextField layoutX="522.0" layoutY="42.0" prefHeight="25.0" prefWidth="243.0" promptText="Buscar" />
-                                    <ImageView fitHeight="17.0" fitWidth="26.0" layoutX="742.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true">
+                                    <Button fx:id="btnMinizeWindow11111" layoutX="835.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@styles/loginStyle.css" text="-">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="491.0" prefWidth="874.0">
+                                 <children>
+                                    <VBox alignment="TOP_CENTER" layoutX="215.0" layoutY="5.0" prefHeight="490.0" prefWidth="474.0">
+                                       <children>
+                                          <Label prefHeight="20.0" prefWidth="331.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Ingresa la información para crear un nuevo sinoidal.">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <HBox prefHeight="42.0" prefWidth="390.0">
+                                             <children>
+                                                <TextField fx:id="txtNombreSinoidal1" prefHeight="40.0" prefWidth="222.0" promptText="Nombre del Sinoidal" />
+                                                <TextField fx:id="txtApellidosSinoidal1" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="220.0" promptText="Apellidos del Sinoidal">
+                                                   <HBox.margin>
+                                                      <Insets left="20.0" />
+                                                   </HBox.margin>
+                                                </TextField>
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets top="10.0" />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <TextField fx:id="txtIdSinoidal1" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="414.0" promptText="Matricula del Sinoidal">
+                                             <VBox.margin>
+                                                <Insets bottom="20.0" top="20.0" />
+                                             </VBox.margin>
+                                          </TextField>
+                                          <TextField fx:id="txtEmailSinoidal1" accessibleText="/^(\s*|\d+)$/" layoutX="10.0" layoutY="60.0" prefHeight="40.0" prefWidth="723.0" promptText="Email del Sinoidal">
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" top="20.0" />
+                                             </VBox.margin>
+                                          </TextField>
+                                          <TextField fx:id="txtTelefonoSinoidal1" accessibleText="/^(\s*|\d+)$/" layoutX="10.0" layoutY="182.0" prefHeight="40.0" prefWidth="418.0" promptText="Telefono del Sinoidal">
+                                             <VBox.margin>
+                                                <Insets top="20.0" />
+                                             </VBox.margin>
+                                          </TextField>
+                                          <TextField fx:id="txtCoordinacionSinoidal1" accessibleText="/^(\s*|\d+)$/" layoutX="10.0" layoutY="232.0" onAction="#handleClicks" prefHeight="40.0" prefWidth="418.0" promptText="Coordinación del Sinoidal">
+                                             <VBox.margin>
+                                                <Insets top="20.0" />
+                                             </VBox.margin>
+                                          </TextField>
+                                          <Button fx:id="btnCrearSinoidal1" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="392.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="CREAR SINOIDAL">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <VBox.margin>
+                                                <Insets top="30.0" />
+                                             </VBox.margin>
+                                          </Button>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </VBox>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="ceremoniasPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                     <children>
+                        <VBox prefHeight="576.0" prefWidth="874.0">
+                           <children>
+                              <Pane prefHeight="99.0" prefWidth="874.0">
+                                 <children>
+                                    <Label layoutY="58.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="CEREMONIAS">
+                                       <font>
+                                          <Font size="26.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField layoutX="516.0" layoutY="24.0" prefHeight="25.0" prefWidth="243.0" promptText="Buscar" />
+                                    <ImageView fitHeight="17.0" fitWidth="26.0" layoutX="742.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../images/icons8_Search_52px.png" />
                                        </image>
@@ -350,10 +439,129 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="btnAgregarActa111" layoutX="772.0" layoutY="36.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Buscar" />
+                                    <Button fx:id="btnAgregarActa111" layoutX="765.0" layoutY="21.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Buscar" />
+                                    <Label layoutX="437.0" layoutY="58.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="FOLDERS">
+                                       <font>
+                                          <Font size="26.0" />
+                                       </font>
+                                    </Label>
                                  </children>
                               </Pane>
-                              <TableView fx:id="tableCeremonias" prefHeight="489.0" prefWidth="874.0" />
+                              <Pane prefHeight="478.0" prefWidth="874.0">
+                                 <children>
+                                    <HBox alignment="TOP_CENTER" prefHeight="462.0" prefWidth="871.0">
+                                       <children>
+                                          <VBox prefHeight="82.0" prefWidth="874.0">
+                                             <children>
+                                                <Label prefHeight="20.0" prefWidth="348.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Ingresa la información para crear una nueva Ceremonia.">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <DatePicker fx:id="datePickerCeremonia" prefHeight="25.0" prefWidth="251.0" promptText="Ingresa la fecha de la Ceremonia">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                   <VBox.margin>
+                                                      <Insets top="5.0" />
+                                                   </VBox.margin>
+                                                </DatePicker>
+                                                <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="426.0">
+                                                   <children>
+                                                      <Button fx:id="btnCrearCeremonia" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Crear Ceremonia">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </Button>
+                                                      <Button fx:id="btnCrearCeremonia1" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-update" stylesheets="@styles/style.css" text="Modificar Fecha">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" right="10.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button fx:id="btnCrearCeremonia11" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="Eliminar Ceremonia">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </Button>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets bottom="15.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                </HBox>
+                                                <TableView fx:id="tableCeremonias" prefHeight="344.0" prefWidth="426.0" stylesheets="@styles/style.css">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor></TableView>
+                                             </children>
+                                             <HBox.margin>
+                                                <Insets left="10.0" right="10.0" />
+                                             </HBox.margin>
+                                          </VBox>
+                                          <VBox layoutX="20.0" layoutY="10.0" prefHeight="82.0" prefWidth="874.0">
+                                             <children>
+                                                <Label prefHeight="20.0" prefWidth="348.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Selecciona un estante para crear una Carpeta.">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <ComboBox fx:id="cbEstantes" prefHeight="25.0" prefWidth="180.0" promptText="Selecciona un estante ">
+                                                   <VBox.margin>
+                                                      <Insets top="5.0" />
+                                                   </VBox.margin>
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                </ComboBox>
+                                                <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="426.0">
+                                                   <children>
+                                                      <Button fx:id="btnCrearFolder" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Crear Folder">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </Button>
+                                                      <Button fx:id="btnCrearCeremonia11" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-update" stylesheets="@styles/style.css" text="Modificar Folder">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" right="10.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button fx:id="btnCrearCeremonia111" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="Eliminar Folder">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </Button>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets bottom="15.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                </HBox>
+                                                <TableView fx:id="tableFolders" prefHeight="343.0" prefWidth="385.0" stylesheets="@styles/style.css">
+                                                   <VBox.margin>
+                                                      <Insets left="10.0" right="10.0" />
+                                                   </VBox.margin>
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor></TableView>
+                                             </children>
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </Pane>
                            </children>
                         </VBox>
                      </children>

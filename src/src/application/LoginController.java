@@ -63,7 +63,7 @@ public class LoginController{
     	if(!jsonReq.isEmpty()) {
     		lblErrors.setText("");
     		
-    		HttpResponse<String> response=PostRequest(0);
+    		HttpResponse<String> response=PostRequest(0,POST_URL);
     		if(response == null) {
     			Alert alert=runAlert(AlertType.ERROR,"Error de Conexión","Revisa tu conexión a internet, no pudimos comunicarnos con el Servidor");
     			alert.showAndWait();
@@ -90,13 +90,13 @@ public class LoginController{
     }
     
     
-    private HttpResponse<String> PostRequest(int intentos) throws InterruptedException {
+    public HttpResponse<String> PostRequest(int intentos,String URL) throws InterruptedException {
     	HttpResponse<String> response = null;
     	try {
 	    	HttpClient client=HttpClient.newHttpClient();
 	        HttpRequest req=(HttpRequest) HttpRequest.newBuilder()
 	        .setHeader("Content-Type","application/json")
-	        .uri(URI.create(POST_URL))
+	        .uri(URI.create(URL))
 	        .POST(HttpRequest.BodyPublishers.ofString(jsonReq.toString()))
 	        .build();        
 			response= client.send(req,HttpResponse.BodyHandlers.ofString());
@@ -104,8 +104,7 @@ public class LoginController{
 		} catch (IOException | InterruptedException e) {
 			if(intentos < 5) {
 				Thread.sleep(2000);
-				System.out.println(intentos);
-				return PostRequest(intentos+1);
+				return PostRequest(intentos+1,URL);
 			}
 	//		e.printStackTrace();
 		}
