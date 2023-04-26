@@ -183,7 +183,7 @@ public class SampleController implements Initializable{
     	return String.valueOf(data[0]);
     }
     
-    public void handleClicks(ActionEvent actionEvent) throws InterruptedException, JsonMappingException, JsonProcessingException {
+    public void handleClicks(ActionEvent actionEvent) throws InterruptedException, IOException {
       if (actionEvent.getSource() == btnInicio) {
     	  	try {
 				fillTableActas();
@@ -270,16 +270,36 @@ public class SampleController implements Initializable{
         }
         
         if(actionEvent.getSource() == btnEliminarActa) {
-        	System.out.println("Vamos a eliminar el acta: "+id_Acta);
+        	deleteActa();
         }
         
         if(actionEvent.getSource() == btnActualizarActa) {
-        	System.out.println("Vamos a actualizar el id "+id_Acta);
+        	updateActa();
+        	
         }
         
     }
     
-    
+    private void updateActa() throws InterruptedException, JsonMappingException, JsonProcessingException {
+    	Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Folder", "¿Seguro que quieres actualizar esta Acta en el sistema?");
+    	Optional<ButtonType> result = alert.showAndWait();
+    	if(result.get() == ButtonType.OK) {
+    		JSONObject json = new JSONObject();
+    		json.put("idCeremony", Integer.parseInt(cbCeremonias.getValue()));
+    		json.put("idFolder", Integer.parseInt(cbFolders.getValue()));
+    		HttpResponse<String> rps = putRequest(0,"http://127.0.0.1:4040/api/certificates/updateActa/"+id_Acta,json);
+    		System.out.println(rps);
+    		if(rps == null || rps.statusCode()!=201) {
+    			alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
+        		alert.show();
+    		}else {
+    			fillTableActas();
+    			inicioPane.toFront();
+    			alert=lc.runAlert(AlertType.INFORMATION, "Acta Actualizada", "Acta fue actualizada exitosamente.");
+        		alert.show();
+    		}
+    	}
+    }
     
     
     private void createFolder() throws InterruptedException, JsonMappingException, JsonProcessingException {
@@ -452,6 +472,50 @@ public class SampleController implements Initializable{
     	}
     }
    
+    private void deleteActa() throws IOException, InterruptedException {
+    		HttpResponse<String> res = null;
+			Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Eliminar Acta", "¿Seguro que quieres eliminar el acta con el id #"+id_Acta+" ?");
+        	Optional<ButtonType> result = alert.showAndWait();
+        	if(result.get()==ButtonType.OK) {
+        		res = deleteRequest(0,"http://127.0.0.1:4040/api/certificates/actasSinoidales/delete/"+id_Acta);
+        		if(res == null || res.statusCode() !=201) {
+        			alert=lc.runAlert(AlertType.ERROR, "ERROR ELIMINAR ACTA", "Hubo un error al momento de eliminar el acta, verifica tu conexión a internet.\nStatus: "+res.statusCode());
+        			res = deleteRequest(0,"http://127.0.0.1:4040/api/certificates/"+id_Acta);
+        			if(res == null || res.statusCode() != 201) {
+        				alert=lc.runAlert(AlertType.ERROR, "ERROR ELIMINAR ACTA", "Hubo un error al momento de eliminar el acta, verifica tu conexión a internet.\nStatus: "+res.statusCode());
+                		alert.show();
+        			}else {
+        				fillTableActas();
+        				inicioPane.toFront();
+        				alert=lc.runAlert(AlertType.INFORMATION, "ACTA ELIMINADA", "El Acta fue eliminada correctamente.");
+                		alert.show();
+        			}
+        		}
+        	}
+    }
+    
+    private HttpResponse<String> deleteRequest(int intentos,String URL) throws IOException, InterruptedException {
+		HttpResponse<String> response=null;
+    	try {
+    		HttpClient cli = HttpClient.newHttpClient();
+            HttpRequest req=(HttpRequest) HttpRequest.newBuilder()
+            .setHeader("Content-Type","application/json")
+            .setHeader("x-access-token", token)
+            .uri(URI.create(URL))
+            .DELETE()
+            .build();        
+    		response= cli.send(req,HttpResponse.BodyHandlers.ofString());
+    		return response;
+    	}catch(IOException | InterruptedException e) {
+    		if(intentos < 5) {
+				Thread.sleep(2000);
+				return deleteRequest(intentos+1,URL);
+			}
+    	}
+    	return response;
+    }
+    
+    
     private void createCeremonia() throws InterruptedException, JsonMappingException, JsonProcessingException {
     	if(datePickerCeremonia.getValue()!=null) {
     		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Ceremonia", "¿Seguro que quieres crear esta ceremonia con fecha del "+datePickerCeremonia.getValue()+" ?");
@@ -522,7 +586,7 @@ public class SampleController implements Initializable{
 		} catch (IOException | InterruptedException e) {
 			if(intentos < 5) {
 				Thread.sleep(2000);
-				return postRequest(intentos+1,URL,json);
+				return putRequest(intentos+1,URL,json);
 			}
 	//		e.printStackTrace();
 		}
@@ -556,7 +620,6 @@ public class SampleController implements Initializable{
     	if(maxlenght == 255) {
     		source = txt.getText().concat("\s");
     	}
-    	System.out.println(source);
     	if(source.length()>0 && source.matches(regex) && source.length() <= maxlenght ) {
     		return true;
     	}else{
@@ -712,7 +775,6 @@ public class SampleController implements Initializable{
   			lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
   		}else {
   			for(Actas a:actas) {
-  				a.setName("aaa");
   	  			a.setDate_limit_fk(splitData(a.getDate_limit_fk(),"T"));
   	  			tableActas.getItems().add(a);
   	  		}
@@ -803,7 +865,6 @@ public class SampleController implements Initializable{
 		response = client.send(req,HttpResponse.BodyHandlers.ofString());
         }catch(IOException | InterruptedException e) {
         	if(intentos < 5) {
-        		System.out.println(intentos);
     			return getRequest(intentos+1,URL);
         	}
         	alert = lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
@@ -828,14 +889,19 @@ public class SampleController implements Initializable{
     	idActaColumn.setSortable(false);
     	idActaColumn.setResizable(false);
     	
-    	TableColumn  nameColumn= new TableColumn("Estudiante");
+    	TableColumn  nameColumn= new TableColumn("Nombre");
     	nameColumn.setCellValueFactory(new PropertyValueFactory<>("name_Student"));
     	nameColumn.setStyle( "-fx-alignment: center;");
     	nameColumn.setSortable(false);
     	nameColumn.setResizable(false);
-    	nameColumn.setMinWidth(200);
+    	nameColumn.setMinWidth(150);
 
-    	
+    	TableColumn  lastNameColumn= new TableColumn("Apellidos");
+    	lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName_Student"));
+    	lastNameColumn.setStyle( "-fx-alignment: center;");
+    	lastNameColumn.setSortable(false);
+    	lastNameColumn.setResizable(false);
+    	lastNameColumn.setMinWidth(150);
     	
     	TableColumn  idStudentColumn= new TableColumn("Matricula");
     	idStudentColumn.setCellValueFactory(new PropertyValueFactory<>("id_Student"));
@@ -849,14 +915,14 @@ public class SampleController implements Initializable{
     	idFolderColumn.setStyle( "-fx-alignment: center;");
     	idFolderColumn.setSortable(false);
     	idFolderColumn.setResizable(false);
-
+    	idFolderColumn.setMinWidth(30);
     	
     	TableColumn  signaturesColumn= new TableColumn("Status");
     	signaturesColumn.setCellValueFactory(new PropertyValueFactory<>("signatures"));
     	signaturesColumn.setStyle( "-fx-alignment: center;");
     	signaturesColumn.setSortable(false);
     	signaturesColumn.setResizable(false);
-    	signaturesColumn.setMinWidth(150);
+    	signaturesColumn.setMinWidth(100);
 
     	
     	TableColumn  dateLimitColumn= new TableColumn("Fecha Limite");
@@ -864,7 +930,7 @@ public class SampleController implements Initializable{
     	dateLimitColumn.setStyle( "-fx-alignment: center;");
     	dateLimitColumn.setSortable(false);
     	dateLimitColumn.setResizable(false);
-    	dateLimitColumn.setMinWidth(200);
+    	dateLimitColumn.setMinWidth(150);
     	
     	TableColumn  ceremonyColumn= new TableColumn("id Ceremonia");
     	ceremonyColumn.setCellValueFactory(new PropertyValueFactory<>("id_ceremony_fk"));
@@ -874,7 +940,7 @@ public class SampleController implements Initializable{
 
 
     	
-    	tableActas.getColumns().addAll(idActaColumn,nameColumn,idStudentColumn,idFolderColumn,dateLimitColumn,ceremonyColumn,signaturesColumn);
+    	tableActas.getColumns().addAll(idActaColumn,nameColumn,lastNameColumn,idStudentColumn,idFolderColumn,dateLimitColumn,ceremonyColumn,signaturesColumn);
     	
     	tableActas.addEventHandler(MouseEvent.MOUSE_CLICKED, (e)->{
     		if(e.getClickCount() == 2) {
@@ -883,11 +949,10 @@ public class SampleController implements Initializable{
             	
             	if (result.get() == ButtonType.OK){
             		Actas selectedItem = tableActas.getSelectionModel().getSelectedItem();
-                    if (!selectedItem.equals(null)) {
+                    if (selectedItem != null) {
                     	actasPane.toFront();
-                    	//System.out.println(selectedItem.toString());
                     	txtNameStudent.setText(selectedItem.getName_Student());
-                    	txtApellidosStudent.setText(selectedItem.getlastName_Student());
+                    	txtApellidosStudent.setText(selectedItem.getLastName_Student());
                     	txtIdStudent.setText(selectedItem.getId_Student().toString());
                     	txtPlanStudent.setText(String.valueOf(selectedItem.getDegree_plan()));
                     	
@@ -921,9 +986,13 @@ public class SampleController implements Initializable{
                     	cbFolders.getSelectionModel().select(selectedItem.getId_Folder_fk());
                     	cbCeremonias.getSelectionModel().select(selectedItem.getId_ceremony_fk().toString());
                     	cbCarreras.getSelectionModel().select(selectedItem.getDegree());
+                    	cbCarreras.setDisable(true);
                     	btnActualizarActa.setVisible(true);
                     	btnEliminarActa.setVisible(true);
                     	btnCrearActa.setVisible(false);
+                    }else{
+                    	alert=lc.runAlert(AlertType.CONFIRMATION, "Selecciona un Registro", "Selecciona un registro para ver su información.");
+                		alert.show();
                     }
             	}
     			

@@ -14,28 +14,44 @@ public class Actas {
 	private String date_limit_fk;
 	private BigInteger id_ceremony_fk;
 	private int signatures;
+
 	
-	public String getlastName_Student() {
-		return lastName_Student;
-	}
-
-	public void setlastName_Student(String lastName_Student) {
-		this.lastName_Student = lastName_Student;
-	}
-
+	
+	
+	
 
 	public String getName_Student() {
 		return name_Student;
 	}
 
-	public void setName(String lastName_Student) {
-		this.name_Student.concat(" "+lastName_Student);
-	}
+
+
+
 
 
 	public void setName_Student(String name_Student) {
 		this.name_Student = name_Student;
 	}
+
+
+
+
+
+
+	public String getLastName_Student() {
+		return lastName_Student;
+	}
+
+
+
+
+
+
+	public void setLastName_Student(String lastName_Student) {
+		this.lastName_Student = lastName_Student;
+	}
+
+
 
 
 
@@ -47,9 +63,13 @@ public class Actas {
 
 
 
+
+
 	public void setId_actas(BigInteger id_actas) {
 		this.id_actas = id_actas;
 	}
+
+
 
 
 
@@ -61,9 +81,13 @@ public class Actas {
 
 
 
+
+
 	public void setId_Student(BigInteger id_Student) {
 		this.id_Student = id_Student;
 	}
+
+
 
 
 
@@ -75,9 +99,13 @@ public class Actas {
 
 
 
+
+
 	public void setId_Folder_fk(int id_Folder_fk) {
 		this.id_Folder_fk = id_Folder_fk;
 	}
+
+
 
 
 
@@ -89,9 +117,13 @@ public class Actas {
 
 
 
+
+
 	public void setDegree(String degree) {
 		this.degree = degree;
 	}
+
+
 
 
 
@@ -103,9 +135,13 @@ public class Actas {
 
 
 
+
+
 	public void setDegree_plan(int degree_plan) {
 		this.degree_plan = degree_plan;
 	}
+
+
 
 
 
@@ -117,9 +153,13 @@ public class Actas {
 
 
 
+
+
 	public void setDate_limit_fk(String date_limit_fk) {
 		this.date_limit_fk = date_limit_fk;
 	}
+
+
 
 
 
@@ -131,9 +171,13 @@ public class Actas {
 
 
 
+
+
 	public void setId_ceremony_fk(BigInteger id_ceremony_fk) {
 		this.id_ceremony_fk = id_ceremony_fk;
 	}
+
+
 
 
 
@@ -145,6 +189,8 @@ public class Actas {
 
 
 
+
+
 	public void setSignatures(int signatures) {
 		this.signatures = signatures;
 	}
@@ -152,34 +198,13 @@ public class Actas {
 
 
 
-	
 
-	/*public Actas(String name_Student, BigInteger id_acta, BigInteger id_student,int id_Folder_fk ,String degree, int degree_plan,
-			String date_limit_fk, BigInteger id_ceremony_fk, int signatures) {
-		super();
-		this.name_Student = name_Student;
-		this.id_actas = id_acta;
-		this.id_Student = id_student;
-		this.id_Folder_fk = id_Folder_fk;
-		this.degree = degree;
-		this.degree_plan = degree_plan;
-		this.date_limit_fk = date_limit_fk;
-		this.id_ceremony_fk = id_ceremony_fk;
-		this.signatures = signatures;
-	}
-*/
+
 	@Override
 	public String toString() {
-		return "Actas [Name_Student=" + name_Student +" "+lastName_Student+ ", id_acta=" + id_actas + ", id_student=" + id_Student
-				+ ", id_Folder_fk=" + id_Folder_fk + ", degree=" + degree + ", degree_plan=" + degree_plan
-				+ ", date_limit_fk=" + date_limit_fk + ", id_ceremony_fk=" + id_ceremony_fk + ", signatures="
-				+ signatures + "]";
+		return "Actas [name_Student=" + name_Student + ", lastName_Student=" + lastName_Student + ", id_actas="
+				+ id_actas + ", id_Student=" + id_Student + ", id_Folder_fk=" + id_Folder_fk + ", degree=" + degree
+				+ ", degree_plan=" + degree_plan + ", date_limit_fk=" + date_limit_fk + ", id_ceremony_fk="
+				+ id_ceremony_fk + ", signatures=" + signatures + "]";
 	}
-	
-	
-	
-	
-	
-	
-	
 }
