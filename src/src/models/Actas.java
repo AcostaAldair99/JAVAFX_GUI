@@ -5,6 +5,7 @@ import java.math.BigInteger;
 public class Actas {
 	
 	private String name_Student;
+	private String lastName_Student;
 	private BigInteger id_actas;
 	private BigInteger id_Student;
 	private int id_Folder_fk;
@@ -14,14 +15,22 @@ public class Actas {
 	private BigInteger id_ceremony_fk;
 	private int signatures;
 	
-	
+	public String getlastName_Student() {
+		return lastName_Student;
+	}
+
+	public void setlastName_Student(String lastName_Student) {
+		this.lastName_Student = lastName_Student;
+	}
 
 
 	public String getName_Student() {
 		return name_Student;
 	}
 
-
+	public void setName(String lastName_Student) {
+		this.name_Student.concat(" "+lastName_Student);
+	}
 
 
 	public void setName_Student(String name_Student) {
@@ -161,7 +170,7 @@ public class Actas {
 */
 	@Override
 	public String toString() {
-		return "Actas [Name_Student=" + name_Student + ", id_acta=" + id_actas + ", id_student=" + id_Student
+		return "Actas [Name_Student=" + name_Student +" "+lastName_Student+ ", id_acta=" + id_actas + ", id_student=" + id_Student
 				+ ", id_Folder_fk=" + id_Folder_fk + ", degree=" + degree + ", degree_plan=" + degree_plan
 				+ ", date_limit_fk=" + date_limit_fk + ", id_ceremony_fk=" + id_ceremony_fk + ", signatures="
 				+ signatures + "]";

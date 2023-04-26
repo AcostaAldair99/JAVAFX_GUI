@@ -61,7 +61,7 @@
 }
 
 .buttonMenu-update{
--fx-background-color :  #55A9DD;
+-fx-background-color :  #F7AB06;
 -fx-text-fill : #ffff;
 -fx-padding: 10, 2, 2, 2;
 -fx-font-weight:bold;
@@ -70,7 +70,7 @@
 }
 
 .buttonMenu-update:hover{
-	-fx-background-color : #0d3923;
+	-fx-background-color : #DA9008;
 }
 
 .buttonMenu:hover{
