@@ -150,7 +150,7 @@
             </VBox>
             <StackPane fx:id="paneMain" prefHeight="576.0" prefWidth="874.0">
                <children>
-                  <Pane fx:id="sinoidalesPane" prefHeight="576.0" prefWidth="879.0" style="-fx-background-color: white;" visible="false">
+                  <Pane fx:id="sinoidalesPane" prefHeight="576.0" prefWidth="879.0" style="-fx-background-color: white;">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>
@@ -191,7 +191,7 @@
                            </children>
                         </VBox>
                      </children></Pane>
-                  <Pane fx:id="addSinoidales" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" visible="false">
+                  <Pane fx:id="addSinoidales" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>
@@ -214,56 +214,160 @@
                               </Pane>
                               <Pane prefHeight="491.0" prefWidth="874.0">
                                  <children>
-                                    <VBox alignment="TOP_CENTER" layoutX="215.0" layoutY="5.0" prefHeight="490.0" prefWidth="474.0">
+                                    <HBox layoutX="2.0" prefHeight="490.0" prefWidth="871.0">
                                        <children>
-                                          <Label prefHeight="20.0" prefWidth="331.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Ingresa la información para crear un nuevo sinoidal.">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <HBox prefHeight="42.0" prefWidth="390.0">
+                                          <VBox alignment="TOP_CENTER" prefHeight="490.0" prefWidth="567.0">
                                              <children>
-                                                <TextField fx:id="txtNombreSinoidal" prefHeight="40.0" prefWidth="222.0" promptText="Nombre del Sinoidal" />
-                                                <TextField fx:id="txtApellidosSinoidal" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="220.0" promptText="Apellidos del Sinoidal">
-                                                   <HBox.margin>
-                                                      <Insets left="20.0" />
-                                                   </HBox.margin>
+                                                <Label prefHeight="20.0" prefWidth="331.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Ingresa la información para crear un nuevo sinoidal.">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <HBox prefHeight="42.0" prefWidth="390.0">
+                                                   <children>
+                                                      <TextField fx:id="txtNombreSinoidal" prefHeight="40.0" prefWidth="222.0" promptText="Nombre del Sinoidal" />
+                                                      <TextField fx:id="txtApellidosSinoidal" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="220.0" promptText="Apellidos del Sinoidal">
+                                                         <HBox.margin>
+                                                            <Insets left="20.0" />
+                                                         </HBox.margin>
+                                                      </TextField>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets top="10.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                                <TextField fx:id="txtIdSinoidal" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="414.0" promptText="Matricula del Sinoidal">
+                                                   <VBox.margin>
+                                                      <Insets bottom="20.0" top="20.0" />
+                                                   </VBox.margin>
                                                 </TextField>
+                                                <TextField fx:id="txtCoordinacionSinoidal" accessibleText="/^(\s*|\d+)$/" layoutX="10.0" layoutY="232.0" onAction="#handleClicks" prefHeight="40.0" prefWidth="418.0" promptText="Coordinación del Sinoidal">
+                                                   <VBox.margin>
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin>
+                                                </TextField>
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Button fx:id="btnCrearSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="CREAR SINOIDAL">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </Button>
+                                                      <Button fx:id="btnActualizarSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu-update" stylesheets="@styles/style.css" text="ACTUALIZAR">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" right="10.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button fx:id="btnEliminarSinoidales" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="ELIMINAR">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </Button>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets top="50.0" />
+                                                   </VBox.margin>
+                                                </HBox>
                                              </children>
-                                             <VBox.margin>
-                                                <Insets top="10.0" />
-                                             </VBox.margin>
-                                          </HBox>
-                                          <TextField fx:id="txtIdSinoidal" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="414.0" promptText="Matricula del Sinoidal">
-                                             <VBox.margin>
-                                                <Insets bottom="20.0" top="20.0" />
-                                             </VBox.margin>
-                                          </TextField>
-                                          <TextField fx:id="txtEmailSinoidal" accessibleText="/^(\s*|\d+)$/" layoutX="10.0" layoutY="60.0" prefHeight="40.0" prefWidth="723.0" promptText="Email del Sinoidal">
-                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="20.0" />
-                                             </VBox.margin>
-                                          </TextField>
-                                          <TextField fx:id="txtTelefonoSinoidal" accessibleText="/^(\s*|\d+)$/" layoutX="10.0" layoutY="182.0" prefHeight="40.0" prefWidth="418.0" promptText="Telefono del Sinoidal">
-                                             <VBox.margin>
-                                                <Insets top="20.0" />
-                                             </VBox.margin>
-                                          </TextField>
-                                          <TextField fx:id="txtCoordinacionSinoidal" accessibleText="/^(\s*|\d+)$/" layoutX="10.0" layoutY="232.0" onAction="#handleClicks" prefHeight="40.0" prefWidth="418.0" promptText="Coordinación del Sinoidal">
-                                             <VBox.margin>
-                                                <Insets top="20.0" />
-                                             </VBox.margin>
-                                          </TextField>
-                                          <Button fx:id="btnCrearSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="392.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="CREAR SINOIDAL">
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                             <VBox.margin>
-                                                <Insets top="30.0" />
-                                             </VBox.margin>
-                                          </Button>
+                                             <HBox.margin>
+                                                <Insets left="10.0" right="10.0" />
+                                             </HBox.margin>
+                                          </VBox>
+                                          <VBox prefHeight="490.0" prefWidth="440.0">
+                                             <children>
+                                                <HBox prefHeight="48.0" prefWidth="352.0">
+                                                   <children>
+                                                      <TextField fx:id="txtTelefonoSinoidal" accessibleText="/^(\s*|\d+)$/" prefHeight="40.0" prefWidth="219.0" promptText="Telefono del Sinoidal" />
+                                                      <Button fx:id="btnAgregarTelefono" mnemonicParsing="false" onAction="#handleClicks" prefHeight="32.0" prefWidth="62.0" styleClass="buttonMenu" stylesheets="@styles/style.css">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" />
+                                                         </HBox.margin>
+                                                         <graphic>
+                                                            <ImageView fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="https://img.icons8.com/ios/50/null/add--v1.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Button>
+                                                      <Button fx:id="btnEliminarTelefono" layoutX="239.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="40.0" prefWidth="53.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <graphic>
+                                                            <ImageView fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="https://img.icons8.com/dotty/80/null/filled-trash.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                   </children>
+                                                </HBox>
+                                                <ListView fx:id="listTelefonos" prefHeight="182.0" prefWidth="332.0">
+                                                   <VBox.margin>
+                                                      <Insets left="10.0" right="10.0" />
+                                                   </VBox.margin>
+                                                </ListView>
+                                                <HBox prefHeight="49.0" prefWidth="352.0">
+                                                   <children>
+                                                      <TextField fx:id="txtEmailSinoidal" accessibleText="/^(\s*|\d+)$/" prefHeight="40.0" prefWidth="235.0" promptText="Email del Sinoidal" />
+                                                      <Button fx:id="btnAgregarEmail" mnemonicParsing="false" onAction="#handleClicks" prefHeight="32.0" prefWidth="62.0" styleClass="buttonMenu" stylesheets="@styles/style.css">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <graphic>
+                                                            <ImageView fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="https://img.icons8.com/ios/50/null/add--v1.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button fx:id="btnEliminarEmail" mnemonicParsing="false" onAction="#handleClicks" prefHeight="32.0" prefWidth="62.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <graphic>
+                                                            <ImageView fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="https://img.icons8.com/dotty/80/null/filled-trash.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                                <ListView fx:id="listCorreos" prefHeight="171.0" prefWidth="332.0">
+                                                   <VBox.margin>
+                                                      <Insets left="10.0" right="10.0" />
+                                                   </VBox.margin>
+                                                </ListView>
+                                             </children>
+                                             <HBox.margin>
+                                                <Insets left="10.0" right="10.0" />
+                                             </HBox.margin>
+                                          </VBox>
                                        </children>
-                                    </VBox>
+                                    </HBox>
                                  </children>
                               </Pane>
                            </children>
@@ -433,7 +537,7 @@
                         <Label text="CONFIGURACION" />
                      </children>
                   </Pane>
-                  <Pane fx:id="actasPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                  <Pane fx:id="actasPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" visible="false">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>
@@ -496,21 +600,31 @@
                                                       <Insets top="20.0" />
                                                    </VBox.margin>
                                                 </ComboBox>
-                                                <HBox prefHeight="56.0" prefWidth="390.0">
+                                                <HBox alignment="TOP_CENTER" prefHeight="56.0" prefWidth="390.0">
                                                    <children>
-                                                      <ComboBox fx:id="cbCeremonias" prefHeight="25.0" prefWidth="177.0" promptText="Selecciona la Ceremonia">
-                                                         <cursor>
-                                                            <Cursor fx:constant="HAND" />
-                                                         </cursor>
-                                                      </ComboBox>
-                                                      <ComboBox fx:id="cbFolders" prefHeight="25.0" prefWidth="172.0" promptText="Selecciona el Folder">
+                                                      <VBox prefHeight="56.0" prefWidth="200.0">
+                                                         <children>
+                                                            <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Selecciona una Ceremonia" />
+                                                            <ComboBox fx:id="cbCeremonias" prefHeight="25.0" prefWidth="177.0" promptText="Selecciona la Ceremonia">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                            </ComboBox>
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox prefHeight="56.0" prefWidth="177.0">
+                                                         <children>
+                                                            <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Selecciona un Folder" />
+                                                            <ComboBox fx:id="cbFolders" prefHeight="25.0" prefWidth="172.0" promptText="Selecciona el Folder">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                            </ComboBox>
+                                                         </children>
                                                          <HBox.margin>
-                                                            <Insets left="50.0" />
+                                                            <Insets left="30.0" />
                                                          </HBox.margin>
-                                                         <cursor>
-                                                            <Cursor fx:constant="HAND" />
-                                                         </cursor>
-                                                      </ComboBox>
+                                                      </VBox>
                                                    </children>
                                                    <VBox.margin>
                                                       <Insets top="30.0" />
@@ -540,6 +654,9 @@
                                                          </HBox.margin>
                                                       </Button>
                                                    </children>
+                                                   <VBox.margin>
+                                                      <Insets top="30.0" />
+                                                   </VBox.margin>
                                                 </HBox>
                                              </children>
                                              <HBox.margin>
@@ -604,7 +721,7 @@
                            </children>
                         </VBox>
                      </children></Pane>
-                  <Pane fx:id="inicioPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" StackPane.alignment="CENTER">
+                  <Pane fx:id="inicioPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" visible="false" StackPane.alignment="CENTER">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>

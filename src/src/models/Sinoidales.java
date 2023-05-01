@@ -7,9 +7,7 @@ public class Sinoidales {
 	private String first_Name;
 	private String second_Name;
     private BigInteger id_professor;
-    private String email;
     private String area;
-    private String telephone;
     private int disponibility;
     private int isActive;
     
@@ -39,24 +37,14 @@ public class Sinoidales {
 	public void setId_professor(BigInteger id_professor) {
 		this.id_professor = id_professor;
 	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
+
 	public String getArea() {
 		return area;
 	}
 	public void setArea(String area) {
 		this.area = area;
 	}
-	public String getTelephone() {
-		return telephone;
-	}
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
+
 	public int getDisponibility() {
 		return disponibility;
 	}
@@ -71,8 +59,11 @@ public class Sinoidales {
 	}
 	@Override
 	public String toString() {
-		return "Sinoidales [First Name ="+first_Name+" second_Name=" + second_Name + ", id_professor=" + id_professor + ", email=" + email
-				+ ", area=" + area + ", telephone=" + telephone + ", disponibility=" + disponibility + ", isActive="
-				+ isActive + "]";
-	}    
+		return "Sinoidales [id_sinoidales=" + id_sinoidales + ", first_Name=" + first_Name + ", second_Name="
+				+ second_Name + ", id_professor=" + id_professor + ", area=" + area + ", disponibility=" + disponibility
+				+ ", isActive=" + isActive + "]";
+	}
+
+	
+	
 }
