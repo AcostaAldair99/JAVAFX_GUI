@@ -73,10 +73,10 @@ public class SampleController implements Initializable{
 	private String token;
 	Alert alert;
 	private BigInteger id_Acta=null;
-	
+	private BigInteger id_Sinoidal=null;
 	
 	@FXML
-    private Button btnCloseWindow,btnActualizarSinoidal,btnEliminarSinoidales,btnAgregarTelefono,btnAgregarEmail,btnEliminarTelefono,btnEliminarEmail;
+    private Button btnCloseWindow,btnActualizarSinoidal,btnEliminarSinoidales,btnAgregarTelefono,btnAgregarEmail,btnEliminarTelefono,btnEliminarEmail,btnDeleteSinoidal;
 	
 	@FXML
     private Button btnMinizeWindow,btnAgregarSinoidales,btnCrearSinoidal,btnCrearFolder;
@@ -295,6 +295,14 @@ public class SampleController implements Initializable{
         if(actionEvent.getSource() == btnEliminarTelefono) {
         	deleteSelected(listTelefonos,"Eliminar Telefono","¿Seguro que quieres eliminar este telefono?",btnEliminarTelefono);
         }
+        
+        if(actionEvent.getSource() == btnDeleteSinoidal) {
+        	//deleteSinoidal();
+        }
+        
+        if(actionEvent.getSource() == btnActualizarSinoidal) {
+        	updateSinoidal();
+        }
     }
     
     
@@ -318,7 +326,7 @@ public class SampleController implements Initializable{
     }
     
     private void addEmailToList() {
-		if(validateTextField(txtEmailSinoidal,"El valor del campo email es nulo o contiene letras","\"[a-zA-Z0-9_!#$%&'*+/=?``{|}~^.]+@[a-zA-Z0-9.]+$\"g",255)){
+		if(validateTextField(txtEmailSinoidal,"El valor del campo email es nulo o no cuenta con el formato indicado.","[a-zA-Z0-9_!#$%&'*+/=?``{|}~^.]+@[a-zA-Z0-9.]+$",255)){
 			Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Agregar Email", "¿Seguro que quieres asignar este email a este sinoidal?");
         	Optional<ButtonType> result = alert.showAndWait();
         	if(result.get() == ButtonType.OK) {
@@ -360,7 +368,7 @@ public class SampleController implements Initializable{
     private void updateActa() throws InterruptedException, IOException {
     	int i=1;
     	if(validateList(listSinoidales,3,"No se han asignado todos los 3 sinoidales necesarios para crear el Acta")) {
-    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Folder", "¿Seguro que quieres actualizar esta Acta en el sistema?");
+    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Actualizar Acta", "¿Seguro que quieres actualizar esta Acta en el sistema?");
         	Optional<ButtonType> result = alert.showAndWait();
         	if(result.get() == ButtonType.OK) {
         		JSONObject json = new JSONObject();
@@ -398,7 +406,57 @@ public class SampleController implements Initializable{
     	
     }
     
-    
+    private void updateSinoidal() throws IOException, InterruptedException {
+    	HttpResponse<String> res = null;
+    	JSONObject js = new JSONObject();
+    	if(validateList(listTelefonos,1,"Ingresa al menos un telefono para asignarlo al sinoidal") &&
+    			validateList(listCorreos,1,"Ingresa al menos un email para asignarlo al sinoidal")) {
+    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Actualizar Sinoidal", "¿Seguro que quieres actualizar la informacion de este Sinoidal en el sistema?");
+        	Optional<ButtonType> result = alert.showAndWait();
+        	if(result.get() == ButtonType.OK) {
+        			res = deleteRequest(0,"http://127.0.0.1:4040/api/sinoidales/phones/delete/"+id_Sinoidal);
+        			if(res == null || res.statusCode()!=201) {
+        				alert=lc.runAlert(AlertType.ERROR, "ERROR Sinoidal", "Hubo un error al momento de actualizar el sinoidal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
+                		alert.show();
+        			}else {
+        				res = deleteRequest(0,"http://127.0.0.1:4040/api/sinoidales/emails/delete/"+id_Sinoidal);
+        				if(res == null || res.statusCode()!=201) {
+            				alert=lc.runAlert(AlertType.ERROR, "ERROR Sinoidal", "Hubo un error al momento de actualizar el sinoidal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
+                    		alert.show();
+            			}else {
+            				for(String src: listTelefonos.getItems()) {
+    	        				js.clear();
+    	        				js.put("phone", src);
+    	        				res = postRequest(0,"http://127.0.0.1:4040/api/sinoidales/addPhone/"+id_Sinoidal,js);
+    	        				if(res == null || res.statusCode() != 201) {
+    	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinoidal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
+    	    	            		alert.show();
+    	        				}
+    	        			}
+    	        			
+    	        			for(String src:listCorreos.getItems()) {
+    	        				js.clear();
+    	        				js.put("email", src);
+    	        				res = postRequest(0,"http://127.0.0.1:4040/api/sinoidales/addEmail/"+id_Sinoidal,js);
+    	        				if(res == null || res.statusCode() != 201) {
+    	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinoidal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
+    	    	            		alert.show();
+    	        				}
+    	        			}
+
+    	        			fillTableSinoidales();
+    	        			sinoidalesPane.toFront();
+    	        			alert=lc.runAlert(AlertType.INFORMATION, "SINOIDAL ACTUALIZADO", "El Sinoidal ha sido actualizado exitosamente.");
+    	            		alert.show();
+
+        			}
+        			
+        		}
+        		
+        		
+        	}
+    	}
+    }
     private void createFolder() throws InterruptedException, JsonMappingException, JsonProcessingException {
     	if(validateComboBox(cbEstantes,"Estantes")) {
     		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Folder", "¿Seguro que quieres crear este nuevo folder en el sistema?");
@@ -534,7 +592,7 @@ public class SampleController implements Initializable{
     	txtCoordinacionSinoidal.setDisable(false);
     	btnCrearSinoidal.setVisible(true);
     	btnActualizarSinoidal.setVisible(false);
-    	btnEliminarSinoidales.setVisible(false);
+    	btnDeleteSinoidal.setVisible(false);
     	listTelefonos.getItems().clear();
     	listCorreos.getItems().clear();
     	btnEliminarTelefono.setDisable(true);
@@ -556,16 +614,37 @@ public class SampleController implements Initializable{
 	        		js.put("first_Name", txtNombreSinoidal.getText());
 	        		js.put("second_Name", txtApellidosSinoidal.getText());
 	        		js.put("id_professor", txtIdSinoidal.getText());
-	        		js.put("email", txtEmailSinoidal.getText());
+	        		//js.put("email", txtEmailSinoidal.getText());
 	        		js.put("area", txtCoordinacionSinoidal.getText());
-	        		js.put("telephone", txtTelefonoSinoidal.getText());
+	        		//js.put("telephone", txtTelefonoSinoidal.getText());
 	        		js.put("disponibility",1);
 	        		js.put("isActive",1);
 	        		HttpResponse<String> response = postRequest(0,"http://127.0.0.1:4040/api/sinoidales",js);
+	        		String s[]=response.body().split("[,.!:;?{}]");
 	        		if( response == null || response.statusCode()!=201) {
 	        			alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinoidal, verifica tu conexión a internet.\nStatus: "+response.statusCode());
 	            		alert.show();
 	        		}else {
+	        			for(String src: listTelefonos.getItems()) {
+	        				
+	        				js.put("phone", src);
+	        				response = postRequest(0,"http://127.0.0.1:4040/api/sinoidales/addPhone/"+s[2],js);
+	        				if(response == null || response.statusCode() != 201) {
+	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinoidal, verifica tu conexión a internet.\nStatus: "+response.statusCode());
+	    	            		alert.show();
+	        				}
+	        			}
+	        			
+	        			for(String src:listCorreos.getItems()) {
+	        				js.clear();
+	        				js.put("email", src);
+	        				response = postRequest(0,"http://127.0.0.1:4040/api/sinoidales/addEmail/"+s[2],js);
+	        				if(response == null || response.statusCode() != 201) {
+	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinoidal, verifica tu conexión a internet.\nStatus: "+response.statusCode());
+	    	            		alert.show();
+	        				}
+	        			}
+
 	        			fillTableSinoidales();
 	        			sinoidalesPane.toFront();
 	        			alert=lc.runAlert(AlertType.INFORMATION, "SINOIDAL CREADO", "El nuevo Sinoidal ha sido creado exitosamente.");
@@ -605,6 +684,39 @@ public class SampleController implements Initializable{
         		}
         	}
     }
+    
+    /*private void deleteSinoidal() throws IOException, InterruptedException {
+    	HttpResponse<String> res = null;
+		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Eliminar Sinoidal", "¿Seguro que quieres eliminar el sinoidal con el id #"+id_Sinoidal+" ?");
+    	Optional<ButtonType> result = alert.showAndWait();
+    	if(result.get()==ButtonType.OK) {
+    		res = deleteRequest(0,"http://127.0.0.1:4040/api/sinoidales/phones/delete/"+id_Sinoidal);
+    		if(res == null || res.statusCode() !=201) {
+    			alert=lc.runAlert(AlertType.ERROR, "ERROR ELIMINAR ACTA", "Hubo un error al momento de eliminar el acta, verifica tu conexión a internet.\nStatus: "+res.statusCode());
+    			alert.show();
+    		}else {
+    			res = deleteRequest(0,"http://127.0.0.1:4040/api/sinoidales/emails/delete/"+id_Sinoidal);
+    			if(res == null || res.statusCode() != 201) {
+    				alert=lc.runAlert(AlertType.ERROR, "ERROR ELIMINAR ACTA", "Hubo un error al momento de eliminar el acta, verifica tu conexión a internet.\nStatus: "+res.statusCode());
+            		alert.show();
+    			}else {
+    				res = deleteRequest(0,"http://127.0.0.1:4040/api/sinoidales/delete/"+id_Sinoidal);
+    				if(res == null || res.statusCode() != 201) {
+        				alert=lc.runAlert(AlertType.ERROR, "ERROR ELIMINAR SINOIDAL", "Hubo un error al momento de eliminar el sinoidal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
+                		alert.show();
+        			}else {
+        				fillTableActas();
+        				sinoidalesPane.toFront();
+        				alert=lc.runAlert(AlertType.INFORMATION, "SINOIDAL ELIMINADO", "El sinoidal fue eliminado correctamente del sistema.");
+                		alert.show();
+        			}
+    			}
+    		}
+    	}
+    }*/
+    
+  
+    
     
     private HttpResponse<String> deleteRequest(int intentos,String URL) throws IOException, InterruptedException {
 		HttpResponse<String> response=null;
@@ -730,9 +842,6 @@ public class SampleController implements Initializable{
     
     private boolean validateTextField(TextField txt,String message,String regex,int maxlenght) {
     	String source=txt.getText();
-    	if(maxlenght == 255) {
-    		source = txt.getText().concat("\s");
-    	}
     	if(source.length()>1 && source.matches(regex) && source.length() <= maxlenght ) {
     		return true;
     	}else{
@@ -1211,6 +1320,7 @@ public class SampleController implements Initializable{
                     	listTelefonos.getItems().clear();
                     	listCorreos.getItems().clear();
                     	addSinoidales.toFront();
+                    	id_Sinoidal = selectedItem.getId_sinoidales();
                     	txtNombreSinoidal.setText(selectedItem.getFirst_Name());
                     	txtApellidosSinoidal.setText(selectedItem.getSecond_Name());
                     	txtIdSinoidal.setText(selectedItem.getId_professor().toString());
@@ -1219,7 +1329,7 @@ public class SampleController implements Initializable{
                     	txtCoordinacionSinoidal.setText(selectedItem.getArea());  
                     	btnCrearSinoidal.setVisible(false);
                     	btnActualizarSinoidal.setVisible(true);
-                    	btnEliminarSinoidales.setVisible(true);
+                    	btnDeleteSinoidal.setVisible(true);
                     	txtNombreSinoidal.setDisable(true);
                     	txtApellidosSinoidal.setDisable(true);
                     	txtIdSinoidal.setDisable(true);

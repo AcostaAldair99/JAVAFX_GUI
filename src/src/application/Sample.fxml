@@ -261,7 +261,7 @@
                                                             <Insets left="10.0" right="10.0" />
                                                          </HBox.margin>
                                                       </Button>
-                                                      <Button fx:id="btnEliminarSinoidales" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="ELIMINAR">
+                                                      <Button fx:id="btnDeleteSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="ELIMINAR">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
