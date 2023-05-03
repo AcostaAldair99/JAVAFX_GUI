@@ -119,6 +119,8 @@ tablecolumn{
 }
 
 .table-view *.scroll-bar:horizontal *.increment-arrow,
+
+
 .table-view *.scroll-bar:horizontal *.decrement-arrow {
   -fx-background-color: null;
   -fx-background-radius: 0;
@@ -127,4 +129,7 @@ tablecolumn{
   -fx-shape: null;
 }
 
-
+.container{
+	-fx-border-color: #c9c6ac;
+	-fx-border-radius:10;
+}

@@ -556,13 +556,27 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Button>
+                                    <HBox fx:id="hStatus" layoutX="14.0" layoutY="67.0" prefHeight="40.0" prefWidth="424.0" visible="false">
+                                       <children>
+                                          <Label prefHeight="34.0" prefWidth="71.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="STATUS:">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="lblStatus" layoutX="10.0" layoutY="10.0" prefHeight="34.0" prefWidth="201.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="AQUI VA EL STATUS">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
                                  </children>
                               </Pane>
                               <Pane prefHeight="491.0" prefWidth="874.0">
                                  <children>
                                     <HBox prefHeight="490.0" prefWidth="874.0">
                                        <children>
-                                          <VBox prefHeight="490.0" prefWidth="600.0">
+                                          <VBox prefHeight="490.0" prefWidth="600.0" styleClass="container" stylesheets="@styles/style.css">
                                              <children>
                                                 <Label prefHeight="20.0" prefWidth="310.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Ingresa la información para crear un acta nueva.">
                                                    <font>
@@ -665,69 +679,97 @@
                                                 </HBox>
                                              </children>
                                              <HBox.margin>
-                                                <Insets left="20.0" right="20.0" />
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </HBox.margin>
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </padding>
                                           </VBox>
                                           <VBox prefHeight="490.0" prefWidth="634.0">
                                              <children>
-                                                <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Asigna los sinoidales de la Acta.">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets bottom="20.0" />
-                                                   </VBox.margin>
-                                                </Label>
-                                                <HBox prefHeight="46.0" prefWidth="424.0">
+                                                <VBox prefHeight="243.0" prefWidth="424.0" styleClass="container" stylesheets="@styles/style.css">
                                                    <children>
-                                                      <ComboBox fx:id="cbSinoidales" prefHeight="35.0" prefWidth="262.0" promptText="Selecciona un sinoidal">
+                                                      <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Asigna los sinoidales de la Acta.">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" left="5.0" top="10.0" />
+                                                         </VBox.margin>
+                                                      </Label>
+                                                      <HBox prefHeight="46.0" prefWidth="424.0">
+                                                         <children>
+                                                            <ComboBox fx:id="cbSinoidales" prefHeight="35.0" prefWidth="262.0" promptText="Selecciona un sinoidal">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                            </ComboBox>
+                                                            <Button fx:id="btnAsignarSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Sinoidal">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                               <HBox.margin>
+                                                                  <Insets left="20.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                      <ListView fx:id="listSinoidales" prefHeight="100.0" prefWidth="392.0">
+                                                         <VBox.margin>
+                                                            <Insets left="10.0" right="10.0" top="10.0" />
+                                                         </VBox.margin>
+                                                      </ListView>
+                                                      <Button fx:id="btnEliminarSinoidal" alignment="CENTER" contentDisplay="RIGHT" disable="true" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="Eliminar Sinoidal" textAlignment="JUSTIFY">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
-                                                      </ComboBox>
-                                                      <Button fx:id="btnAsignarSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Sinoidal">
-                                                         <cursor>
-                                                            <Cursor fx:constant="HAND" />
-                                                         </cursor>
-                                                         <HBox.margin>
-                                                            <Insets left="20.0" />
-                                                         </HBox.margin>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" left="285.0" top="10.0" />
+                                                         </VBox.margin>
+                                                         <opaqueInsets>
+                                                            <Insets />
+                                                         </opaqueInsets>
                                                       </Button>
                                                    </children>
-                                                </HBox>
-                                                <ListView fx:id="listSinoidales" prefHeight="150.0" prefWidth="414.0">
                                                    <VBox.margin>
-                                                      <Insets right="10.0" />
+                                                      <Insets left="5.0" right="5.0" top="10.0" />
                                                    </VBox.margin>
-                                                </ListView>
-                                                <Button fx:id="btnEliminarSinoidal" alignment="CENTER" contentDisplay="RIGHT" disable="true" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="Eliminar Sinoidal" textAlignment="JUSTIFY">
-                                                   <cursor>
-                                                      <Cursor fx:constant="HAND" />
-                                                   </cursor>
-                                                   <VBox.margin>
-                                                      <Insets left="285.0" top="10.0" />
-                                                   </VBox.margin>
-                                                   <opaqueInsets>
-                                                      <Insets />
-                                                   </opaqueInsets>
-                                                </Button>
-                                                <HBox prefHeight="40.0" prefWidth="424.0">
+                                                   <padding>
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" />
+                                                   </padding>
+                                                </VBox>
+                                                <VBox fx:id="vContainerSigns" prefHeight="213.0" prefWidth="424.0" styleClass="container" stylesheets="@styles/style.css" visible="false">
                                                    <children>
-                                                      <Label prefHeight="34.0" prefWidth="71.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="STATUS:">
-                                                         <font>
-                                                            <Font size="18.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <Label layoutX="10.0" layoutY="10.0" prefHeight="34.0" prefWidth="201.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="AQUI VA EL STATUS">
-                                                         <font>
-                                                            <Font name="System Bold" size="18.0" />
-                                                         </font>
-                                                      </Label>
+                                                      <HBox alignment="CENTER" prefHeight="37.0" prefWidth="424.0" stylesheets="@styles/style.css">
+                                                         <children>
+                                                            <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="FIRMAS SINOIDALES">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Button fx:id="btnAgregarFirmaSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Firma">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                               <HBox.margin>
+                                                                  <Insets left="145.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets top="10.0" />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                      <ListView fx:id="listFirmas" prefHeight="100.0" prefWidth="392.0">
+                                                         <VBox.margin>
+                                                            <Insets left="10.0" right="10.0" top="10.0" />
+                                                         </VBox.margin>
+                                                      </ListView>
                                                    </children>
                                                    <VBox.margin>
-                                                      <Insets top="40.0" />
+                                                      <Insets bottom="10.0" left="5.0" right="5.0" top="30.0" />
                                                    </VBox.margin>
-                                                </HBox>
+                                                </VBox>
                                              </children>
                                              <opaqueInsets>
                                                 <Insets left="20.0" right="30.0" />

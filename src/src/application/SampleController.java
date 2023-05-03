@@ -88,17 +88,17 @@ public class SampleController implements Initializable{
 	@FXML
 	private VBox vContainerSigns;
 	
-	//@FXML
-	//private Checkbox sign1,sign2,sign3;
+	@FXML
+	private HBox hStatus;
 	
 	@FXML
-	private Label titleActa;
+	private Label titleActa,lblStatus;
 	
 	@FXML
     private Button btnCloseWindow,btnActualizarSinoidal,btnEliminarSinoidales,btnAgregarTelefono,btnAgregarEmail,btnEliminarTelefono,btnEliminarEmail,btnDeleteSinoidal;
 	
 	@FXML
-    private Button btnMinizeWindow,btnAgregarSinoidales,btnCrearSinoidal,btnCrearFolder;
+    private Button btnMinizeWindow,btnAgregarSinoidales,btnCrearSinoidal,btnCrearFolder,btnAgregarFirmaSinoidal;
 	
 	@FXML
 	private ComboBox<String> cbSinoidales,cbFolders,cbCeremonias,cbCarreras,cbCiclo,cbEstantes;
@@ -171,7 +171,7 @@ public class SampleController implements Initializable{
     private TableView<Folder>tableFolders;
     
     @FXML
-    private ListView<String> listSinoidales,listTelefonos,listCorreos;
+    private ListView<String> listSinoidales,listTelefonos,listCorreos,listFirmas;
     
     LoginController lc=new LoginController();
     
@@ -323,8 +323,34 @@ public class SampleController implements Initializable{
         if(actionEvent.getSource() == btnActualizarSinoidal) {
         	updateSinoidal();
         }
+        
+        if(actionEvent.getSource() == btnAgregarFirmaSinoidal) {
+        	asignFirma();
+        }
     }
     
+    private void asignFirma() {
+    	MultipleSelectionModel<String>select = listSinoidales.getSelectionModel();
+    	if(select.getSelectedItem() != null) {
+    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "FIRMA SINOIDAL","¿Seguro que ya firmo el sinoidal "+select.getSelectedItem()+" ?");
+        	Optional<ButtonType> result = alert.showAndWait();
+        	if (result.get() == ButtonType.OK){
+        		String sinoidal = select.getSelectedItem();
+    			listSinoidales.getItems().remove(select.getSelectedIndex());
+        		if(listFirmas.getItems().size()==3) {
+        			btnEliminarSinoidal.setDisable(true);
+        		}else {
+        			listFirmas.getItems().add(sinoidal);
+        			alert=lc.runAlert(AlertType.INFORMATION, "Acta Firma", "Se agrego una firma al acta correctamente.\nDa clic en Actualizar para guardar los cambios.");
+            		alert.show();
+        		}
+        		
+        	}
+    	}else {
+    		alert = lc.runAlert(AlertType.ERROR,"Error ","Selecciona un elemento de la lista para eliminar");
+			alert.showAndWait();
+    	}
+    }
     
     private void deleteSelected(ListView<String> list,String Title,String message,Button btn) {
     	MultipleSelectionModel<String> selected = list.getSelectionModel();
@@ -596,6 +622,8 @@ public class SampleController implements Initializable{
     	btnEliminarActa.setVisible(false);
     	btnCrearActa.setVisible(true);
     	cbCarreras.setDisable(false);
+    	vContainerSigns.setVisible(false);
+    	hStatus.setVisible(false);
     }
     
     private void clearFormSinoidales() {
@@ -976,6 +1004,7 @@ public class SampleController implements Initializable{
     			"ITS","IMA","IME"
     			);
     	listSinoidales.getItems().clear();
+    	listFirmas.getItems().clear();
     	cbFolders.getItems().clear();
     	cbCeremonias.getItems().clear();
     	cbSinoidales.getItems().clear();
@@ -1223,7 +1252,6 @@ public class SampleController implements Initializable{
                     	txtIdStudent.setDisable(true);
                     	txtPlanStudent.setDisable(true);
                     	btnEliminarSinoidal.setDisable(false);
-                    	List<listItem> listItem;
                     	try {
 							setComboboxActas();
 							List<Actas_Sinoidales> actas_sinoidales=handleResponseActasSinoidales("http://127.0.0.1:4040/api/certificates/actasSinoidales/"+selectedItem.getId_actas());
@@ -1232,18 +1260,43 @@ public class SampleController implements Initializable{
 					  		}else {
 					  			for(Actas_Sinoidales as:actas_sinoidales) {
 					  				List<Sinoidales> sinoidalesActa = handleResponseSinoidales("http://127.0.0.1:4040/api/sinoidales/search/"+as.getId_sinoidales_fk());
-					  				for(Sinoidales i : sinoidalesActa) {	
+					  				for(Sinoidales i : sinoidalesActa) {
 					  					listSinoidales.getItems().add(as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name());
 					  					
 					  					cbSinoidales.getItems().remove(as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name());
 					  				}
 					  	  		}
 					  			
+					  			if(listFirmas.getItems().size()==0) {
+					  				setStatus("SIN FIRMAS",Color.RED);
+					  			}
+					  			
+					  			
+					  			/*listSinoidales.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+					  		        @Override 
+					  		        public ListCell<String> call(ListView<String> param) {
+					  		            return new ListCell<String>() {
+					  		                @Override 
+					  		                protected void updateItem(String item, boolean empty) {
+					  		                    super.updateItem(item, empty);
+					  		                    if ("Orange".equals(item)) {
+					  		                        setDisable(true);
+					  		                    } else {
+					  		                        setDisable(false);
+					  		                    }
+					  		                    setText(item);
+					  		                }
+
+					  		            };
+					  		        }
+					  		    });
+					  			*/
+					  			
 					  		    //listSinoidales.setCellFactory(CheckBoxListCell.forListView(item -> item.onProperty()));
 
 					  			
-					  			
-					  			
+					  			hStatus.setVisible(true);
+					  			vContainerSigns.setVisible(true);
 					  			cbFolders.getSelectionModel().select(String.valueOf(selectedItem.getId_Folder_fk()));
 		                    	cbCeremonias.getSelectionModel().select(selectedItem.getId_ceremony_fk().toString());
 		                    	cbCarreras.getSelectionModel().select(selectedItem.getDegree());
@@ -1450,4 +1503,10 @@ public class SampleController implements Initializable{
 		tableFolders.getColumns().addAll(idFolder,caseColumn,actasNumColumn);
 		
 	}
+	
+	public void setStatus(String status,Color color) {
+		lblStatus.setText(status);
+		lblStatus.setTextFill(color);
+	}
+	
 }
