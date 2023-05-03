@@ -742,17 +742,28 @@
                                                    <children>
                                                       <HBox alignment="CENTER" prefHeight="37.0" prefWidth="424.0" stylesheets="@styles/style.css">
                                                          <children>
-                                                            <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="FIRMAS SINOIDALES">
+                                                            <Label prefHeight="20.0" prefWidth="146.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="FIRMAS SINOIDALES">
                                                                <font>
                                                                   <Font size="14.0" />
                                                                </font>
+                                                               <HBox.margin>
+                                                                  <Insets left="5.0" />
+                                                               </HBox.margin>
                                                             </Label>
-                                                            <Button fx:id="btnAgregarFirmaSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Firma">
+                                                            <Button fx:id="btnEliminarFirmaSinoidal" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="Eliminar Firma">
                                                                <cursor>
                                                                   <Cursor fx:constant="HAND" />
                                                                </cursor>
                                                                <HBox.margin>
-                                                                  <Insets left="145.0" />
+                                                                  <Insets left="30.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btnAgregarFirmaSinoidal" layoutX="294.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Firma">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                               <HBox.margin>
+                                                                  <Insets left="10.0" right="5.0" />
                                                                </HBox.margin>
                                                             </Button>
                                                          </children>

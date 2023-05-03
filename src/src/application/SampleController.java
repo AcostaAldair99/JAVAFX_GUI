@@ -95,7 +95,7 @@ public class SampleController implements Initializable{
 	private Label titleActa,lblStatus;
 	
 	@FXML
-    private Button btnCloseWindow,btnActualizarSinoidal,btnEliminarSinoidales,btnAgregarTelefono,btnAgregarEmail,btnEliminarTelefono,btnEliminarEmail,btnDeleteSinoidal;
+    private Button btnCloseWindow,btnActualizarSinoidal,btnEliminarSinoidales,btnAgregarTelefono,btnAgregarEmail,btnEliminarTelefono,btnEliminarEmail,btnDeleteSinoidal,btnEliminarFirmaSinoidal;
 	
 	@FXML
     private Button btnMinizeWindow,btnAgregarSinoidales,btnCrearSinoidal,btnCrearFolder,btnAgregarFirmaSinoidal;
@@ -327,6 +327,10 @@ public class SampleController implements Initializable{
         if(actionEvent.getSource() == btnAgregarFirmaSinoidal) {
         	asignFirma();
         }
+        if(actionEvent.getSource() == btnEliminarFirmaSinoidal) {
+        	//deleteSelected(listFirmas,"FIRMA ELIMINADA","",btnEliminarFirmaSinoidal);
+        	deleteSign();
+        }
     }
     
     private void asignFirma() {
@@ -336,15 +340,41 @@ public class SampleController implements Initializable{
         	Optional<ButtonType> result = alert.showAndWait();
         	if (result.get() == ButtonType.OK){
         		String sinoidal = select.getSelectedItem();
+        		listFirmas.getItems().add(sinoidal);
     			listSinoidales.getItems().remove(select.getSelectedIndex());
         		if(listFirmas.getItems().size()==3) {
         			btnEliminarSinoidal.setDisable(true);
+        			btnAsignarSinoidal.setDisable(true);
+        			cbSinoidales.setDisable(true);
         		}else {
-        			listFirmas.getItems().add(sinoidal);
+        			btnEliminarFirmaSinoidal.setDisable(false);
         			alert=lc.runAlert(AlertType.INFORMATION, "Acta Firma", "Se agrego una firma al acta correctamente.\nDa clic en Actualizar para guardar los cambios.");
             		alert.show();
         		}
         		
+        	}
+    	}else {
+    		alert = lc.runAlert(AlertType.ERROR,"Error ","Selecciona un elemento de la lista para eliminar");
+			alert.showAndWait();
+    	}
+    }
+    
+    private void deleteSign() {
+    	MultipleSelectionModel<String> selected = listFirmas.getSelectionModel();
+    	if(selected.getSelectedItem() != null) {
+    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "FIRMA ELIMINADA","¿Seguro que quieres eliminar la firma del sinoidal "+selected.getSelectedItem()+" ?");
+        	Optional<ButtonType> result = alert.showAndWait();
+        	if (result.get() == ButtonType.OK){
+        		listSinoidales.getItems().add(selected.getSelectedItem());
+        		listFirmas.getItems().remove(selected.getSelectedIndex());
+        		btnAsignarSinoidal.setDisable(false);
+        		btnEliminarSinoidal.setDisable(false);
+        		cbSinoidales.setDisable(false);
+        		if(listFirmas.getItems().size() == 0 ) {
+        			btnEliminarFirmaSinoidal.setDisable(true);
+        		}
+        		alert=lc.runAlert(AlertType.INFORMATION, "FIRMA ELIMINADA", "Firma eliminada correctamente.");
+        		alert.show();
         	}
     	}else {
     		alert = lc.runAlert(AlertType.ERROR,"Error ","Selecciona un elemento de la lista para eliminar");
@@ -624,6 +654,9 @@ public class SampleController implements Initializable{
     	cbCarreras.setDisable(false);
     	vContainerSigns.setVisible(false);
     	hStatus.setVisible(false);
+    	btnAsignarSinoidal.setDisable(false);
+		btnEliminarSinoidal.setDisable(false);
+		cbSinoidales.setDisable(false);
     }
     
     private void clearFormSinoidales() {
@@ -975,7 +1008,7 @@ public class SampleController implements Initializable{
 	    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Asignar Sinoidal", "¿Seguro que quieres asignar este sinoidal a esta acta?");
 	        	Optional<ButtonType> result = alert.showAndWait();
 	        	if(result.get() == ButtonType.OK) {
-	        		if(listSinoidales.getItems().size() < 3) {
+	        		if((listSinoidales.getItems().size()+listFirmas.getItems().size()) < 3) {
 		    			listSinoidales.getItems().add(id.getSelectedItem());
 		    			cbSinoidales.getItems().remove(id.getSelectedIndex());
 		    			btnEliminarSinoidal.setDisable(false);
