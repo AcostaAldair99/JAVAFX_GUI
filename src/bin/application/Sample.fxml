@@ -537,7 +537,7 @@
                         <Label text="CONFIGURACION" />
                      </children>
                   </Pane>
-                  <Pane fx:id="actasPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" visible="false">
+                  <Pane fx:id="actasPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>
@@ -721,7 +721,7 @@
                            </children>
                         </VBox>
                      </children></Pane>
-                  <Pane fx:id="inicioPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" visible="false" StackPane.alignment="CENTER">
+                  <Pane fx:id="inicioPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" StackPane.alignment="CENTER">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>

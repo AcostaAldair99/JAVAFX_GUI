@@ -8,9 +8,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.SingleSelectionModel;
@@ -20,6 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -40,6 +43,7 @@ import models.Email;
 import models.Folder;
 import models.Sinoidales;
 import models.Telephone;
+import models.itemList;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -152,7 +156,10 @@ public class SampleController implements Initializable{
     private TableView<Folder>tableFolders;
     
     @FXML
-    private ListView<String> listSinoidales,listTelefonos,listCorreos;
+    private ListView<String>listTelefonos,listCorreos;
+    
+    @FXML
+    private ListView<itemList>listSinoidales;
     
     LoginController lc=new LoginController();
     
@@ -367,7 +374,7 @@ public class SampleController implements Initializable{
     
     private void updateActa() throws InterruptedException, IOException {
     	int i=1;
-    	if(validateList(listSinoidales,3,"No se han asignado todos los 3 sinoidales necesarios para crear el Acta")) {
+    	if(validateListSinoidales(listSinoidales,3,"No se han asignado todos los 3 sinoidales necesarios para crear el Acta")) {
     		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Actualizar Acta", "¿Seguro que quieres actualizar esta Acta en el sistema?");
         	Optional<ButtonType> result = alert.showAndWait();
         	if(result.get() == ButtonType.OK) {
@@ -384,8 +391,8 @@ public class SampleController implements Initializable{
         				alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
                 		alert.show();
         			}else {	
-        				for(String s:listSinoidales.getItems()) {
-        					String x[] =s.split("-");
+        				for(itemList s:listSinoidales.getItems()) {
+        					String x[] =s.toString().split("-");
         					System.out.println(x[0]);
                 			rps = postRequest(0,"http://127.0.0.1:4040/api/certificates/addSinoidales/"+id_Acta+"/"+cbCeremonias.getValue()+"/"+x[0],json);
                 			if(rps == null || rps.statusCode()!=201) {
@@ -508,7 +515,7 @@ public class SampleController implements Initializable{
     			validateComboBox(cbCeremonias,"Ceremonias") &&
     			validateComboBox(cbFolders,"Folder") &&
     			validateComboBox(cbCarreras,"carreras") &&
-    			validateList(listSinoidales,3,"No se han asignado todos los 3 sinoidales necesarios para crear el Acta")) {
+    			validateListSinoidales(listSinoidales,3,"No se han asignado todos los 3 sinoidales necesarios para crear el Acta")) {
     		if(!checkActasList(txtIdStudent.getText())) {
     			Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Acta", "¿Seguro que quieres crear esta acta?");
             	Optional<ButtonType> result = alert.showAndWait();
@@ -524,12 +531,12 @@ public class SampleController implements Initializable{
             		json.put("id_Folder", cbFolders.getValue());
             		json.put("degree", cbCarreras.getValue());
             		json.put("signatures", 0);
-            		ObservableList<String>sinoidalesAsign = listSinoidales.getItems();
+            		ObservableList<itemList>sinoidalesAsign = listSinoidales.getItems();
             		HttpResponse<String> res = postRequest(0,"http://127.0.0.1:4040/api/certificates",json);
             		String s[]=res.body().split("[.!:;?{}]");
             		if(res.statusCode() == 201) {
-            			for(String a: sinoidalesAsign) {
-                			String[] x=a.split("-");
+            			for(itemList a: sinoidalesAsign) {
+                			String[] x=a.toString().split("-");
                 			res = postRequest(0,"http://127.0.0.1:4040/api/certificates/addSinoidales/"+s[2]+"/"+cbCeremonias.getValue()+"/"+x[0],json);
                 			//System.out.println(res);
                 		}
@@ -817,6 +824,17 @@ public class SampleController implements Initializable{
     	return response;
 	}
 	
+	private boolean validateListSinoidales(ListView<itemList> listSinoidales,int SIZE,String message) {
+		if(listSinoidales.getItems().size() < SIZE) {
+    		Alert alert=lc.runAlert(AlertType.ERROR, "ERROR LISTA",message);
+    		alert.show();
+    		listSinoidales.requestFocus();
+    	}else {
+    		return true;
+    	}
+    	return false;
+	}
+	
 
     private boolean validateList(ListView<String> listSinoidales,int SIZE,String message) {
     	if(listSinoidales.getItems().size() < SIZE) {
@@ -901,12 +919,12 @@ public class SampleController implements Initializable{
     }
     
     private void deleteSelectedSinoidal() {
-    	MultipleSelectionModel<String> selected = listSinoidales.getSelectionModel();
+    	MultipleSelectionModel<itemList> selected = listSinoidales.getSelectionModel();
     	if(selected.getSelectedItem() != null) {
     		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Eliminar Sinoidal", "¿Seguro que quieres desasignar esta acta al sinoidal?");
         	Optional<ButtonType> result = alert.showAndWait();
         	if (result.get() == ButtonType.OK){
-        		cbSinoidales.getItems().add(selected.getSelectedItem());
+        		cbSinoidales.getItems().add(selected.getSelectedItem().toString());
         		listSinoidales.getItems().remove(selected.getSelectedIndex());
         		if(listSinoidales.getItems().size() == 0 ) {
         			btnEliminarSinoidal.setDisable(true);
@@ -927,7 +945,8 @@ public class SampleController implements Initializable{
 	        	Optional<ButtonType> result = alert.showAndWait();
 	        	if(result.get() == ButtonType.OK) {
 	        		if(listSinoidales.getItems().size() < 3) {
-		    			listSinoidales.getItems().add(id.getSelectedItem());
+	        			itemList item = new itemList(id.getSelectedItem().toString());
+		    			listSinoidales.getItems().add(item);
 		    			cbSinoidales.getItems().remove(id.getSelectedIndex());
 		    			btnEliminarSinoidal.setDisable(false);
 		    		}else {
@@ -1032,7 +1051,7 @@ public class SampleController implements Initializable{
     }
     
     protected List<Actas> handleResponseActas(String URL) throws JsonMappingException, JsonProcessingException, InterruptedException {
-    	HttpResponse<String> response=getRequest(0,URL);
+    	HttpResponse<String> response=getRequest(0,URL,token);
     	List<Actas> listActas=null;
     	if(response.statusCode()==201) {
         	ObjectMapper objectMapper = new ObjectMapper();
@@ -1043,7 +1062,7 @@ public class SampleController implements Initializable{
     
     
     protected List<Folder> handleResponseFolder(String URL) throws InterruptedException, JsonMappingException, JsonProcessingException{
-    	HttpResponse<String> res = getRequest(0,URL);
+    	HttpResponse<String> res = getRequest(0,URL,token);
     	List<Folder> listFolder = null;
     	ObjectMapper om = new ObjectMapper();
 		listFolder = om.readValue(res.body(), new TypeReference<List<Folder>>(){});
@@ -1051,7 +1070,7 @@ public class SampleController implements Initializable{
     }
     
     protected List<Sinoidales> handleResponseSinoidales(String URL) throws JsonMappingException, JsonProcessingException, InterruptedException{
-    	HttpResponse<String> response=getRequest(0,URL);
+    	HttpResponse<String> response=getRequest(0,URL,token);
     	List<Sinoidales> listSinoidales=null;
     	ObjectMapper objectMapper = new ObjectMapper();
 		listSinoidales = objectMapper.readValue(response.body(), new TypeReference<List<Sinoidales>>(){});
@@ -1059,7 +1078,7 @@ public class SampleController implements Initializable{
     }
     
     protected List<Actas_Sinoidales> handleResponseActasSinoidales(String URL) throws InterruptedException, JsonMappingException, JsonProcessingException{
-    	HttpResponse<String> response=getRequest(0,URL);
+    	HttpResponse<String> response=getRequest(0,URL,token);
     	List<Actas_Sinoidales> listActasSinoidales=null;
     	ObjectMapper objectMapper = new ObjectMapper();
 		listActasSinoidales = objectMapper.readValue(response.body(), new TypeReference<List<Actas_Sinoidales>>(){});
@@ -1067,7 +1086,7 @@ public class SampleController implements Initializable{
     }
     
     protected List<Telephone> handleResponseTelephone(String URL) throws JsonMappingException, JsonProcessingException, InterruptedException{
-    	HttpResponse<String> response = getRequest(0,URL);
+    	HttpResponse<String> response = getRequest(0,URL,token);
     	List<Telephone> listTelephones = null;
     	ObjectMapper objectMapper = new ObjectMapper();
 		listTelephones = objectMapper.readValue(response.body(), new TypeReference<List<Telephone>>(){});
@@ -1075,7 +1094,7 @@ public class SampleController implements Initializable{
     }
     
     protected List<Email> handleResponseEmail(String URL) throws JsonMappingException, JsonProcessingException, InterruptedException{
-    	HttpResponse<String> response = getRequest(0,URL);
+    	HttpResponse<String> response = getRequest(0,URL,token);
     	List<Email> listEmails = null;
     	ObjectMapper objectMapper = new ObjectMapper();
 		listEmails = objectMapper.readValue(response.body(), new TypeReference<List<Email>>(){});
@@ -1083,7 +1102,7 @@ public class SampleController implements Initializable{
     }
     
     protected List<Ceremonias> handleResponseCeremony(String URL) throws InterruptedException, JsonMappingException, JsonProcessingException{
-    	HttpResponse<String> response=getRequest(0,URL);
+    	HttpResponse<String> response=getRequest(0,URL,token);
     	List<Ceremonias> listCeremonias=null;
     	ObjectMapper objectMapper = new ObjectMapper();
 		listCeremonias = objectMapper.readValue(response.body(), new TypeReference<List<Ceremonias>>(){});
@@ -1091,19 +1110,19 @@ public class SampleController implements Initializable{
     }
     
     
-    protected HttpResponse<String> getRequest(int intentos, String URL) throws InterruptedException{
+    public HttpResponse<String> getRequest(int intentos, String URL,String tk) throws InterruptedException{
     	HttpResponse<String> response=null;
     	try {
     	HttpClient client=HttpClient.newHttpClient();
         HttpRequest req=(HttpRequest) HttpRequest.newBuilder()
         .setHeader("Content-Type","application/json")
-        .setHeader("x-access-token", token)
+        .setHeader("x-access-token", tk)
         .uri(URI.create(URL))
         .build();
 		response = client.send(req,HttpResponse.BodyHandlers.ofString());
         }catch(IOException | InterruptedException e) {
         	if(intentos < 5) {
-    			return getRequest(intentos+1,URL);
+    			return getRequest(intentos+1,URL,tk);
         	}
         	alert = lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
         	alert.showAndWait();
@@ -1210,24 +1229,65 @@ public class SampleController implements Initializable{
 					  			for(Actas_Sinoidales as:actas_sinoidales) {
 					  				List<Sinoidales> sin = handleResponseSinoidales("http://127.0.0.1:4040/api/sinoidales/search/"+as.getId_sinoidales_fk());
 					  				for(Sinoidales i : sin) {
-					  					listSinoidales.getItems().add(as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name());
+					  					itemList item = new itemList(as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name());
+					  					listSinoidales.getItems().add(item);
 					  					cbSinoidales.getItems().remove(as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name());
 					  				}
 					  			
 					  	  		}
+					  			
+					  			listSinoidales.setCellFactory((ListView<itemList> param) -> new ListCell<itemList>() {
+					  	            private CheckBox checkBox;
+
+					  	            @Override
+					  	            public void updateItem(itemList item, boolean empty) {
+					  	                super.updateItem(item, empty);
+					  	                if (!(empty || item == null)) {
+					  	                    try {
+					  	                    	if(item.getDoneProperty(id_Acta.toString())) {
+					  	                    		getCheckBox().setSelected(true);
+					  	                    		setDisable(true);
+					  	                    	}
+											} catch (InterruptedException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
+					  	                    setGraphic(getCheckBox());
+					  	                    setText(item.toString());
+					  	                    
+					  	                } else {
+					  	                    setGraphic(null);
+					  	                    setText(null);
+					  	                }
+					  	            }
+
+					  	            private CheckBox getCheckBox() {
+					  	                if (checkBox == null) {
+					  	                    checkBox = new CheckBox();
+					  	                    checkBox.selectedProperty().addListener((obs, old, val) -> {
+					  	                        if (getItem() != null) {
+					  	                        	getItem().isDoneProperty(val);
+					  	                        }
+					  	                    });
+					  	                }
+					  	                return checkBox;
+					  	            }
+					  	        });
+					  			
+					  			cbFolders.getSelectionModel().select(String.valueOf(selectedItem.getId_Folder_fk()));
+		                    	cbCeremonias.getSelectionModel().select(selectedItem.getId_ceremony_fk().toString());
+		                    	cbCarreras.getSelectionModel().select(selectedItem.getDegree());
+		                    	cbCarreras.setDisable(true);
+		                    	btnActualizarActa.setVisible(true);
+		                    	btnEliminarActa.setVisible(true);
+		                    	btnCrearActa.setVisible(false);
 					  		}
 						} catch (JsonProcessingException | InterruptedException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
                     	
-                    	cbFolders.getSelectionModel().select(String.valueOf(selectedItem.getId_Folder_fk()));
-                    	cbCeremonias.getSelectionModel().select(selectedItem.getId_ceremony_fk().toString());
-                    	cbCarreras.getSelectionModel().select(selectedItem.getDegree());
-                    	cbCarreras.setDisable(true);
-                    	btnActualizarActa.setVisible(true);
-                    	btnEliminarActa.setVisible(true);
-                    	btnCrearActa.setVisible(false);
+                    	
                     }else{
                     	alert=lc.runAlert(AlertType.CONFIRMATION, "Selecciona un Registro", "Selecciona un registro para ver su información.");
                 		alert.show();
@@ -1420,4 +1480,5 @@ public class SampleController implements Initializable{
 		tableFolders.getColumns().addAll(idFolder,caseColumn,actasNumColumn);
 		
 	}
+	
 }

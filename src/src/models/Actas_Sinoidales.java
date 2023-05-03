@@ -8,6 +8,17 @@ public class Actas_Sinoidales {
      private String date_fk;
      private BigInteger id_ceremony;
      private BigInteger id_register;
+     private int signed;
+     
+     
+     
+	public int getSigned() {
+		return signed;
+	}
+	public void setSigned(int signed) {
+		this.signed = signed;
+	}
+	
 	public BigInteger getId_actas_fk() {
 		return id_actas_fk;
 	}
