@@ -50,17 +50,18 @@ public class SplashController implements Initializable{
 						Parent root=null;
 						try {
 							root = FXMLLoader.load(getClass().getResource("Sample.fxml"));		
+							Scene es=new Scene(root);
+							
+							Stage st=new Stage();
+							st.setScene(es);
+							st.getIcons().add(new Image(this.getClass().getResourceAsStream("logoLogin.png")));
+							st.initStyle(StageStyle.UNDECORATED);
+							st.show();
+							rootPane.getScene().getWindow().hide();	
 						}catch(IOException e) {
 							e.printStackTrace();
 						}
-						Scene es=new Scene(root);
-						
-						Stage st=new Stage();
-						st.setScene(es);
-						st.getIcons().add(new Image(this.getClass().getResourceAsStream("logoLogin.png")));
-						st.initStyle(StageStyle.UNDECORATED);
-						st.show();
-						rootPane.getScene().getWindow().hide();		
+							
 					}
 				});
 			} catch (InterruptedException e) {

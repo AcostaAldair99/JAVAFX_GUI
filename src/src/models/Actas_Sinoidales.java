@@ -8,6 +8,16 @@ public class Actas_Sinoidales {
      private String date_fk;
      private BigInteger id_ceremony;
      private BigInteger id_register;
+     private int signed;
+     
+     
+     
+	public int getSigned() {
+		return signed;
+	}
+	public void setSigned(int signed) {
+		this.signed = signed;
+	}
 	public BigInteger getId_actas_fk() {
 		return id_actas_fk;
 	}
@@ -41,7 +51,7 @@ public class Actas_Sinoidales {
 	@Override
 	public String toString() {
 		return "Actas_Sinoidales [id_actas_fk=" + id_actas_fk + ", id_sinoidales_fk=" + id_sinoidales_fk + ", date_fk="
-				+ date_fk + ", id_ceremony=" + id_ceremony + ", id_register=" + id_register;
+				+ date_fk + ", id_ceremony=" + id_ceremony + ", id_register=" + id_register+", signed= "+signed;
 	}
      
      

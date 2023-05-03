@@ -1,16 +1,22 @@
 package application;
 
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.SingleSelectionModel;
@@ -18,8 +24,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -40,7 +48,9 @@ import models.Email;
 import models.Folder;
 import models.Sinoidales;
 import models.Telephone;
+import models.listItem;
 
+import java.awt.Checkbox;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
@@ -74,6 +84,15 @@ public class SampleController implements Initializable{
 	Alert alert;
 	private BigInteger id_Acta=null;
 	private BigInteger id_Sinoidal=null;
+	
+	@FXML
+	private VBox vContainerSigns;
+	
+	//@FXML
+	//private Checkbox sign1,sign2,sign3;
+	
+	@FXML
+	private Label titleActa;
 	
 	@FXML
     private Button btnCloseWindow,btnActualizarSinoidal,btnEliminarSinoidales,btnAgregarTelefono,btnAgregarEmail,btnEliminarTelefono,btnEliminarEmail,btnDeleteSinoidal;
@@ -196,6 +215,7 @@ public class SampleController implements Initializable{
             inicioPane.toFront();
         }
         if (actionEvent.getSource() == btnActas || actionEvent.getSource() == btnAgregarActa) {
+        	titleActa.setText("CREAR ACTA");
             actasPane.toFront();
             try {
             	clearFormActas();
@@ -575,6 +595,7 @@ public class SampleController implements Initializable{
     	btnActualizarActa.setVisible(false);
     	btnEliminarActa.setVisible(false);
     	btnCrearActa.setVisible(true);
+    	cbCarreras.setDisable(false);
     }
     
     private void clearFormSinoidales() {
@@ -1189,6 +1210,7 @@ public class SampleController implements Initializable{
             		Actas selectedItem = tableActas.getSelectionModel().getSelectedItem();
                     if (selectedItem != null) {
                     	actasPane.toFront();
+                    	titleActa.setText("ACTUALIZAR ACTA");
                     	txtNameStudent.setText(selectedItem.getName_Student());
                     	txtApellidosStudent.setText(selectedItem.getLastName_Student());
                     	txtIdStudent.setText(selectedItem.getId_Student().toString());
@@ -1201,6 +1223,7 @@ public class SampleController implements Initializable{
                     	txtIdStudent.setDisable(true);
                     	txtPlanStudent.setDisable(true);
                     	btnEliminarSinoidal.setDisable(false);
+                    	List<listItem> listItem;
                     	try {
 							setComboboxActas();
 							List<Actas_Sinoidales> actas_sinoidales=handleResponseActasSinoidales("http://127.0.0.1:4040/api/certificates/actasSinoidales/"+selectedItem.getId_actas());
@@ -1208,26 +1231,33 @@ public class SampleController implements Initializable{
 					  			lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
 					  		}else {
 					  			for(Actas_Sinoidales as:actas_sinoidales) {
-					  				List<Sinoidales> sin = handleResponseSinoidales("http://127.0.0.1:4040/api/sinoidales/search/"+as.getId_sinoidales_fk());
-					  				for(Sinoidales i : sin) {
+					  				List<Sinoidales> sinoidalesActa = handleResponseSinoidales("http://127.0.0.1:4040/api/sinoidales/search/"+as.getId_sinoidales_fk());
+					  				for(Sinoidales i : sinoidalesActa) {	
 					  					listSinoidales.getItems().add(as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name());
+					  					
 					  					cbSinoidales.getItems().remove(as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name());
 					  				}
-					  			
 					  	  		}
+					  			
+					  		    //listSinoidales.setCellFactory(CheckBoxListCell.forListView(item -> item.onProperty()));
+
+					  			
+					  			
+					  			
+					  			cbFolders.getSelectionModel().select(String.valueOf(selectedItem.getId_Folder_fk()));
+		                    	cbCeremonias.getSelectionModel().select(selectedItem.getId_ceremony_fk().toString());
+		                    	cbCarreras.getSelectionModel().select(selectedItem.getDegree());
+		                    	cbCarreras.setDisable(true);
+		                    	btnActualizarActa.setVisible(true);
+		                    	btnEliminarActa.setVisible(true);
+		                    	btnCrearActa.setVisible(false);
 					  		}
 						} catch (JsonProcessingException | InterruptedException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
                     	
-                    	cbFolders.getSelectionModel().select(String.valueOf(selectedItem.getId_Folder_fk()));
-                    	cbCeremonias.getSelectionModel().select(selectedItem.getId_ceremony_fk().toString());
-                    	cbCarreras.getSelectionModel().select(selectedItem.getDegree());
-                    	cbCarreras.setDisable(true);
-                    	btnActualizarActa.setVisible(true);
-                    	btnEliminarActa.setVisible(true);
-                    	btnCrearActa.setVisible(false);
+                    	
                     }else{
                     	alert=lc.runAlert(AlertType.CONFIRMATION, "Selecciona un Registro", "Selecciona un registro para ver su información.");
                 		alert.show();

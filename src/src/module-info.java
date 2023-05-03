@@ -8,6 +8,7 @@ module src {
 	requires com.fasterxml.jackson.annotation;
 	requires com.fasterxml.jackson.databind;
 	requires javafx.base;
+	requires java.desktop;
 	exports models;
 	opens application to javafx.graphics, javafx.fxml;
 }
