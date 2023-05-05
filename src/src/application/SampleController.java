@@ -464,6 +464,12 @@ public class SampleController implements Initializable{
         					alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar las firmas del acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
                     		alert.show();
         				}else if(i>=listFirmas.getItems().size()) {
+        					
+        					rps = putRequest(0,"http://127.0.0.1:4040/api/certificates/updateActa/addSignature/"+id_Acta+"/"+i,json);
+        					if(rps==null || rps.statusCode()!=201) {
+        						alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar las firmas del acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
+                        		alert.show();
+        					}else {
         					if(listSinoidales.getItems().size()!=0) {
         						rps = deleteRequest(0,"http://127.0.0.1:4040/api/certificates/actasSinoidales/delete/"+id_Acta);
             					i=1;
@@ -492,8 +498,8 @@ public class SampleController implements Initializable{
                 				fillTableActas();
                 				alert=lc.runAlert(AlertType.INFORMATION, "Acta Actualizada", "El acta fue actualizada correctamente");
                         		alert.show();
+        						}
         					}
-        					
         				}
         				i++;
         			}
@@ -1281,7 +1287,7 @@ public class SampleController implements Initializable{
     	signaturesColumn.setStyle( "-fx-alignment: center;");
     	signaturesColumn.setSortable(false);
     	signaturesColumn.setResizable(false);
-    	signaturesColumn.setMinWidth(100);
+    	signaturesColumn.setMinWidth(97);
 
     	
     	TableColumn  dateLimitColumn= new TableColumn("Fecha Limite");
@@ -1289,7 +1295,7 @@ public class SampleController implements Initializable{
     	dateLimitColumn.setStyle( "-fx-alignment: center;");
     	dateLimitColumn.setSortable(false);
     	dateLimitColumn.setResizable(false);
-    	dateLimitColumn.setMinWidth(150);
+    	dateLimitColumn.setMinWidth(130);
     	
     	TableColumn  ceremonyColumn= new TableColumn("id Ceremonia");
     	ceremonyColumn.setCellValueFactory(new PropertyValueFactory<>("id_ceremony_fk"));
@@ -1342,35 +1348,20 @@ public class SampleController implements Initializable{
 					  				}
 					  	  		}
 					  			
+					  			if(listFirmas.getItems().size()==3) {
+					  				listSinoidales.setDisable(true);
+					  				cbSinoidales.setDisable(true);
+					  				btnAsignarSinoidal.setDisable(true);
+					  				btnEliminarSinoidal.setDisable(true);
+					  				btnEliminarFirmaSinoidal.setDisable(true);
+					  				btnAgregarFirmaSinoidal.setDisable(true);
+					  				btnEliminarActa.setDisable(true);
+					  				cbCeremonias.setDisable(true);
+					  			}
 					  			
 					  			getStatus(listFirmas);
-					  			
-					  			
-					  			
-					  			
-					  			/*listSinoidales.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-					  		        @Override 
-					  		        public ListCell<String> call(ListView<String> param) {
-					  		            return new ListCell<String>() {
-					  		                @Override 
-					  		                protected void updateItem(String item, boolean empty) {
-					  		                    super.updateItem(item, empty);
-					  		                    if ("Orange".equals(item)) {
-					  		                        setDisable(true);
-					  		                    } else {
-					  		                        setDisable(false);
-					  		                    }
-					  		                    setText(item);
-					  		                }
 
-					  		            };
-					  		        }
-					  		    });
-					  			*/
-					  			
-					  		    //listSinoidales.setCellFactory(CheckBoxListCell.forListView(item -> item.onProperty()));
-
-					  			
+					  		
 					  			hStatus.setVisible(true);
 					  			vContainerSigns.setVisible(true);
 					  			cbFolders.getSelectionModel().select(String.valueOf(selectedItem.getId_Folder_fk()));
