@@ -336,7 +336,7 @@ public class SampleController implements Initializable{
     private void asignFirma() {
     	MultipleSelectionModel<String>select = listSinoidales.getSelectionModel();
     	if(select.getSelectedItem() != null) {
-    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "FIRMA SINOIDAL","¿Seguro que ya firmo el sinoidal "+select.getSelectedItem()+" ?");
+    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "FIRMA SINODAL","¿Seguro que ya firmo el sinodal "+select.getSelectedItem()+" ?");
         	Optional<ButtonType> result = alert.showAndWait();
         	if (result.get() == ButtonType.OK){
         		String sinoidal = select.getSelectedItem();
@@ -349,7 +349,8 @@ public class SampleController implements Initializable{
         		}else {
         			btnEliminarFirmaSinoidal.setDisable(false);
         			alert=lc.runAlert(AlertType.INFORMATION, "Acta Firma", "Se agrego una firma al acta correctamente.\nDa clic en Actualizar para guardar los cambios.");
-            		alert.show();
+        			alert.show();
+        			btnActualizarActa.setFocusTraversable(true);
         		}
         		
         	}
@@ -362,7 +363,7 @@ public class SampleController implements Initializable{
     private void deleteSign() {
     	MultipleSelectionModel<String> selected = listFirmas.getSelectionModel();
     	if(selected.getSelectedItem() != null) {
-    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "FIRMA ELIMINADA","¿Seguro que quieres eliminar la firma del sinoidal "+selected.getSelectedItem()+" ?");
+    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "FIRMA ELIMINADA","¿Seguro que quieres eliminar la firma del sinodal "+selected.getSelectedItem()+" ?");
         	Optional<ButtonType> result = alert.showAndWait();
         	if (result.get() == ButtonType.OK){
         		listSinoidales.getItems().add(selected.getSelectedItem());
@@ -403,7 +404,7 @@ public class SampleController implements Initializable{
     
     private void addEmailToList() {
 		if(validateTextField(txtEmailSinoidal,"El valor del campo email es nulo o no cuenta con el formato indicado.","[a-zA-Z0-9_!#$%&'*+/=?``{|}~^.]+@[a-zA-Z0-9.]+$",255)){
-			Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Agregar Email", "¿Seguro que quieres asignar este email a este sinoidal?");
+			Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Agregar Email", "¿Seguro que quieres asignar este email a este sinodal?");
         	Optional<ButtonType> result = alert.showAndWait();
         	if(result.get() == ButtonType.OK) {
         		if(listCorreos.getItems().contains(txtEmailSinoidal.getText())) {
@@ -422,7 +423,7 @@ public class SampleController implements Initializable{
     
     private void addTelephoneToList() {
     	if(validateTextField(txtTelefonoSinoidal,"El valor en el campo telefono es nulo o contiene letras","[0-9]+",10)){
-    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Agregar Telefono", "¿Seguro que quieres asignar este telefono a este sinoidal?");
+    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Agregar Telefono", "¿Seguro que quieres asignar este telefono a este sinodal?");
         	Optional<ButtonType> result = alert.showAndWait();
         	if(result.get() == ButtonType.OK) {
         		if(listTelefonos.getItems().contains(txtTelefonoSinoidal.getText())) {
@@ -440,10 +441,10 @@ public class SampleController implements Initializable{
     	}
     }
     
-    
-    private void updateActa() throws InterruptedException, IOException {
-    	int i=1;
-    	if(validateList(listSinoidales,3,"No se han asignado todos los 3 sinoidales necesarios para crear el Acta")) {
+   private void updateActa() throws InterruptedException, IOException {
+    	int i; 
+
+    	if(validateListSinodales("No se han asignado todos los 3 sinodales o firmas necesariass para crear el Acta")) {
     		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Actualizar Acta", "¿Seguro que quieres actualizar esta Acta en el sistema?");
         	Optional<ButtonType> result = alert.showAndWait();
         	if(result.get() == ButtonType.OK) {
@@ -455,27 +456,54 @@ public class SampleController implements Initializable{
         			alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
             		alert.show();
         		}else {
-        			rps = deleteRequest(0,"http://127.0.0.1:4040/api/certificates/actasSinoidales/delete/"+id_Acta);
-        			if(rps == null || rps.statusCode()!=201) {
-        				alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
-                		alert.show();
-        			}else {	
-        				for(String s:listSinoidales.getItems()) {
-        					String x[] =s.split("-");
-        					System.out.println(x[0]);
-                			rps = postRequest(0,"http://127.0.0.1:4040/api/certificates/addSinoidales/"+id_Acta+"/"+cbCeremonias.getValue()+"/"+x[0],json);
-                			if(rps == null || rps.statusCode()!=201) {
-                				alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
-                        		alert.show();
-                			}else if(i>=listSinoidales.getItems().size()) {
-                				inicioPane.toFront();
+        			i=1;
+        			for(String ids:listFirmas.getItems()) {
+        				String id[] = ids.split("-");
+        				rps = putRequest(0,"http://127.0.0.1:4040/api/certificates/updateActasSignatures/"+id_Acta+"/"+id[0],json);
+        				if(rps == null || rps.statusCode()!=201) {
+        					alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar las firmas del acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
+                    		alert.show();
+        				}else if(i>=listFirmas.getItems().size()) {
+        					if(listSinoidales.getItems().size()!=0) {
+        						rps = deleteRequest(0,"http://127.0.0.1:4040/api/certificates/actasSinoidales/delete/"+id_Acta);
+            					i=1;
+                    			if(rps == null || rps.statusCode()!=201) {
+                    				alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
+                            		alert.show();
+                    			}else {	
+                    				for(String s:listSinoidales.getItems()) {
+                    					String x[] =s.split("-");
+                    					System.out.println(x[0]);
+                            			rps = postRequest(0,"http://127.0.0.1:4040/api/certificates/addSinoidales/"+id_Acta+"/"+cbCeremonias.getValue()+"/"+x[0],json);
+                            			if(rps == null || rps.statusCode()!=201) {
+                            				alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
+                                    		alert.show();
+                            			}else if(i>=listSinoidales.getItems().size()) {
+                            				inicioPane.toFront();
+                            				fillTableActas();
+                            				alert=lc.runAlert(AlertType.INFORMATION, "Acta Actualizada", "El acta fue actualizada correctamente");
+                                    		alert.show();
+                            			}
+                            			i++;
+                    				}
+                    			}
+        					}else {
+        						inicioPane.toFront();
                 				fillTableActas();
                 				alert=lc.runAlert(AlertType.INFORMATION, "Acta Actualizada", "El acta fue actualizada correctamente");
                         		alert.show();
-                			}
-                			i++;
+        					}
+        					
         				}
+        				i++;
         			}
+        			
+        			
+        			
+        			
+        			
+        			
+        			
         		}
         	}
     	}
@@ -485,19 +513,19 @@ public class SampleController implements Initializable{
     private void updateSinoidal() throws IOException, InterruptedException {
     	HttpResponse<String> res = null;
     	JSONObject js = new JSONObject();
-    	if(validateList(listTelefonos,1,"Ingresa al menos un telefono para asignarlo al sinoidal") &&
-    			validateList(listCorreos,1,"Ingresa al menos un email para asignarlo al sinoidal")) {
-    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Actualizar Sinoidal", "¿Seguro que quieres actualizar la informacion de este Sinoidal en el sistema?");
+    	if(validateList(listTelefonos,1,"Ingresa al menos un telefono para asignarlo al sinodal") &&
+    			validateList(listCorreos,1,"Ingresa al menos un email para asignarlo al sinodal")) {
+    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Actualizar Sinoidal", "¿Seguro que quieres actualizar la informacion de este Sinodal en el sistema?");
         	Optional<ButtonType> result = alert.showAndWait();
         	if(result.get() == ButtonType.OK) {
         			res = deleteRequest(0,"http://127.0.0.1:4040/api/sinoidales/phones/delete/"+id_Sinoidal);
         			if(res == null || res.statusCode()!=201) {
-        				alert=lc.runAlert(AlertType.ERROR, "ERROR Sinoidal", "Hubo un error al momento de actualizar el sinoidal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
+        				alert=lc.runAlert(AlertType.ERROR, "ERROR Sinodal", "Hubo un error al momento de actualizar el sinodal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
                 		alert.show();
         			}else {
         				res = deleteRequest(0,"http://127.0.0.1:4040/api/sinoidales/emails/delete/"+id_Sinoidal);
         				if(res == null || res.statusCode()!=201) {
-            				alert=lc.runAlert(AlertType.ERROR, "ERROR Sinoidal", "Hubo un error al momento de actualizar el sinoidal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
+            				alert=lc.runAlert(AlertType.ERROR, "ERROR Sinodal", "Hubo un error al momento de actualizar el sinodal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
                     		alert.show();
             			}else {
             				for(String src: listTelefonos.getItems()) {
@@ -505,7 +533,7 @@ public class SampleController implements Initializable{
     	        				js.put("phone", src);
     	        				res = postRequest(0,"http://127.0.0.1:4040/api/sinoidales/addPhone/"+id_Sinoidal,js);
     	        				if(res == null || res.statusCode() != 201) {
-    	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinoidal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
+    	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinodal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
     	    	            		alert.show();
     	        				}
     	        			}
@@ -515,14 +543,14 @@ public class SampleController implements Initializable{
     	        				js.put("email", src);
     	        				res = postRequest(0,"http://127.0.0.1:4040/api/sinoidales/addEmail/"+id_Sinoidal,js);
     	        				if(res == null || res.statusCode() != 201) {
-    	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinoidal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
+    	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINODAL", "Hubo un error al momento de crear el sinodal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
     	    	            		alert.show();
     	        				}
     	        			}
 
     	        			fillTableSinoidales();
     	        			sinoidalesPane.toFront();
-    	        			alert=lc.runAlert(AlertType.INFORMATION, "SINOIDAL ACTUALIZADO", "El Sinoidal ha sido actualizado exitosamente.");
+    	        			alert=lc.runAlert(AlertType.INFORMATION, "SINOIDAL ACTUALIZADO", "El Sinodal ha sido actualizado exitosamente.");
     	            		alert.show();
 
         			}
@@ -584,7 +612,7 @@ public class SampleController implements Initializable{
     			validateComboBox(cbCeremonias,"Ceremonias") &&
     			validateComboBox(cbFolders,"Folder") &&
     			validateComboBox(cbCarreras,"carreras") &&
-    			validateList(listSinoidales,3,"No se han asignado todos los 3 sinoidales necesarios para crear el Acta")) {
+    			validateList(listSinoidales,3,"No se han asignado todos los 3 sinodales necesarios para crear el Acta")) {
     		if(!checkActasList(txtIdStudent.getText())) {
     			Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Acta", "¿Seguro que quieres crear esta acta?");
             	Optional<ButtonType> result = alert.showAndWait();
@@ -686,10 +714,10 @@ public class SampleController implements Initializable{
     			validateTextField(txtApellidosSinoidal,"El valor del campo apellidos es nulo o numerico","[a-zA-Z\u00f1\u00d1\s]+",255) &&
     			validateTextField(txtIdSinoidal,"El valor del campo matricula es nulo o numerico","[0-9]+",10)&&
     			validateTextField(txtCoordinacionSinoidal,"El valor del coordinación es nulo o contiene letras","[a-zA-Z\u00f1\u00d1\s]+",255) &&
-    			validateList(listTelefonos,1,"Ingresa al menos un telefono para asignarlo al sinoidal") &&
-    			validateList(listCorreos,1,"Ingresa al menos un email para asignarlo al sinoidal")){
+    			validateList(listTelefonos,1,"Ingresa al menos un telefono para asignarlo al sinodal") &&
+    			validateList(listCorreos,1,"Ingresa al menos un email para asignarlo al sinodal")){
     		if(!checkSinoidalesList(txtIdSinoidal.getText())) {
-    			Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Sinoidal", "¿Seguro que quieres crear este sinoidal?");
+    			Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Sinoidal", "¿Seguro que quieres crear este sinodal?");
 	        	Optional<ButtonType> result = alert.showAndWait();
 	        	if(result.get()==ButtonType.OK) {
 	        		JSONObject js = new JSONObject();
@@ -704,7 +732,7 @@ public class SampleController implements Initializable{
 	        		HttpResponse<String> response = postRequest(0,"http://127.0.0.1:4040/api/sinoidales",js);
 	        		String s[]=response.body().split("[,.!:;?{}]");
 	        		if( response == null || response.statusCode()!=201) {
-	        			alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinoidal, verifica tu conexión a internet.\nStatus: "+response.statusCode());
+	        			alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinodal, verifica tu conexión a internet.\nStatus: "+response.statusCode());
 	            		alert.show();
 	        		}else {
 	        			for(String src: listTelefonos.getItems()) {
@@ -712,7 +740,7 @@ public class SampleController implements Initializable{
 	        				js.put("phone", src);
 	        				response = postRequest(0,"http://127.0.0.1:4040/api/sinoidales/addPhone/"+s[2],js);
 	        				if(response == null || response.statusCode() != 201) {
-	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinoidal, verifica tu conexión a internet.\nStatus: "+response.statusCode());
+	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinodal, verifica tu conexión a internet.\nStatus: "+response.statusCode());
 	    	            		alert.show();
 	        				}
 	        			}
@@ -722,14 +750,14 @@ public class SampleController implements Initializable{
 	        				js.put("email", src);
 	        				response = postRequest(0,"http://127.0.0.1:4040/api/sinoidales/addEmail/"+s[2],js);
 	        				if(response == null || response.statusCode() != 201) {
-	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinoidal, verifica tu conexión a internet.\nStatus: "+response.statusCode());
+	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinodal, verifica tu conexión a internet.\nStatus: "+response.statusCode());
 	    	            		alert.show();
 	        				}
 	        			}
 
 	        			fillTableSinoidales();
 	        			sinoidalesPane.toFront();
-	        			alert=lc.runAlert(AlertType.INFORMATION, "SINOIDAL CREADO", "El nuevo Sinoidal ha sido creado exitosamente.");
+	        			alert=lc.runAlert(AlertType.INFORMATION, "SINOIDAL CREADO", "El nuevo Sinodal ha sido creado exitosamente.");
 	            		alert.show();
 	        		}
 	        	}
@@ -899,9 +927,19 @@ public class SampleController implements Initializable{
     	return response;
 	}
 	
-
-    private boolean validateList(ListView<String> listSinoidales,int SIZE,String message) {
-    	if(listSinoidales.getItems().size() < SIZE) {
+	private boolean validateListSinodales(String message) {
+		if(listSinoidales.getItems().size()+listFirmas.getItems().size() < 3) {
+			Alert alert=lc.runAlert(AlertType.ERROR, "ERROR SINODALES",message);
+    		alert.show();
+    		listSinoidales.requestFocus();
+		}else {
+			return true;
+		}
+		return false;
+	}
+	
+    private boolean validateList(ListView<String> list,int SIZE,String message) {
+    	if(list.getItems().size() < SIZE) {
     		Alert alert=lc.runAlert(AlertType.ERROR, "ERROR LISTA",message);
     		alert.show();
     		listSinoidales.requestFocus();
@@ -1294,15 +1332,20 @@ public class SampleController implements Initializable{
 					  			for(Actas_Sinoidales as:actas_sinoidales) {
 					  				List<Sinoidales> sinoidalesActa = handleResponseSinoidales("http://127.0.0.1:4040/api/sinoidales/search/"+as.getId_sinoidales_fk());
 					  				for(Sinoidales i : sinoidalesActa) {
-					  					listSinoidales.getItems().add(as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name());
-					  					
+					  					if(as.getSigned()==1) {
+					  						btnEliminarFirmaSinoidal.setDisable(false);
+					  						listFirmas.getItems().add(as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name());
+					  					}else{
+					  						listSinoidales.getItems().add(as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name());
+					  					}
 					  					cbSinoidales.getItems().remove(as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name());
 					  				}
 					  	  		}
 					  			
-					  			if(listFirmas.getItems().size()==0) {
-					  				setStatus("SIN FIRMAS",Color.RED);
-					  			}
+					  			
+					  			getStatus(listFirmas);
+					  			
+					  			
 					  			
 					  			
 					  			/*listSinoidales.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
@@ -1535,6 +1578,27 @@ public class SampleController implements Initializable{
 		
 		tableFolders.getColumns().addAll(idFolder,caseColumn,actasNumColumn);
 		
+	}
+	
+	public void getStatus(ListView<String> list) {
+		int len=list.getItems().size();
+		switch(len) {
+			case 1:
+				setStatus("POR FIRMAR ("+(3-len)+" SINOIDALES)",Color.ORANGE);
+			break;
+			
+			case 2:
+				setStatus("POR FIRMAR ("+(3-len)+" SINOIDAL)",Color.YELLOW);
+			break;
+			
+			case 3:
+				setStatus("COMPLETA",Color.GREEN);
+			break;
+				
+			default:
+				setStatus("SIN FIRMAS",Color.RED);
+			break;
+		}
 	}
 	
 	public void setStatus(String status,Color color) {

@@ -69,7 +69,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="btnSinoidales" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="SINOIDALES">
+                  <Button fx:id="btnSinoidales" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="SINODALES">
                      <padding>
                         <Insets left="50.0" />
                      </padding>
@@ -156,11 +156,11 @@
                            <children>
                               <Pane prefHeight="136.0" prefWidth="874.0">
                                  <children>
-                                    <Button fx:id="btnAgregarSinoidal" layoutX="22.0" layoutY="66.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Sinoidal">
+                                    <Button fx:id="btnAgregarSinoidal" layoutX="22.0" layoutY="66.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Sinodal">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor></Button>
-                                    <Label layoutX="14.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="SINOIDALES">
+                                    <Label layoutX="14.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="SINODALES">
                                        <font>
                                           <Font size="26.0" />
                                        </font>
@@ -197,7 +197,7 @@
                            <children>
                               <Pane prefHeight="88.0" prefWidth="874.0">
                                  <children>
-                                    <Label layoutX="14.0" layoutY="24.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="CREAR SINOIDAL">
+                                    <Label layoutX="14.0" layoutY="24.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="CREAR SINODAL">
                                        <font>
                                           <Font size="26.0" />
                                        </font>
@@ -218,15 +218,15 @@
                                        <children>
                                           <VBox alignment="TOP_CENTER" prefHeight="490.0" prefWidth="567.0">
                                              <children>
-                                                <Label prefHeight="20.0" prefWidth="331.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Ingresa la información para crear un nuevo sinoidal.">
+                                                <Label prefHeight="20.0" prefWidth="331.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Ingresa la información para crear un nuevo sinodal.">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
                                                 <HBox prefHeight="42.0" prefWidth="390.0">
                                                    <children>
-                                                      <TextField fx:id="txtNombreSinoidal" prefHeight="40.0" prefWidth="222.0" promptText="Nombre del Sinoidal" />
-                                                      <TextField fx:id="txtApellidosSinoidal" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="220.0" promptText="Apellidos del Sinoidal">
+                                                      <TextField fx:id="txtNombreSinoidal" prefHeight="40.0" prefWidth="222.0" promptText="Nombre del Sinodal" />
+                                                      <TextField fx:id="txtApellidosSinoidal" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="220.0" promptText="Apellidos del Sinodal">
                                                          <HBox.margin>
                                                             <Insets left="20.0" />
                                                          </HBox.margin>
@@ -236,19 +236,19 @@
                                                       <Insets top="10.0" />
                                                    </VBox.margin>
                                                 </HBox>
-                                                <TextField fx:id="txtIdSinoidal" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="414.0" promptText="Matricula del Sinoidal">
+                                                <TextField fx:id="txtIdSinoidal" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="414.0" promptText="Matricula del Sinodal">
                                                    <VBox.margin>
                                                       <Insets bottom="20.0" top="20.0" />
                                                    </VBox.margin>
                                                 </TextField>
-                                                <TextField fx:id="txtCoordinacionSinoidal" accessibleText="/^(\s*|\d+)$/" layoutX="10.0" layoutY="232.0" onAction="#handleClicks" prefHeight="40.0" prefWidth="418.0" promptText="Coordinación del Sinoidal">
+                                                <TextField fx:id="txtCoordinacionSinoidal" accessibleText="/^(\s*|\d+)$/" layoutX="10.0" layoutY="232.0" onAction="#handleClicks" prefHeight="40.0" prefWidth="418.0" promptText="Coordinación del Sinodal">
                                                    <VBox.margin>
                                                       <Insets top="20.0" />
                                                    </VBox.margin>
                                                 </TextField>
                                                 <HBox prefHeight="100.0" prefWidth="200.0">
                                                    <children>
-                                                      <Button fx:id="btnCrearSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="CREAR SINOIDAL">
+                                                      <Button fx:id="btnCrearSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="CREAR SINODAL">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
@@ -280,7 +280,7 @@
                                              <children>
                                                 <HBox prefHeight="48.0" prefWidth="352.0">
                                                    <children>
-                                                      <TextField fx:id="txtTelefonoSinoidal" accessibleText="/^(\s*|\d+)$/" prefHeight="40.0" prefWidth="219.0" promptText="Telefono del Sinoidal" />
+                                                      <TextField fx:id="txtTelefonoSinoidal" accessibleText="/^(\s*|\d+)$/" prefHeight="40.0" prefWidth="219.0" promptText="Telefono del Sinodal" />
                                                       <Button fx:id="btnAgregarTelefono" mnemonicParsing="false" onAction="#handleClicks" prefHeight="32.0" prefWidth="62.0" styleClass="buttonMenu" stylesheets="@styles/style.css">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
@@ -320,7 +320,7 @@
                                                 </ListView>
                                                 <HBox prefHeight="49.0" prefWidth="352.0">
                                                    <children>
-                                                      <TextField fx:id="txtEmailSinoidal" accessibleText="/^(\s*|\d+)$/" prefHeight="40.0" prefWidth="235.0" promptText="Email del Sinoidal" />
+                                                      <TextField fx:id="txtEmailSinoidal" accessibleText="/^(\s*|\d+)$/" prefHeight="40.0" prefWidth="235.0" promptText="Email del Sinodal" />
                                                       <Button fx:id="btnAgregarEmail" mnemonicParsing="false" onAction="#handleClicks" prefHeight="32.0" prefWidth="62.0" styleClass="buttonMenu" stylesheets="@styles/style.css">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
@@ -563,7 +563,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="lblStatus" layoutX="10.0" layoutY="10.0" prefHeight="34.0" prefWidth="201.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="AQUI VA EL STATUS">
+                                          <Label fx:id="lblStatus" layoutX="10.0" layoutY="10.0" prefHeight="34.0" prefWidth="353.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="AQUI VA EL STATUS">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -689,7 +689,7 @@
                                              <children>
                                                 <VBox prefHeight="243.0" prefWidth="424.0" styleClass="container" stylesheets="@styles/style.css">
                                                    <children>
-                                                      <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Asigna los sinoidales de la Acta.">
+                                                      <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Asigna los sinodales de la Acta.">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
@@ -704,7 +704,7 @@
                                                                   <Cursor fx:constant="HAND" />
                                                                </cursor>
                                                             </ComboBox>
-                                                            <Button fx:id="btnAsignarSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Sinoidal">
+                                                            <Button fx:id="btnAsignarSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Sinodal">
                                                                <cursor>
                                                                   <Cursor fx:constant="HAND" />
                                                                </cursor>
@@ -719,7 +719,7 @@
                                                             <Insets left="10.0" right="10.0" top="10.0" />
                                                          </VBox.margin>
                                                       </ListView>
-                                                      <Button fx:id="btnEliminarSinoidal" alignment="CENTER" contentDisplay="RIGHT" disable="true" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="Eliminar Sinoidal" textAlignment="JUSTIFY">
+                                                      <Button fx:id="btnEliminarSinoidal" alignment="CENTER" contentDisplay="RIGHT" disable="true" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="Eliminar Sinodal" textAlignment="JUSTIFY">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
@@ -742,7 +742,7 @@
                                                    <children>
                                                       <HBox alignment="CENTER" prefHeight="37.0" prefWidth="424.0" stylesheets="@styles/style.css">
                                                          <children>
-                                                            <Label prefHeight="20.0" prefWidth="146.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="FIRMAS SINOIDALES">
+                                                            <Label prefHeight="20.0" prefWidth="146.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="FIRMAS SINODALES">
                                                                <font>
                                                                   <Font size="14.0" />
                                                                </font>
@@ -802,7 +802,7 @@
                            <children>
                               <Pane prefHeight="110.0" prefWidth="874.0">
                                  <children>
-                                    <Label layoutX="14.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="ACTAS SINOIDALES">
+                                    <Label layoutX="14.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="ACTAS">
                                        <font>
                                           <Font size="26.0" />
                                        </font>
