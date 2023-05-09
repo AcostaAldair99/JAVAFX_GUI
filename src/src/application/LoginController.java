@@ -55,6 +55,7 @@ public class LoginController{
 	
     public static String token;
     
+    public static String user;
 
    
     public void handleButtonAction(MouseEvent event) throws IOException, InterruptedException {
@@ -123,7 +124,8 @@ public class LoginController{
     		txtUsername.setFocusTraversable(true);
     		setLblError(Color.RED,"Ingresa completas las credenciales");
     	}else {
-    		json.put("user", txtUsername.getText());
+    		user = txtUsername.getText();
+    		json.put("user",user);
         	json.put("pass", txtPassword.getText());
     	}
     	return json;
@@ -164,7 +166,9 @@ public class LoginController{
     	return token;
     }
     
-    
+    public String getUser() {
+    	return user;
+    }
  
     
 }

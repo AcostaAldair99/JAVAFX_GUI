@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -15,6 +16,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -24,7 +27,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.CheckBoxListCell;
@@ -38,7 +44,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import models.Actas;
@@ -84,6 +92,8 @@ public class SampleController implements Initializable{
 	Alert alert;
 	private BigInteger id_Acta=null;
 	private BigInteger id_Sinoidal=null;
+	public String user;
+	public String action;
 	
 	@FXML
 	private VBox vContainerSigns;
@@ -180,9 +190,10 @@ public class SampleController implements Initializable{
     @FXML
     private TextField txtNombreSinoidal,txtApellidosSinoidal,txtIdSinoidal,txtEmailSinoidal,txtTelefonoSinoidal,txtCoordinacionSinoidal;
     
-    
-    @Override
+
+	@Override
     public void initialize(URL location, ResourceBundle resources) {
+    	setUser();
     	LoginController swe=new LoginController();
     	token=swe.getoken();
     	setTableViewActas();
@@ -296,7 +307,7 @@ public class SampleController implements Initializable{
         }
         
         if(actionEvent.getSource() == btnActualizarActa) {
-        	updateActa();
+        	updateActa(actionEvent);
         	
         }
         
@@ -441,9 +452,20 @@ public class SampleController implements Initializable{
     	}
     }
     
-   private void updateActa() throws InterruptedException, IOException {
+    private void showModal(ActionEvent event) throws IOException {
+    	validateModal vm = new validateModal();
+    	vm.showModal(event);
+    	vm.getStage().showAndWait();
+    	System.out.println("This is from sample controller: "+vm.getData());
+    }
+    
+   private void updateActa(ActionEvent event) throws InterruptedException, IOException {
     	int i; 
-
+    	
+    	showModal(event);
+    	
+    	
+    	/*
     	if(validateListSinodales("No se han asignado todos los 3 sinodales o firmas necesariass para crear el Acta")) {
     		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Actualizar Acta", "¿Seguro que quieres actualizar esta Acta en el sistema?");
         	Optional<ButtonType> result = alert.showAndWait();
@@ -464,7 +486,7 @@ public class SampleController implements Initializable{
         					alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar las firmas del acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
                     		alert.show();
         				}else if(i>=listFirmas.getItems().size()) {
-        					
+        		
         					rps = putRequest(0,"http://127.0.0.1:4040/api/certificates/updateActa/addSignature/"+id_Acta+"/"+i,json);
         					if(rps==null || rps.statusCode()!=201) {
         						alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar las firmas del acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
@@ -513,7 +535,7 @@ public class SampleController implements Initializable{
         		}
         	}
     	}
-    	
+    	*/
     }
     
     private void updateSinoidal() throws IOException, InterruptedException {
@@ -889,7 +911,7 @@ public class SampleController implements Initializable{
     	}
     }
     
-	private HttpResponse<String> postRequest(int intentos,String URL,JSONObject jsonBody) throws InterruptedException{
+	public HttpResponse<String> postRequest(int intentos,String URL,JSONObject jsonBody) throws InterruptedException{
     	HttpResponse<String> response = null;
     	try {
 	    	HttpClient client=HttpClient.newHttpClient();
@@ -1595,6 +1617,14 @@ public class SampleController implements Initializable{
 	public void setStatus(String status,Color color) {
 		lblStatus.setText(status);
 		lblStatus.setTextFill(color);
+	}
+	
+	public void setUser() {
+		user = lc.getUser();
+	}
+
+	public String getUser() {
+		return user;
 	}
 	
 }
