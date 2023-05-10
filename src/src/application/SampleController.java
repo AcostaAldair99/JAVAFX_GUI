@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -22,6 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -39,6 +41,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -307,7 +310,7 @@ public class SampleController implements Initializable{
         }
         
         if(actionEvent.getSource() == btnActualizarActa) {
-        	updateActa(actionEvent);
+        	updateActa();
         	
         }
         
@@ -452,24 +455,72 @@ public class SampleController implements Initializable{
     	}
     }
     
-    private void showModal(ActionEvent event) throws IOException {
-    	validateModal vm = new validateModal();
-    	vm.showModal(event);
-    	vm.getStage().showAndWait();
-    	System.out.println("This is from sample controller: "+vm.getData());
+    private Dialog<String> getValidateModal( ) throws IOException {
+    	Dialog<String> dialog = new Dialog<>();
+    	dialog.setTitle("Validar Movimiento");
+    	dialog.setHeaderText("Ingresa tu contraseña para validar la modificación en el sistema.");
+    	dialog.setResizable(false);
+    	dialog.initModality(Modality.APPLICATION_MODAL); 
+    	dialog.initStyle(StageStyle.UNDECORATED);
+    	dialog.getDialogPane().setPrefSize(400, 200);
+    	PasswordField text1 = new PasswordField();
+    	text1.setPrefWidth(150);
+    	VBox grid = new VBox();
+    	grid.getChildren().add(text1);
+    	dialog.getDialogPane().setContent(grid);
+    	         
+    	ButtonType buttonTypeOk = new ButtonType("Validar", ButtonData.OK_DONE);
+    	ButtonType buttonTypeCancel = new ButtonType("Cancelar", ButtonData.NO);
+    	
+    	//Styling the dialogpane
+    	dialog.getDialogPane().getStylesheets().add(getClass().getResource("dialogStyle.css").toExternalForm());;
+    	dialog.getDialogPane().getStyleClass().add("myDialog");
+    	
+    	dialog.getDialogPane().getButtonTypes().addAll(buttonTypeOk,buttonTypeCancel);    	
+    	
+    	dialog.setResultConverter(new Callback<ButtonType, String>() {
+    	    @Override
+    	    public String call(ButtonType b) {
+    	 
+    	        if (b == buttonTypeOk) {
+    	        	try {
+    	        		JSONObject json = new JSONObject();
+        	        	json.put("user", user);
+        	        	json.put("pass", text1.getText());
+						HttpResponse<String> resp = postRequest(0,"http://127.0.0.1:4040/auth/signIn/validate",json);
+						if(resp.statusCode()==201) {
+							return "auth";
+						}else {
+							return "no auth";
+						}
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+    	        }
+    	        
+    	        if(b==buttonTypeCancel) {
+    	        	return "cancel";
+    	        }
+    	        
+    	        return "null";
+    	    }
+    	});
+    	
+    	
+    	
+    	return dialog;
     }
     
-   private void updateActa(ActionEvent event) throws InterruptedException, IOException {
-    	int i; 
+    
+   //Check update acta 
+   private void updateActa( ) throws InterruptedException, IOException {
+    	int i;     	
     	
-    	showModal(event);
-    	
-    	
-    	/*
     	if(validateListSinodales("No se han asignado todos los 3 sinodales o firmas necesariass para crear el Acta")) {
-    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Actualizar Acta", "¿Seguro que quieres actualizar esta Acta en el sistema?");
-        	Optional<ButtonType> result = alert.showAndWait();
-        	if(result.get() == ButtonType.OK) {
+    		/*Dialog<String> validate = getValidateModal();
+        	Optional<String> result = validate.showAndWait();
+        	if(result.get().matches("auth")) {*/
         		JSONObject json = new JSONObject();
         		json.put("idCeremony", Integer.parseInt(cbCeremonias.getValue()));
         		json.put("idFolder", Integer.parseInt(cbFolders.getValue()));
@@ -525,17 +576,13 @@ public class SampleController implements Initializable{
         				}
         				i++;
         			}
-        			
-        			
-        			
-        			
-        			
-        			
-        			
         		}
-        	}
+        	/*}else if(result.get().matches("no auth")) {
+        		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
+    			alert.show();
+        	}*/
     	}
-    	*/
+    	
     }
     
     private void updateSinoidal() throws IOException, InterruptedException {
@@ -543,9 +590,10 @@ public class SampleController implements Initializable{
     	JSONObject js = new JSONObject();
     	if(validateList(listTelefonos,1,"Ingresa al menos un telefono para asignarlo al sinodal") &&
     			validateList(listCorreos,1,"Ingresa al menos un email para asignarlo al sinodal")) {
-    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Actualizar Sinoidal", "¿Seguro que quieres actualizar la informacion de este Sinodal en el sistema?");
-        	Optional<ButtonType> result = alert.showAndWait();
-        	if(result.get() == ButtonType.OK) {
+    		Dialog<String> d = getValidateModal();
+    		Optional<String> result = d.showAndWait();
+    		
+        	if(result.get().matches("auth")) {
         			res = deleteRequest(0,"http://127.0.0.1:4040/api/sinoidales/phones/delete/"+id_Sinoidal);
         			if(res == null || res.statusCode()!=201) {
         				alert=lc.runAlert(AlertType.ERROR, "ERROR Sinodal", "Hubo un error al momento de actualizar el sinodal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
@@ -578,7 +626,7 @@ public class SampleController implements Initializable{
 
     	        			fillTableSinoidales();
     	        			sinoidalesPane.toFront();
-    	        			alert=lc.runAlert(AlertType.INFORMATION, "SINOIDAL ACTUALIZADO", "El Sinodal ha sido actualizado exitosamente.");
+    	        			alert=lc.runAlert(AlertType.INFORMATION, "SINODAL ACTUALIZADO", "El Sinodal ha sido actualizado exitosamente.");
     	            		alert.show();
 
         			}
@@ -586,14 +634,17 @@ public class SampleController implements Initializable{
         		}
         		
         		
+        	}else if(result.get().matches("no auth")) {
+        		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
+    			alert.show();
         	}
     	}
     }
-    private void createFolder() throws InterruptedException, JsonMappingException, JsonProcessingException {
+    private void createFolder() throws InterruptedException, IOException {
     	if(validateComboBox(cbEstantes,"Estantes")) {
-    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Folder", "¿Seguro que quieres crear este nuevo folder en el sistema?");
-        	Optional<ButtonType> result = alert.showAndWait();
-        	if(result.get() == ButtonType.OK) {
+    		Dialog<String> di = getValidateModal();
+    		Optional<String> result = di.showAndWait();
+        	if(result.get().matches("auth")) {
         		JSONObject j = new JSONObject();
         		j.put("case",cbEstantes.getValue());
         		
@@ -607,13 +658,21 @@ public class SampleController implements Initializable{
         			alert=lc.runAlert(AlertType.INFORMATION, "Folder CREADO", "El nuevo Folder ha sido creado exitosamente.");
             		alert.show();
         		}
+        	}else if (result.get().matches("no auth")){
+        		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
+    			alert.show();
         	}
     	}
     	
     	
     }
     
-    private boolean checkActasList(String idStudent) {
+    private Dialog showModelValidation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private boolean checkActasList(String idStudent) {
     	for(Actas act : tableActas.getItems()) {
     		if(act.getId_Student().toString().equals(idStudent)) {
     			return true;
@@ -631,7 +690,7 @@ public class SampleController implements Initializable{
     	return false;
     }
     
-    private void createActa() throws InterruptedException, JsonMappingException, JsonProcessingException{
+    private void createActa() throws InterruptedException, IOException{
     	
     	if(validateTextField(txtNameStudent,"El valor del campo nombre es nulo o numerico","[a-zA-Z\u00f1\u00d1\s]+",255) && 
     			validateTextField(txtApellidosStudent,"El valor del campo apellidos es nulo o numerico","[a-zA-Z\u00f1\u00d1\s]+",255) &&
@@ -642,10 +701,13 @@ public class SampleController implements Initializable{
     			validateComboBox(cbCarreras,"carreras") &&
     			validateList(listSinoidales,3,"No se han asignado todos los 3 sinodales necesarios para crear el Acta")) {
     		if(!checkActasList(txtIdStudent.getText())) {
-    			Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Acta", "¿Seguro que quieres crear esta acta?");
+    			/*Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Acta", "¿Seguro que quieres crear esta acta?");
             	Optional<ButtonType> result = alert.showAndWait();
-            	
-            	if (result.get() == ButtonType.OK){
+            	*/
+    			Dialog<String> validate = getValidateModal();
+            	Optional<String> result = validate.showAndWait();
+    			
+            	if (result.get().matches("auth")){
             		JSONObject json=new JSONObject();
             		
             		json.put("name_Student",txtNameStudent.getText());
@@ -682,6 +744,9 @@ public class SampleController implements Initializable{
                 		alert.show();
             		}
             		
+            	}else if(result.get().matches("no auth")) {
+            		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
+        			alert.show();
             	}
         	}else {
         		alert=lc.runAlert(AlertType.ERROR, "ERROR ACTA", "Ya hay un Acta registrada con el número de matricula ingresado.");
@@ -737,7 +802,7 @@ public class SampleController implements Initializable{
     	btnEliminarEmail.setDisable(true);
     }
     
-    private void createSinoidal() throws InterruptedException, JsonMappingException, JsonProcessingException {
+    private void createSinoidal() throws InterruptedException, IOException {
     	if(validateTextField(txtNombreSinoidal,"El valor del campo nombre es nulo o numerico","[a-zA-Z\u00f1\u00d1\s]+",255) && 
     			validateTextField(txtApellidosSinoidal,"El valor del campo apellidos es nulo o numerico","[a-zA-Z\u00f1\u00d1\s]+",255) &&
     			validateTextField(txtIdSinoidal,"El valor del campo matricula es nulo o numerico","[0-9]+",10)&&
@@ -745,9 +810,13 @@ public class SampleController implements Initializable{
     			validateList(listTelefonos,1,"Ingresa al menos un telefono para asignarlo al sinodal") &&
     			validateList(listCorreos,1,"Ingresa al menos un email para asignarlo al sinodal")){
     		if(!checkSinoidalesList(txtIdSinoidal.getText())) {
-    			Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Sinoidal", "¿Seguro que quieres crear este sinodal?");
+    			/*Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Sinoidal", "¿Seguro que quieres crear este sinodal?");
 	        	Optional<ButtonType> result = alert.showAndWait();
-	        	if(result.get()==ButtonType.OK) {
+	        	*/
+    			Dialog<String> di = getValidateModal();
+    			Optional<String> result = di.showAndWait();
+	        	
+	        	if(result.get().matches("auth")) {
 	        		JSONObject js = new JSONObject();
 	        		js.put("first_Name", txtNombreSinoidal.getText());
 	        		js.put("second_Name", txtApellidosSinoidal.getText());
@@ -788,6 +857,9 @@ public class SampleController implements Initializable{
 	        			alert=lc.runAlert(AlertType.INFORMATION, "SINOIDAL CREADO", "El nuevo Sinodal ha sido creado exitosamente.");
 	            		alert.show();
 	        		}
+	        	}else if(result.get().matches("no auth")) {
+	        		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
+        			alert.show();
 	        	}
     		}else {
     			alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Ya hay un Sinoidal registrado con el número de matricula ingresado.");
@@ -801,9 +873,13 @@ public class SampleController implements Initializable{
    
     private void deleteActa() throws IOException, InterruptedException {
     		HttpResponse<String> res = null;
-			Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Eliminar Acta", "¿Seguro que quieres eliminar el acta con el id #"+id_Acta+" ?");
+			/*Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Eliminar Acta", "¿Seguro que quieres eliminar el acta con el id #"+id_Acta+" ?");
         	Optional<ButtonType> result = alert.showAndWait();
-        	if(result.get()==ButtonType.OK) {
+        	*/
+        	Dialog<String> di = getValidateModal();
+        	Optional<String> result = di.showAndWait();
+        	
+        	if(result.get().matches("auth")) {
         		res = deleteRequest(0,"http://127.0.0.1:4040/api/certificates/actasSinoidales/delete/"+id_Acta);
         		if(res == null || res.statusCode() !=201) {
         			alert=lc.runAlert(AlertType.ERROR, "ERROR ELIMINAR ACTA", "Hubo un error al momento de eliminar el acta, verifica tu conexión a internet.\nStatus: "+res.statusCode());
@@ -820,8 +896,13 @@ public class SampleController implements Initializable{
                 		alert.show();
         			}
         		}
+        	}else if(result.get().matches("no auth")) {
+        		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
+    			alert.show();
         	}
     }
+    
+    //Check delete Sinoidal
     
     /*private void deleteSinoidal() throws IOException, InterruptedException {
     	HttpResponse<String> res = null;
@@ -878,11 +959,14 @@ public class SampleController implements Initializable{
     }
     
     
-    private void createCeremonia() throws InterruptedException, JsonMappingException, JsonProcessingException {
+    private void createCeremonia() throws InterruptedException, IOException {
     	if(datePickerCeremonia.getValue()!=null) {
-    		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Ceremonia", "¿Seguro que quieres crear esta ceremonia con fecha del "+datePickerCeremonia.getValue()+" ?");
+    		/*Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Ceremonia", "¿Seguro que quieres crear esta ceremonia con fecha del "+datePickerCeremonia.getValue()+" ?");
         	Optional<ButtonType> result = alert.showAndWait();
-        	if(result.get() == ButtonType.OK) {
+        	*/
+    		Dialog<String> di = getValidateModal();
+    		Optional<String> result = di.showAndWait();
+        	if(result.get().matches("auth")) {
         		JSONObject json = new JSONObject();
         		json.put("date",datePickerCeremonia.getValue());
         		json.put("cicle", getCicle(datePickerCeremonia.getValue()));
@@ -895,6 +979,9 @@ public class SampleController implements Initializable{
         			alert=lc.runAlert(AlertType.ERROR, "CEREMONIA CREADA", "Se creo la ceremonia de manera exitosa !\nComienza a asignar actas a la nueva ceremonia");
             		alert.show();
         		}
+        	}else if(result.get().matches("no auth")) {
+        		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
+    			alert.show();
         	}
     	}else {
     		alert=lc.runAlert(AlertType.ERROR, "ERROR FECHA", "Ingresa un valor en el campo fecha");

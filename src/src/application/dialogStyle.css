@@ -1,0 +1,14 @@
+.myDialog{
+    -fx-background-color: #218E58;
+    -fx-border-color:ffff;
+    -fx-text-background-color: white;
+    
+}
+
+.myDialog:header *.header-panel{
+    -fx-background-color: #218E58;
+    -fx-text-background-color: white;
+    -fx-font-size:14px;
+}
+
+
