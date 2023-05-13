@@ -1,26 +1,22 @@
 package application;
 
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.CheckBox;
+
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
+
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
+
 import javafx.scene.control.ListView;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.PasswordField;
@@ -28,20 +24,10 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -51,7 +37,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
 import models.Actas;
 import models.Actas_Sinoidales;
 import models.Ceremonias;
@@ -59,24 +44,16 @@ import models.Email;
 import models.Folder;
 import models.Sinoidales;
 import models.Telephone;
-import models.listItem;
 
-import java.awt.Checkbox;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -207,7 +184,6 @@ public class SampleController implements Initializable{
 			fillTableActas();
 			fillTableSinoidales();
 		} catch (JsonProcessingException | InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
@@ -223,7 +199,6 @@ public class SampleController implements Initializable{
     	  	try {
 				fillTableActas();
 			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
             inicioPane.toFront();
@@ -233,9 +208,7 @@ public class SampleController implements Initializable{
             actasPane.toFront();
             try {
             	clearFormActas();
-				
 			} catch (JsonProcessingException | InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
         }
@@ -243,7 +216,7 @@ public class SampleController implements Initializable{
         	try {
 				fillTableSinoidales();
 			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
             sinoidalesPane.toFront();
@@ -255,7 +228,6 @@ public class SampleController implements Initializable{
 				fillTableCeremony();
 				filltableFolder();
 			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
             ceremoniasPane.toFront();
@@ -494,7 +466,7 @@ public class SampleController implements Initializable{
 							return "no auth";
 						}
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
     	        }
@@ -515,12 +487,11 @@ public class SampleController implements Initializable{
     
    //Check update acta 
    private void updateActa( ) throws InterruptedException, IOException {
-    	int i;     	
-    	
+    	int i,j;     	
     	if(validateListSinodales("No se han asignado todos los 3 sinodales o firmas necesariass para crear el Acta")) {
-    		/*Dialog<String> validate = getValidateModal();
+    		Dialog<String> validate = getValidateModal();
         	Optional<String> result = validate.showAndWait();
-        	if(result.get().matches("auth")) {*/
+        	if(result.get().matches("auth")) {
         		JSONObject json = new JSONObject();
         		json.put("idCeremony", Integer.parseInt(cbCeremonias.getValue()));
         		json.put("idFolder", Integer.parseInt(cbFolders.getValue()));
@@ -531,39 +502,42 @@ public class SampleController implements Initializable{
         		}else {
         			i=1;
         			for(String ids:listFirmas.getItems()) {
+        				if(ids.isBlank()) {
+        					i=listFirmas.getItems().size();
+        				}
         				String id[] = ids.split("-");
         				rps = putRequest(0,"http://127.0.0.1:4040/api/certificates/updateActasSignatures/"+id_Acta+"/"+id[0],json);
         				if(rps == null || rps.statusCode()!=201) {
         					alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar las firmas del acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
                     		alert.show();
-        				}else if(i>=listFirmas.getItems().size()) {
-        		
+        				}else if(i>=listFirmas.getItems().size()){        					
         					rps = putRequest(0,"http://127.0.0.1:4040/api/certificates/updateActa/addSignature/"+id_Acta+"/"+i,json);
         					if(rps==null || rps.statusCode()!=201) {
         						alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar las firmas del acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
                         		alert.show();
         					}else {
         					if(listSinoidales.getItems().size()!=0) {
+        						
+        						
         						rps = deleteRequest(0,"http://127.0.0.1:4040/api/certificates/actasSinoidales/delete/"+id_Acta);
-            					i=1;
+            					j=1;
                     			if(rps == null || rps.statusCode()!=201) {
                     				alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
                             		alert.show();
                     			}else {	
                     				for(String s:listSinoidales.getItems()) {
                     					String x[] =s.split("-");
-                    					System.out.println(x[0]);
                             			rps = postRequest(0,"http://127.0.0.1:4040/api/certificates/addSinoidales/"+id_Acta+"/"+cbCeremonias.getValue()+"/"+x[0],json);
                             			if(rps == null || rps.statusCode()!=201) {
                             				alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
                                     		alert.show();
-                            			}else if(i>=listSinoidales.getItems().size()) {
+                            			}else if(j>=listSinoidales.getItems().size()) {
                             				inicioPane.toFront();
                             				fillTableActas();
                             				alert=lc.runAlert(AlertType.INFORMATION, "Acta Actualizada", "El acta fue actualizada correctamente");
                                     		alert.show();
                             			}
-                            			i++;
+                            			j++;
                     				}
                     			}
         					}else {
@@ -577,10 +551,10 @@ public class SampleController implements Initializable{
         				i++;
         			}
         		}
-        	/*}else if(result.get().matches("no auth")) {
+        	}else if(result.get().matches("no auth")) {
         		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
     			alert.show();
-        	}*/
+        	}
     	}
     	
     }
@@ -647,8 +621,6 @@ public class SampleController implements Initializable{
         	if(result.get().matches("auth")) {
         		JSONObject j = new JSONObject();
         		j.put("case",cbEstantes.getValue());
-        		
-        		System.out.println(j);
         		HttpResponse<String> res = postRequest(0,"http://127.0.0.1:4040/api/folders",j);
         		if(res == null||res.statusCode() !=201) {
         			alert=lc.runAlert(AlertType.ERROR, "ERROR Folder", "Hubo un error al momento de crear el Folder, verifica tu conexión a internet.\nStatus: "+res.statusCode());
@@ -667,10 +639,6 @@ public class SampleController implements Initializable{
     	
     }
     
-    private Dialog showModelValidation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	private boolean checkActasList(String idStudent) {
     	for(Actas act : tableActas.getItems()) {
@@ -810,9 +778,6 @@ public class SampleController implements Initializable{
     			validateList(listTelefonos,1,"Ingresa al menos un telefono para asignarlo al sinodal") &&
     			validateList(listCorreos,1,"Ingresa al menos un email para asignarlo al sinodal")){
     		if(!checkSinoidalesList(txtIdSinoidal.getText())) {
-    			/*Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Sinoidal", "¿Seguro que quieres crear este sinodal?");
-	        	Optional<ButtonType> result = alert.showAndWait();
-	        	*/
     			Dialog<String> di = getValidateModal();
     			Optional<String> result = di.showAndWait();
 	        	
@@ -873,9 +838,6 @@ public class SampleController implements Initializable{
    
     private void deleteActa() throws IOException, InterruptedException {
     		HttpResponse<String> res = null;
-			/*Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Eliminar Acta", "¿Seguro que quieres eliminar el acta con el id #"+id_Acta+" ?");
-        	Optional<ButtonType> result = alert.showAndWait();
-        	*/
         	Dialog<String> di = getValidateModal();
         	Optional<String> result = di.showAndWait();
         	
@@ -961,9 +923,6 @@ public class SampleController implements Initializable{
     
     private void createCeremonia() throws InterruptedException, IOException {
     	if(datePickerCeremonia.getValue()!=null) {
-    		/*Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Crear Ceremonia", "¿Seguro que quieres crear esta ceremonia con fecha del "+datePickerCeremonia.getValue()+" ?");
-        	Optional<ButtonType> result = alert.showAndWait();
-        	*/
     		Dialog<String> di = getValidateModal();
     		Optional<String> result = di.showAndWait();
         	if(result.get().matches("auth")) {
@@ -1391,7 +1350,7 @@ public class SampleController implements Initializable{
     	idFolderColumn.setResizable(false);
     	idFolderColumn.setMinWidth(30);
     	
-    	TableColumn  signaturesColumn= new TableColumn("Status");
+    	TableColumn  signaturesColumn= new TableColumn("# Firmas");
     	signaturesColumn.setCellValueFactory(new PropertyValueFactory<>("signatures"));
     	signaturesColumn.setStyle( "-fx-alignment: center;");
     	signaturesColumn.setSortable(false);
@@ -1482,7 +1441,7 @@ public class SampleController implements Initializable{
 		                    	btnCrearActa.setVisible(false);
 					  		}
 						} catch (JsonProcessingException | InterruptedException e1) {
-							// TODO Auto-generated catch block
+							lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
 							e1.printStackTrace();
 						}
                     	
@@ -1595,9 +1554,7 @@ public class SampleController implements Initializable{
                     	txtCoordinacionSinoidal.setDisable(true);
                     	btnEliminarTelefono.setDisable(false);
                     	btnEliminarEmail.setDisable(false);
-                    	//Todo make the scheme for telephones and emails
-                    	System.out.println(selectedItem.getId_sinoidales());
-
+                    	
 						try {
 							List<Telephone> telephones = handleResponseTelephone("http://127.0.0.1:4040/api/sinoidales/phones/"+selectedItem.getId_sinoidales());
 	                    	for(Telephone t : telephones) {
@@ -1611,7 +1568,7 @@ public class SampleController implements Initializable{
 	                    		
 	                    	}
 						} catch (JsonProcessingException | InterruptedException e1) {
-							// TODO Auto-generated catch block
+							lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
 							e1.printStackTrace();
 							
 						}
@@ -1669,6 +1626,7 @@ public class SampleController implements Initializable{
 		caseColumn.setResizable(false);
 		caseColumn.setMinWidth(164);
 		
+		@SuppressWarnings("rawtypes")
 		TableColumn  actasNumColumn= new TableColumn("Numero de Actas");
 		actasNumColumn.setCellValueFactory(new PropertyValueFactory<>("actas_num"));
 		actasNumColumn.setStyle( "-fx-alignment: center;");

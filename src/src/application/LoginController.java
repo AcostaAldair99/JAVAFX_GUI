@@ -74,7 +74,7 @@ public class LoginController{
             }else if(response.statusCode()==200){
                 setAuthToken(response.body());
             	changeStage(event);
-            }else if(response.statusCode() == 500) {
+            }else if(response == null || response.statusCode() == 500) {
         		setLblError(Color.RED,"Error en el Servidor contacte con el Administrador");
             }	     		
     	}
