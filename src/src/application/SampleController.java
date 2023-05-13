@@ -1,6 +1,8 @@
 package application;
 
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,6 +24,7 @@ import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
@@ -33,6 +36,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -746,6 +750,7 @@ public class SampleController implements Initializable{
     	btnAsignarSinoidal.setDisable(false);
 		btnEliminarSinoidal.setDisable(false);
 		cbSinoidales.setDisable(false);
+		cbCeremonias.setDisable(false);
     }
     
     private void clearFormSinoidales() {
@@ -1341,6 +1346,7 @@ public class SampleController implements Initializable{
     	idStudentColumn.setStyle( "-fx-alignment: center;");
     	idStudentColumn.setSortable(false);
     	idStudentColumn.setResizable(false);
+    	lastNameColumn.setMinWidth(135);
 
     	
     	TableColumn  idFolderColumn= new TableColumn("Folder");
@@ -1348,32 +1354,63 @@ public class SampleController implements Initializable{
     	idFolderColumn.setStyle( "-fx-alignment: center;");
     	idFolderColumn.setSortable(false);
     	idFolderColumn.setResizable(false);
-    	idFolderColumn.setMinWidth(30);
+    	idFolderColumn.setMinWidth(50);
     	
-    	TableColumn  signaturesColumn= new TableColumn("# Firmas");
+    	/*TableColumn  signaturesColumn= new TableColumn("#Firmas");
     	signaturesColumn.setCellValueFactory(new PropertyValueFactory<>("signatures"));
     	signaturesColumn.setStyle( "-fx-alignment: center;");
     	signaturesColumn.setSortable(false);
     	signaturesColumn.setResizable(false);
-    	signaturesColumn.setMinWidth(97);
+    	signaturesColumn.setMinWidth(30);*/
 
+    	TableColumn statusColumn = new TableColumn("Status");
+    	statusColumn.setMinWidth(107);
+    	statusColumn.setStyle( "-fx-alignment: center;");
+    	statusColumn.setSortable(false);
+    	statusColumn.setResizable(false);
+    	statusColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Actas,Circle>,ObservableValue<Circle>>(){
+
+			@Override
+			public ObservableValue<Circle> call(CellDataFeatures<Actas, Circle> arg0) {
+				Circle circle = new Circle(7);
+				switch(arg0.getValue().getSignatures()) {
+				case 1:
+	                circle.setFill(Color.ORANGE);
+					break;
+				case 2:
+	                circle.setFill(Color.YELLOW);
+					break;
+				case 3:
+	                circle.setFill(Color.GREEN);
+					break;
+				default:
+	                circle.setFill(Color.RED);
+					break;
+				}
+				
+				return new SimpleObjectProperty (circle);
+			}
+    		
+    	});
+    	
     	
     	TableColumn  dateLimitColumn= new TableColumn("Fecha Limite");
     	dateLimitColumn.setCellValueFactory(new PropertyValueFactory<>("date_limit_fk"));
     	dateLimitColumn.setStyle( "-fx-alignment: center;");
     	dateLimitColumn.setSortable(false);
     	dateLimitColumn.setResizable(false);
-    	dateLimitColumn.setMinWidth(130);
+    	dateLimitColumn.setMinWidth(100);
     	
-    	TableColumn  ceremonyColumn= new TableColumn("id Ceremonia");
+    	TableColumn  ceremonyColumn= new TableColumn("# Ceremonia");
     	ceremonyColumn.setCellValueFactory(new PropertyValueFactory<>("id_ceremony_fk"));
     	ceremonyColumn.setStyle( "-fx-alignment: center;");
     	ceremonyColumn.setSortable(false);
     	ceremonyColumn.setResizable(false);
-
+    	ceremonyColumn.setMinWidth(100);
 
     	
-    	tableActas.getColumns().addAll(idActaColumn,nameColumn,lastNameColumn,idStudentColumn,idFolderColumn,dateLimitColumn,ceremonyColumn,signaturesColumn);
+    	tableActas.getColumns().addAll(idActaColumn,nameColumn,lastNameColumn,idStudentColumn,idFolderColumn,dateLimitColumn,ceremonyColumn/*,signaturesColumn*/);
+    	tableActas.getColumns().add(statusColumn);
     	
     	tableActas.addEventHandler(MouseEvent.MOUSE_CLICKED, (e)->{
     		if(e.getClickCount() == 2) {
