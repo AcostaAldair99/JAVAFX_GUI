@@ -4,6 +4,8 @@ package application;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -83,10 +85,10 @@ public class SampleController implements Initializable{
 	private VBox vContainerSigns;
 	
 	@FXML
-	private HBox hStatus;
+	private HBox hStatus,hActasFirmadas;
 	
 	@FXML
-	private Label titleActa,lblStatus;
+	private Label titleActa,lblStatus,lblNumberActas,titleSinodal;
 	
 	@FXML
     private Button btnCloseWindow,btnActualizarSinoidal,btnEliminarSinoidales,btnAgregarTelefono,btnAgregarEmail,btnEliminarTelefono,btnEliminarEmail,btnDeleteSinoidal,btnEliminarFirmaSinoidal;
@@ -170,10 +172,11 @@ public class SampleController implements Initializable{
     LoginController lc=new LoginController();
     
     @FXML
-    private TextField txtNameStudent,txtIdStudent,txtPlanStudent,txtApellidosStudent;
+    private TextField txtNameStudent,txtIdStudent,txtPlanStudent,txtApellidosStudent,txtSearch;
     @FXML
     private TextField txtNombreSinoidal,txtApellidosSinoidal,txtIdSinoidal,txtEmailSinoidal,txtTelefonoSinoidal,txtCoordinacionSinoidal;
     
+	private FilteredList<Actas> data;
 
 	@Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -190,6 +193,38 @@ public class SampleController implements Initializable{
 		} catch (JsonProcessingException | InterruptedException e) {
 			e.printStackTrace();
 		}
+    	
+    	
+    	
+    
+    	/*txtSearch.textProperty().addListener((obsevable,newValue,oldValue)->{
+    		data = new FilteredList<>(tableActas.getItems(),p->true); 
+    		data.setPredicate(acta->{
+    			if(newValue == null || newValue.isEmpty() || newValue.isBlank()) {
+    				return false;
+    			}
+    			
+    			String lowerData = newValue.toLowerCase();
+    			
+    			if(acta.getName_Student().toLowerCase().contains(lowerData)) {
+    				return true;
+    			}
+    			if(acta.getLastName_Student().toLowerCase().contains(lowerData)) {
+    				return true;
+    			}
+    			
+    			return false;
+    		});
+    	});
+    	
+    	SortedList<Actas> sortedData = new SortedList<>(data);
+		
+		// 4. Bind the SortedList comparator to the TableView comparator.
+		sortedData.comparatorProperty().bind(tableActas.comparatorProperty());
+		
+		// 5. Add sorted (and filtered) data to the table.
+		tableActas.setItems(sortedData);
+		*/
     }
 
     protected String splitData(String date,String delimeter) {
@@ -321,7 +356,43 @@ public class SampleController implements Initializable{
         	//deleteSelected(listFirmas,"FIRMA ELIMINADA","",btnEliminarFirmaSinoidal);
         	deleteSign();
         }
+        
+        if(actionEvent.getSource() == btnBuscar) {
+
+        }
+        
     }
+
+    public void searchNamesActas() {
+    	String newValue = txtSearch.getText();
+    	data = new FilteredList<>(tableActas.getItems(),p->true); 
+		data.setPredicate(acta->{
+			if(newValue == null || newValue.isEmpty() || newValue.isBlank()) {
+				return true;
+			}
+			
+			String lowerData = newValue.toLowerCase();
+			
+			if(acta.getName_Student().toLowerCase().contains(lowerData)) {
+				return true;
+			}
+			if(acta.getLastName_Student().toLowerCase().contains(lowerData)) {
+				return true;
+			}
+			
+			return false;
+		});
+	
+		SortedList<Actas> sortedData = new SortedList<>(data);
+	
+	// 4. Bind the SortedList comparator to the TableView comparator.
+		sortedData.comparatorProperty().bind(tableActas.comparatorProperty());
+	
+	// 5. Add sorted (and filtered) data to the table.
+		tableActas.setItems(sortedData);
+	
+   }
+
     
     private void asignFirma() {
     	MultipleSelectionModel<String>select = listSinoidales.getSelectionModel();
@@ -773,6 +844,8 @@ public class SampleController implements Initializable{
     	listCorreos.getItems().clear();
     	btnEliminarTelefono.setDisable(true);
     	btnEliminarEmail.setDisable(true);
+    	hActasFirmadas.setVisible(false);
+    	titleSinodal.setText("Crear Sinodal");
     }
     
     private void createSinoidal() throws InterruptedException, IOException {
@@ -1191,6 +1264,7 @@ public class SampleController implements Initializable{
     
     
     private void fillTableActas() throws JsonMappingException, JsonProcessingException, InterruptedException {
+    	//tableActas.getItems().removeAll(data);
     	tableActas.getItems().clear();
     	List<Actas> actas=handleResponseActas("http://127.0.0.1:4040/api/certificates");
   		if(actas == null) {
@@ -1575,7 +1649,7 @@ public class SampleController implements Initializable{
                     	listTelefonos.getItems().clear();
                     	listCorreos.getItems().clear();
                     	addSinoidales.toFront();
-                    	id_Sinoidal = selectedItem.getId_sinoidales();
+                    	//id_Sinoidal = selectedItem.getId_sinoidales();
                     	txtNombreSinoidal.setText(selectedItem.getFirst_Name());
                     	txtApellidosSinoidal.setText(selectedItem.getSecond_Name());
                     	txtIdSinoidal.setText(selectedItem.getId_professor().toString());
@@ -1591,7 +1665,8 @@ public class SampleController implements Initializable{
                     	txtCoordinacionSinoidal.setDisable(true);
                     	btnEliminarTelefono.setDisable(false);
                     	btnEliminarEmail.setDisable(false);
-                    	
+                    	hActasFirmadas.setVisible(true);
+                    	titleSinodal.setText("Editar Sinodal");
 						try {
 							List<Telephone> telephones = handleResponseTelephone("http://127.0.0.1:4040/api/sinoidales/phones/"+selectedItem.getId_sinoidales());
 	                    	for(Telephone t : telephones) {
@@ -1604,13 +1679,21 @@ public class SampleController implements Initializable{
 	                    		listCorreos.getItems().add(em.getEmail());
 	                    		
 	                    	}
+							
+							HttpResponse<String> res = getRequest(0,"http://127.0.0.1:4040/api/certificates/signed/"+selectedItem.getId_sinoidales());
+							if(res.statusCode() == 201) {
+								System.out.println(res.body());
+								String s[]=res.body().split("[.!:;?{}]");
+								lblNumberActas.setText(s[2]);
+							}
+							
 						} catch (JsonProcessingException | InterruptedException e1) {
 							lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
 							e1.printStackTrace();
 							
 						}
                     	
-                    	
+						
                     }
             	}
     			
