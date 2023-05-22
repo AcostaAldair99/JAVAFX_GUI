@@ -586,7 +586,7 @@
                         <Label text="CONFIGURACION" />
                      </children>
                   </Pane>
-                  <Pane fx:id="actasPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" visible="false">
+                  <Pane fx:id="actasPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>
@@ -845,7 +845,7 @@
                            </children>
                         </VBox>
                      </children></Pane>
-                  <Pane fx:id="inicioPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" visible="false" StackPane.alignment="CENTER">
+                  <Pane fx:id="inicioPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" StackPane.alignment="CENTER">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>
@@ -871,17 +871,69 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="btnAgregarActa" layoutX="14.0" layoutY="62.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="106.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Acta">
+                                    <Button fx:id="btnAgregarActa" layoutX="14.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="106.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Acta">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor></Button>
                                     <Button fx:id="btnBuscar" layoutX="783.0" layoutY="37.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Buscar" />
                                  </children>
                               </Pane>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="44.0" prefWidth="874.0">
+                                 <children>
+                                    <Button fx:id="btnReestablecer" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleClicks" styleClass="buttonRes" stylesheets="@styles/style.css">
+                                       <graphic>
+                                          <ImageView fitHeight="17.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;" styleClass="icon">
+                                             <image>
+                                                <Image url="https://img.icons8.com/ios-filled/50/reply-arrow.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <HBox.margin>
+                                          <Insets right="270.0" />
+                                       </HBox.margin>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor></Button>
+                                    <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Filtros:">
+                                       <font>
+                                          <Font size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox fx:id="cbFilterFolder" prefWidth="150.0" promptText="Folder">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin></ComboBox>
+                                    <ComboBox fx:id="cbFilterCeremonia" layoutX="372.0" layoutY="10.0" prefWidth="150.0" promptText="Ceremonia">
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </ComboBox>
+                                    <ComboBox fx:id="cbFilterEstatus" layoutX="447.0" layoutY="10.0" prefWidth="150.0" promptText="Estatus">
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </ComboBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets right="10.0" top="5.0" />
+                                 </VBox.margin>
+                              </HBox>
                               <Pane prefHeight="467.0" prefWidth="874.0">
                                  <children>
-                                    <TableView fx:id="tableActas" layoutX="13.0" prefHeight="462.0" prefWidth="849.0" />
+                                    <TableView fx:id="tableActas" layoutX="13.0" prefHeight="440.0" prefWidth="849.0" />
                                  </children>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
                               </Pane>
                            </children>
                         </VBox>

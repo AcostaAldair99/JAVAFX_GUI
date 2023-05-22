@@ -3,6 +3,7 @@ package application;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -97,7 +98,10 @@ public class SampleController implements Initializable{
     private Button btnMinizeWindow,btnAgregarSinoidales,btnCrearSinoidal,btnCrearFolder,btnAgregarFirmaSinoidal;
 	
 	@FXML
-	private ComboBox<String> cbSinoidales,cbFolders,cbCeremonias,cbCarreras,cbCiclo,cbEstantes;
+	private ComboBox<String> cbSinoidales,cbFolders,cbCeremonias,cbCarreras,cbCiclo,cbEstantes,cbFilterFolder,cbFilterCeremonia;
+	
+	@FXML
+	private ComboBox<Circle> cbFilterEstatus;
 	
 	@FXML
 	private DatePicker datePickerCeremonia;
@@ -130,7 +134,7 @@ public class SampleController implements Initializable{
     private Button btnAgregarSinoidal;
     
     @FXML
-    private Button btnBuscar;
+    private Button btnBuscar,btnReestablecer;
     
     @FXML
     private Pane inicioPane;
@@ -175,9 +179,6 @@ public class SampleController implements Initializable{
     private TextField txtNameStudent,txtIdStudent,txtPlanStudent,txtApellidosStudent,txtSearch;
     @FXML
     private TextField txtNombreSinoidal,txtApellidosSinoidal,txtIdSinoidal,txtEmailSinoidal,txtTelefonoSinoidal,txtCoordinacionSinoidal;
-    
-	private FilteredList<Actas> data;
-
 	@Override
     public void initialize(URL location, ResourceBundle resources) {
     	setUser();
@@ -188,6 +189,7 @@ public class SampleController implements Initializable{
     	setTableViewCeremony();
     	setTableViewFolders();
     	try {
+	    	setFilterCombobox();
 			fillTableActas();
 			fillTableSinoidales();
 		} catch (JsonProcessingException | InterruptedException e) {
@@ -195,36 +197,63 @@ public class SampleController implements Initializable{
 		}
     	
     	
-    	
-    
-    	/*txtSearch.textProperty().addListener((obsevable,newValue,oldValue)->{
-    		data = new FilteredList<>(tableActas.getItems(),p->true); 
-    		data.setPredicate(acta->{
-    			if(newValue == null || newValue.isEmpty() || newValue.isBlank()) {
-    				return false;
+    	cbFilterFolder.getSelectionModel().selectedItemProperty().addListener((options,oldValue,newValue)->{
+    		if(newValue != null) {
+    			try {
+    				fillTableActas();
+    			} catch (JsonProcessingException | InterruptedException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
     			}
-    			
-    			String lowerData = newValue.toLowerCase();
-    			
-    			if(acta.getName_Student().toLowerCase().contains(lowerData)) {
-    				return true;
-    			}
-    			if(acta.getLastName_Student().toLowerCase().contains(lowerData)) {
-    				return true;
-    			}
-    			
-    			return false;
-    		});
+            		ObservableList<Actas> filteredList = FXCollections.observableArrayList();
+            		for(Actas ac : tableActas.getItems()) {
+            			if(String.valueOf(ac.getId_Folder_fk()).contains(newValue)) {
+            				filteredList.add(ac);
+            			}
+            		}
+            		tableActas.setItems(filteredList);
+    		}
+    		
     	});
     	
-    	SortedList<Actas> sortedData = new SortedList<>(data);
-		
-		// 4. Bind the SortedList comparator to the TableView comparator.
-		sortedData.comparatorProperty().bind(tableActas.comparatorProperty());
-		
-		// 5. Add sorted (and filtered) data to the table.
-		tableActas.setItems(sortedData);
-		*/
+    	cbFilterCeremonia.getSelectionModel().selectedItemProperty().addListener((options,oldValue,newValue)->{
+    		
+    		if(newValue != null) {
+    			try {
+    				fillTableActas();
+    			} catch (JsonProcessingException | InterruptedException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}	
+        			ObservableList<Actas> filteredList = FXCollections.observableArrayList();
+            		for(Actas ac : tableActas.getItems()) {
+            			if(String.valueOf(ac.getId_ceremony_fk()).contains(newValue)) {
+            				filteredList.add(ac);
+            			}
+            		}
+            		tableActas.setItems(filteredList);
+    		}
+    		
+    	});
+    	
+    	cbFilterEstatus.getSelectionModel().selectedIndexProperty().addListener((options,oldValue,newValue)->{
+    		if(newValue != null) {
+    			try {
+    				fillTableActas();
+    			} catch (JsonProcessingException | InterruptedException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}	
+        			ObservableList<Actas> filteredList = FXCollections.observableArrayList();
+            		for(Actas ac : tableActas.getItems()) {
+            			if(newValue.intValue()==ac.getSignatures()) {
+            				filteredList.add(ac);
+            			}
+            		}
+            		tableActas.setItems(filteredList);
+    		}
+    	});
+    	
     }
 
     protected String splitData(String date,String delimeter) {
@@ -233,9 +262,42 @@ public class SampleController implements Initializable{
     	return String.valueOf(data[0]);
     }
     
+    
+    public void setFilterCombobox() throws JsonMappingException, JsonProcessingException, InterruptedException {
+    	cbFilterFolder.getItems().clear();
+    	cbFilterCeremonia.getItems().clear();
+    	cbFilterEstatus.getItems().clear();
+    	List<Folder> folders = handleResponseFolder("http://127.0.0.1:4040/api/folders");
+    	List<Ceremonias> ceremonias=handleResponseCeremony("http://127.0.0.1:4040/api/ceremonies");
+    	
+    
+    	for(Folder f : folders) {
+    		cbFilterFolder.getItems().add(f.getId_folder().toString());
+    	}
+    	for(Ceremonias c: ceremonias) {
+    		cbFilterCeremonia.getItems().add(c.getId_ceremony().toString());
+    	}
+    	
+    	Circle c0 = new Circle(5);
+    	c0.setFill(Color.RED);
+    	Circle c1 = new Circle(5);
+    	c1.setFill(Color.ORANGE);
+    	Circle c2 = new Circle(5);
+    	c2.setFill(Color.YELLOW);
+    	Circle c3 = new Circle(5);
+    	c3.setFill(Color.GREEN);
+    	cbFilterEstatus.getItems().addAll(c0,c1,c2,c3);
+    	
+    	cbFilterFolder.setPromptText("Folder");
+    	cbFilterCeremonia.setPromptText("Ceremonia");
+    	cbFilterEstatus.setPromptText("Estatus");
+    }
+    
     public void handleClicks(ActionEvent actionEvent) throws InterruptedException, IOException {
       if (actionEvent.getSource() == btnInicio) {
     	  	try {
+    	  		
+    	    	setFilterCombobox();
 				fillTableActas();
 			} catch (JsonProcessingException e) {
 				e.printStackTrace();
@@ -361,38 +423,32 @@ public class SampleController implements Initializable{
 
         }
         
+        if(actionEvent.getSource() == btnReestablecer) {
+        	fillTableActas();
+        }
+        
     }
 
-    public void searchNamesActas() {
-    	String newValue = txtSearch.getText();
-    	data = new FilteredList<>(tableActas.getItems(),p->true); 
-		data.setPredicate(acta->{
-			if(newValue == null || newValue.isEmpty() || newValue.isBlank()) {
-				return true;
-			}
-			
-			String lowerData = newValue.toLowerCase();
-			
-			if(acta.getName_Student().toLowerCase().contains(lowerData)) {
-				return true;
-			}
-			if(acta.getLastName_Student().toLowerCase().contains(lowerData)) {
-				return true;
-			}
-			
-			return false;
-		});
-	
-		SortedList<Actas> sortedData = new SortedList<>(data);
-	
-	// 4. Bind the SortedList comparator to the TableView comparator.
-		sortedData.comparatorProperty().bind(tableActas.comparatorProperty());
-	
-	// 5. Add sorted (and filtered) data to the table.
-		tableActas.setItems(sortedData);
-	
+
+    
+    public void searchNamesActas() throws JsonMappingException, JsonProcessingException, InterruptedException {
+    	String filter = txtSearch.getText();
+    	if(filter == null || filter.length() == 0 || filter.isBlank()) {
+    		fillTableActas();
+    	}else {
+    		ObservableList<Actas> filteredList = FXCollections.observableArrayList();
+    		for(Actas ac : tableActas.getItems()) {
+    			if(ac.getName_Student().toLowerCase().contains(filter.toLowerCase()) ||
+    					ac.getLastName_Student().toLowerCase().contains(filter.toLowerCase())) {
+    				filteredList.add(ac);
+    			}
+    		}
+    		tableActas.setItems(filteredList);
+    	}
+
    }
 
+    
     
     private void asignFirma() {
     	MultipleSelectionModel<String>select = listSinoidales.getSelectionModel();
@@ -1264,9 +1320,8 @@ public class SampleController implements Initializable{
     
     
     private void fillTableActas() throws JsonMappingException, JsonProcessingException, InterruptedException {
-    	//tableActas.getItems().removeAll(data);
     	tableActas.getItems().clear();
-    	List<Actas> actas=handleResponseActas("http://127.0.0.1:4040/api/certificates");
+    	List<Actas> actas = handleResponseActas("http://127.0.0.1:4040/api/certificates");
   		if(actas == null) {
   			lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
   		}else {
@@ -1645,7 +1700,7 @@ public class SampleController implements Initializable{
             	
             	if (result.get() == ButtonType.OK){
             		Sinoidales selectedItem = tableSinoidales.getSelectionModel().getSelectedItem();
-                    if (!selectedItem.equals(null)) {
+                    if (selectedItem!=null) {
                     	listTelefonos.getItems().clear();
                     	listCorreos.getItems().clear();
                     	addSinoidales.toFront();

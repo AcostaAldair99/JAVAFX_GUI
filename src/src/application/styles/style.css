@@ -89,6 +89,15 @@
 -fx-background-color : #218E58;
 }
 
+.buttonRes {
+	-fx-border-color : transparent;
+	-fx-border-radius:5px;
+	
+}
+.buttonRes:pressed{
+	-fx-background-color:gray;
+}
+
 .icon{
 	-fx-background-color: transparent;
 	-fx-padding: 2, 2, 2, 2;
