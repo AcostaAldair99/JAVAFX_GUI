@@ -258,17 +258,17 @@ public class SampleController implements Initializable{
     		if(newValue != null) {
     			try {
     				fillTableSinoidales();
-    			} catch (JsonProcessingException | InterruptedException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			}	
-        			ObservableList<Sinoidales> filteredList = FXCollections.observableArrayList();
+    				ObservableList<Sinoidales> filteredList = FXCollections.observableArrayList();
             		for(Sinoidales ac : tableSinoidales.getItems()) {
             			if(ac.getArea().contains(newValue)) {
             				filteredList.add(ac);
             			}
             		}
             		tableSinoidales.setItems(filteredList);
+    			} catch (JsonProcessingException | InterruptedException e) {
+    				// TODO Auto-generated catch block
+    				//e.printStackTrace();
+    			}	
     		}
     	});
     	
@@ -367,6 +367,7 @@ public class SampleController implements Initializable{
         if (actionEvent.getSource() == btnSinoidales) {
         	try {
 				fillTableSinoidales();
+				 setFilterComboboxSinodal();
 			} catch (JsonProcessingException e) {
 				
 				e.printStackTrace();
@@ -483,17 +484,13 @@ public class SampleController implements Initializable{
         }
         
         if(actionEvent.getSource() == btnReestablecerSinodales) {
-        	/*cbFilterFolder.getSelectionModel().select(0);
-        	cbFilterCeremonia.getSelectionModel().select(0);
-        	cbFilterEstatus.getSelectionModel().select(0);
-        	cbFilterSinodal.getSelectionModel().select(0);*/
+        	cbFilterAreaSinodal.getSelectionModel().select(0);
         	fillTableSinoidales();
         }
     }
 
     public void searchSinodalInfo() throws JsonMappingException, JsonProcessingException, InterruptedException {
     	String filter = txtSearchSinodal.getText();
-    	System.out.println(filter);
     	if(filter == null || filter.length() == 0 || filter.isBlank()) {
     		fillTableSinoidales();
     	}else {
@@ -869,7 +866,6 @@ public class SampleController implements Initializable{
     }
     
     private void createActa() throws InterruptedException, IOException{
-    	
     	if(validateTextField(txtNameStudent,"El valor del campo nombre es nulo o numerico","[a-zA-Z\u00f1\u00d1\s]+",255) && 
     			validateTextField(txtApellidosStudent,"El valor del campo apellidos es nulo o numerico","[a-zA-Z\u00f1\u00d1\s]+",255) &&
     			validateTextField(txtIdStudent,"El valor del campo matricula es nulo o contiene letras","[0-9]+",10) && 
@@ -1350,6 +1346,17 @@ public class SampleController implements Initializable{
 	    	
     }
     
+    private void setFilterComboboxSinodal() {
+    	cbFilterAreaSinodal.getItems().clear();
+    	cbFilterAreaSinodal.getItems().add("Area");
+    	
+    	for(Sinoidales a:tableSinoidales.getItems()) {
+    		if(!cbFilterAreaSinodal.getItems().contains(a.getArea())) {
+  	  			cbFilterAreaSinodal.getItems().add(a.getArea());
+  			}
+    	}
+    }
+    
     private void setComboboxActas() throws JsonMappingException, JsonProcessingException, InterruptedException {
     	cbCarreras.getItems().addAll("IAS",
     			"IB",
@@ -1378,8 +1385,19 @@ public class SampleController implements Initializable{
     	}
     	
     	for(Sinoidales s: sinoidales) {
-    		sample =s.getId_sinoidales()+"-"+s.getFirst_Name() + " " + s.getSecond_Name();
-    		cbSinoidales.getItems().add(sample);
+    		HttpResponse<String> rsp = getRequest(0,"http://localhost:4040/api/sinoidales/phone/"+s.getId_sinoidales());
+    		if(rsp.statusCode()==201) {
+    			String phone[]=rsp.body().split("[.!:;?{}\"]");
+    			
+    			HttpResponse<String> rp = getRequest(0,"http://localhost:4040/api/sinoidales/email/"+s.getId_sinoidales());
+    			if(rp.statusCode()==201) {
+    				String email[] = rp.body().split("[!:;?{}\"]");
+    				sample = s.getId_sinoidales()+"-"+s.getFirst_Name() + " " + s.getSecond_Name()+" || "+phone[5] + " || "+email[5];
+            		cbSinoidales.getItems().add(sample);
+    			}
+    			
+    		}
+    		
     	}
     	
     	for(Ceremonias c: ceremonias) {
@@ -1414,16 +1432,11 @@ public class SampleController implements Initializable{
     
     
     private void fillTableSinoidales() throws JsonMappingException, JsonProcessingException, InterruptedException {
-    	cbFilterAreaSinodal.getItems().clear();
     	tableSinoidales.getItems().clear();
     	List<Sinoidales> sinoidales=handleResponseSinoidales("http://127.0.0.1:4040/api/sinoidales");
     	for(Sinoidales s:sinoidales) {
   			tableSinoidales.getItems().add(s);	
-  			if(!cbFilterAreaSinodal.getItems().contains(s.getArea())) {
-  	  			cbFilterAreaSinodal.getItems().add(s.getArea());
-  			}
   		}
-    	
     	
     }
     
@@ -1668,15 +1681,29 @@ public class SampleController implements Initializable{
 					  			for(Actas_Sinoidales as:actas_sinoidales) {
 					  				List<Sinoidales> sinoidalesActa = handleResponseSinoidales("http://127.0.0.1:4040/api/sinoidales/search/"+as.getId_sinoidales_fk());
 					  				for(Sinoidales i : sinoidalesActa) {
-					  					if(as.getSigned()==1) {
-					  						btnEliminarFirmaSinoidal.setDisable(false);
-					  						listFirmas.getItems().add(as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name());
-					  					}else{
-					  						listSinoidales.getItems().add(as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name());
-					  					}
-					  					cbSinoidales.getItems().remove(as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name());
+					  					HttpResponse<String> rsp = getRequest(0,"http://localhost:4040/api/sinoidales/phone/"+as.getId_sinoidales_fk());
+						  	    		if(rsp.statusCode()==201) {
+						  	    			String phone[]=rsp.body().split("[.!:;?{}\"]");
+						  	    			
+						  	    			HttpResponse<String> rp = getRequest(0,"http://localhost:4040/api/sinoidales/email/"+as.getId_sinoidales_fk());
+						  	    			if(rp.statusCode()==201) {
+						  	    				String email[] = rp.body().split("[!:;?{}\"]");
+						  	    				String sample = as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name()+" || "+phone[5] + " || "+email[5];
+						  	    				if(as.getSigned()==1) {
+							  						btnEliminarFirmaSinoidal.setDisable(false);
+							  						listFirmas.getItems().add(sample);
+							  					}else{
+							  						listSinoidales.getItems().add(sample);
+							  					}
+							  					cbSinoidales.getItems().remove(sample);
+						  	    			}
+						  	    			
+						  	    		}
+					  					
 					  				}
 					  	  		}
+
+					  			
 					  			
 					  			if(listFirmas.getItems().size()==3) {
 					  				listSinoidales.setDisable(true);
@@ -1701,6 +1728,7 @@ public class SampleController implements Initializable{
 		                    	btnActualizarActa.setVisible(true);
 		                    	btnEliminarActa.setVisible(true);
 		                    	btnCrearActa.setVisible(false);
+		                    	listSinoidales.setDisable(false);
 					  		}
 						} catch (JsonProcessingException | InterruptedException e1) {
 							lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");

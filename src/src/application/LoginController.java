@@ -68,15 +68,17 @@ public class LoginController{
     		if(response == null) {
     			Alert alert=runAlert(AlertType.ERROR,"Error de Conexión","Revisa tu conexión a internet, no pudimos comunicarnos con el Servidor");
     			alert.showAndWait();
+    		}else {
+    			 if(response.statusCode()==404) {
+    	        		setLblError(Color.RED,"Usuario o contraseña Invalida");
+    	            }else if(response.statusCode()==200){
+    	                setAuthToken(response.body());
+    	            	changeStage(event);
+    	            }else if(response == null || response.statusCode() == 500) {
+    	        		setLblError(Color.RED,"Error en el Servidor contacte con el Administrador");
+    	            }	  
     		}
-            if(response.statusCode()==404) {
-        		setLblError(Color.RED,"Usuario o contraseña Invalida");
-            }else if(response.statusCode()==200){
-                setAuthToken(response.body());
-            	changeStage(event);
-            }else if(response == null || response.statusCode() == 500) {
-        		setLblError(Color.RED,"Error en el Servidor contacte con el Administrador");
-            }	     		
+              		
     	}
     	
     }
