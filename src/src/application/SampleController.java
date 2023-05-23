@@ -98,7 +98,7 @@ public class SampleController implements Initializable{
     private Button btnMinizeWindow,btnAgregarSinoidales,btnCrearSinoidal,btnCrearFolder,btnAgregarFirmaSinoidal;
 	
 	@FXML
-	private ComboBox<String> cbSinoidales,cbFolders,cbCeremonias,cbCarreras,cbCiclo,cbEstantes,cbFilterFolder,cbFilterCeremonia;
+	private ComboBox<String> cbSinoidales,cbFolders,cbCeremonias,cbCarreras,cbCiclo,cbEstantes,cbFilterFolder,cbFilterCeremonia,cbFilterAreaSinodal,cbFilterSinodal;
 	
 	@FXML
 	private ComboBox<Circle> cbFilterEstatus;
@@ -122,7 +122,7 @@ public class SampleController implements Initializable{
     private Button btnInicio;
 
     @FXML
-    private Button btnActas,btnActualizarActa,btnEliminarActa;
+    private Button btnActas,btnActualizarActa,btnEliminarActa,btnReestablecerSinodales;
 
     @FXML
     private Button btnSinoidales;
@@ -176,7 +176,7 @@ public class SampleController implements Initializable{
     LoginController lc=new LoginController();
     
     @FXML
-    private TextField txtNameStudent,txtIdStudent,txtPlanStudent,txtApellidosStudent,txtSearch;
+    private TextField txtNameStudent,txtIdStudent,txtPlanStudent,txtApellidosStudent,txtSearch,txtSearchSinodal;
     @FXML
     private TextField txtNombreSinoidal,txtApellidosSinoidal,txtIdSinoidal,txtEmailSinoidal,txtTelefonoSinoidal,txtCoordinacionSinoidal;
 	@Override
@@ -254,6 +254,43 @@ public class SampleController implements Initializable{
     		}
     	});
     	
+    	cbFilterAreaSinodal.getSelectionModel().selectedItemProperty().addListener((options,oldValue,newValue)->{
+    		if(newValue != null) {
+    			try {
+    				fillTableSinoidales();
+    			} catch (JsonProcessingException | InterruptedException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}	
+        			ObservableList<Sinoidales> filteredList = FXCollections.observableArrayList();
+            		for(Sinoidales ac : tableSinoidales.getItems()) {
+            			if(ac.getArea().contains(newValue)) {
+            				filteredList.add(ac);
+            			}
+            		}
+            		tableSinoidales.setItems(filteredList);
+    		}
+    	});
+    	
+    	cbFilterSinodal.getSelectionModel().selectedItemProperty().addListener((options,oldValue,newValue)->{
+    		if(newValue != null) {
+    			String id[] = newValue.split("-");
+    			try {
+    				tableActas.getItems().clear();
+    				List<Actas_Sinoidales> response = handleResponseActasSinoidales("http://localhost:4040/api/certificates/actasSinoidales/sinoidales/"+id[0]);
+					if(response!=null) {
+						for(Actas_Sinoidales as:response) {
+							List<Actas> res = handleResponseActas("http://localhost:4040/api/certificates/acta/"+as.getId_actas_fk());
+							tableActas.getItems().addAll(res);
+						}
+					}
+				} catch (InterruptedException | JsonProcessingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    	});    	
+    	
     }
 
     protected String splitData(String date,String delimeter) {
@@ -267,15 +304,28 @@ public class SampleController implements Initializable{
     	cbFilterFolder.getItems().clear();
     	cbFilterCeremonia.getItems().clear();
     	cbFilterEstatus.getItems().clear();
+    	cbFilterSinodal.getItems().clear();
+    	
+    	cbFilterFolder.getItems().add("Folder");
+    	cbFilterCeremonia.getItems().add("Ceremonia");
+    	//cbFilterEstatus.getItems().add("Estatus");
+    	cbFilterSinodal.getItems().add("Sinodal");
+    	
     	List<Folder> folders = handleResponseFolder("http://127.0.0.1:4040/api/folders");
     	List<Ceremonias> ceremonias=handleResponseCeremony("http://127.0.0.1:4040/api/ceremonies");
-    	
+    	List<Sinoidales> sinoidales=handleResponseSinoidales("http://127.0.0.1:4040/api/sinoidales");
+
     
     	for(Folder f : folders) {
     		cbFilterFolder.getItems().add(f.getId_folder().toString());
     	}
     	for(Ceremonias c: ceremonias) {
     		cbFilterCeremonia.getItems().add(c.getId_ceremony().toString());
+    	}
+    	
+    	for(Sinoidales s: sinoidales) {
+    		String sample = s.getId_sinoidales()+"-"+s.getFirst_Name() + " " + s.getSecond_Name();
+    		cbFilterSinodal.getItems().add(sample);
     	}
     	
     	Circle c0 = new Circle(5);
@@ -288,9 +338,10 @@ public class SampleController implements Initializable{
     	c3.setFill(Color.GREEN);
     	cbFilterEstatus.getItems().addAll(c0,c1,c2,c3);
     	
-    	cbFilterFolder.setPromptText("Folder");
-    	cbFilterCeremonia.setPromptText("Ceremonia");
-    	cbFilterEstatus.setPromptText("Estatus");
+    	cbFilterFolder.getSelectionModel().select(0);
+    	cbFilterCeremonia.getSelectionModel().select(0);
+    	cbFilterEstatus.getSelectionModel().select(0);
+    	cbFilterSinodal.getSelectionModel().select(0);
     }
     
     public void handleClicks(ActionEvent actionEvent) throws InterruptedException, IOException {
@@ -424,13 +475,41 @@ public class SampleController implements Initializable{
         }
         
         if(actionEvent.getSource() == btnReestablecer) {
+        	cbFilterFolder.getSelectionModel().select(0);
+        	cbFilterCeremonia.getSelectionModel().select(0);
+        	cbFilterEstatus.getSelectionModel().select(0);
+        	cbFilterSinodal.getSelectionModel().select(0);
         	fillTableActas();
         }
         
+        if(actionEvent.getSource() == btnReestablecerSinodales) {
+        	/*cbFilterFolder.getSelectionModel().select(0);
+        	cbFilterCeremonia.getSelectionModel().select(0);
+        	cbFilterEstatus.getSelectionModel().select(0);
+        	cbFilterSinodal.getSelectionModel().select(0);*/
+        	fillTableSinoidales();
+        }
     }
 
-
+    public void searchSinodalInfo() throws JsonMappingException, JsonProcessingException, InterruptedException {
+    	String filter = txtSearchSinodal.getText();
+    	System.out.println(filter);
+    	if(filter == null || filter.length() == 0 || filter.isBlank()) {
+    		fillTableSinoidales();
+    	}else {
+    		ObservableList<Sinoidales> filteredList = FXCollections.observableArrayList();
+    		for(Sinoidales ac : tableSinoidales.getItems()) {
+    			if(ac.getFirst_Name().toLowerCase().contains(filter.toLowerCase()) ||
+    					ac.getSecond_Name().toLowerCase().contains(filter.toLowerCase()) || ac.getId_professor().toString().contains(filter.toLowerCase())
+    					|| ac.getId_sinoidales().toString().contains(filter.toLowerCase())) {
+    				filteredList.add(ac);
+    			}
+    		}
+    		tableSinoidales.setItems(filteredList);
+    	}
+    }
     
+
     public void searchNamesActas() throws JsonMappingException, JsonProcessingException, InterruptedException {
     	String filter = txtSearch.getText();
     	if(filter == null || filter.length() == 0 || filter.isBlank()) {
@@ -1335,12 +1414,17 @@ public class SampleController implements Initializable{
     
     
     private void fillTableSinoidales() throws JsonMappingException, JsonProcessingException, InterruptedException {
+    	cbFilterAreaSinodal.getItems().clear();
     	tableSinoidales.getItems().clear();
     	List<Sinoidales> sinoidales=handleResponseSinoidales("http://127.0.0.1:4040/api/sinoidales");
     	for(Sinoidales s:sinoidales) {
-  			//splitData(,"T");
-  			tableSinoidales.getItems().add(s);
+  			tableSinoidales.getItems().add(s);	
+  			if(!cbFilterAreaSinodal.getItems().contains(s.getArea())) {
+  	  			cbFilterAreaSinodal.getItems().add(s.getArea());
+  			}
   		}
+    	
+    	
     }
     
     private void fillTableCeremony() throws JsonMappingException, JsonProcessingException, InterruptedException {
@@ -1370,6 +1454,16 @@ public class SampleController implements Initializable{
     	return listActas;
     }
     
+    protected List<String> handleResponseStrings(String URL) throws InterruptedException, JsonMappingException, JsonProcessingException{
+    	HttpResponse<String> response=getRequest(0,URL);
+    	List<String> data = null;
+    	if(response.statusCode() == 201) {
+    		ObjectMapper objectMapper = new ObjectMapper();
+    		data = objectMapper.readValue(response.body(), new TypeReference<List<String>>(){});
+    	}
+    	return data;
+    }
+    
     
     protected List<Folder> handleResponseFolder(String URL) throws InterruptedException, JsonMappingException, JsonProcessingException{
     	HttpResponse<String> res = getRequest(0,URL);
@@ -1390,8 +1484,10 @@ public class SampleController implements Initializable{
     protected List<Actas_Sinoidales> handleResponseActasSinoidales(String URL) throws InterruptedException, JsonMappingException, JsonProcessingException{
     	HttpResponse<String> response=getRequest(0,URL);
     	List<Actas_Sinoidales> listActasSinoidales=null;
-    	ObjectMapper objectMapper = new ObjectMapper();
-		listActasSinoidales = objectMapper.readValue(response.body(), new TypeReference<List<Actas_Sinoidales>>(){});
+    	if(response.statusCode()==201) {
+    		ObjectMapper objectMapper = new ObjectMapper();
+    		listActasSinoidales = objectMapper.readValue(response.body(), new TypeReference<List<Actas_Sinoidales>>(){});
+    	}
         return listActasSinoidales;
     }
     
@@ -1624,9 +1720,6 @@ public class SampleController implements Initializable{
     }
 	
     
-   
-    
-    
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void setTableViewSinoidales() {
 		TableColumn idSinoidal = new TableColumn("Id");
@@ -1634,26 +1727,28 @@ public class SampleController implements Initializable{
 		idSinoidal.setStyle( "-fx-alignment: center;");
 		idSinoidal.setSortable(false);
 		idSinoidal.setResizable(false);
-		idSinoidal.setMinWidth(50);
+		idSinoidal.setMinWidth(150);
+		
     	TableColumn FirstName = new TableColumn("Nombre");
     	FirstName.setCellValueFactory(new PropertyValueFactory<>("first_Name"));
     	FirstName.setStyle( "-fx-alignment: center;");
     	FirstName.setSortable(false);
     	FirstName.setResizable(false);
+    	FirstName.setMinWidth(150);
     	
     	TableColumn  secondName= new TableColumn("Apellidos");
     	secondName.setCellValueFactory(new PropertyValueFactory<>("second_Name"));
     	secondName.setStyle( "-fx-alignment: center;");
     	secondName.setSortable(false);
     	secondName.setResizable(false);
-    	//secondName.setMinWidth(200);
+    	secondName.setMinWidth(150);
 
     	TableColumn  idProfessor= new TableColumn("Matricula");
     	idProfessor.setCellValueFactory(new PropertyValueFactory<>("id_professor"));
     	idProfessor.setStyle( "-fx-alignment: center;");
     	idProfessor.setSortable(false);
     	idProfessor.setResizable(false);
-
+    	idProfessor.setMinWidth(200);
     	
     	/*TableColumn  emailColumn= new TableColumn("Email");
     	emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -1667,7 +1762,7 @@ public class SampleController implements Initializable{
     	areaColumn.setStyle( "-fx-alignment: center;");
     	areaColumn.setSortable(false);
     	areaColumn.setResizable(false);
-    	areaColumn.setMinWidth(150);
+    	areaColumn.setMinWidth(200);
 
     	
     	/*TableColumn  telefonoColumn= new TableColumn("Telefono");
@@ -1691,7 +1786,7 @@ public class SampleController implements Initializable{
     	activeColumn.setResizable(false);
     	activeColumn.setMaxWidth(47);
     	
-    	tableSinoidales.getColumns().addAll(idSinoidal,FirstName,secondName,idProfessor,areaColumn,disponibilityColumn,activeColumn);
+    	tableSinoidales.getColumns().addAll(idSinoidal,FirstName,secondName,idProfessor,areaColumn);
     
     	tableSinoidales.addEventHandler(MouseEvent.MOUSE_CLICKED, (e)->{
     		if(e.getClickCount() == 2) {

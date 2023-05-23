@@ -154,9 +154,9 @@
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>
-                              <Pane prefHeight="136.0" prefWidth="874.0">
+                              <Pane prefHeight="96.0" prefWidth="874.0">
                                  <children>
-                                    <Button fx:id="btnAgregarSinoidal" layoutX="22.0" layoutY="66.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Sinodal">
+                                    <Button fx:id="btnAgregarSinoidal" layoutX="14.0" layoutY="49.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Sinodal">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor></Button>
@@ -165,8 +165,8 @@
                                           <Font size="26.0" />
                                        </font>
                                     </Label>
-                                    <TextField layoutX="522.0" layoutY="42.0" prefHeight="25.0" prefWidth="243.0" promptText="Buscar" />
-                                    <ImageView fitHeight="17.0" fitWidth="26.0" layoutX="742.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true">
+                                    <TextField fx:id="txtSearchSinodal" layoutX="522.0" layoutY="42.0" onKeyTyped="#searchSinodalInfo" prefHeight="30.0" prefWidth="243.0" promptText="Buscar" />
+                                    <ImageView fitHeight="17.0" fitWidth="26.0" layoutX="740.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../images/icons8_Search_52px.png" />
                                        </image>
@@ -183,9 +183,44 @@
                                     <Button fx:id="btnAgregarActa11" layoutX="772.0" layoutY="36.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Buscar" />
                                  </children>
                               </Pane>
-                              <Pane prefHeight="467.0" prefWidth="874.0">
+                              <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="857.0">
                                  <children>
-                                    <TableView fx:id="tableSinoidales" layoutX="13.0" prefHeight="448.0" prefWidth="849.0" />
+                                    <Button fx:id="btnReestablecerSinodales" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleClicks" styleClass="buttonRes" stylesheets="@styles/style.css">
+                                       <graphic>
+                                          <ImageView fitHeight="17.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;" styleClass="icon">
+                                             <image>
+                                                <Image url="https://img.icons8.com/ios-filled/50/reply-arrow.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <HBox.margin>
+                                          <Insets right="590.0" />
+                                       </HBox.margin>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Button>
+                                    <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Filtros:">
+                                       <font>
+                                          <Font size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox fx:id="cbFilterAreaSinodal" layoutX="447.0" layoutY="10.0" prefWidth="150.0" promptText="Area">
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </ComboBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets right="13.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <Pane prefHeight="463.0" prefWidth="874.0">
+                                 <children>
+                                    <TableView fx:id="tableSinoidales" layoutX="13.0" layoutY="8.0" prefHeight="440.0" prefWidth="849.0" />
                                  </children>
                               </Pane>
                            </children>
@@ -423,7 +458,7 @@
                         </VBox>
                      </children>
                   </Pane>
-                  <Pane fx:id="ceremoniasPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" visible="false">
+                  <Pane fx:id="ceremoniasPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>
@@ -576,7 +611,7 @@
                         </VBox>
                      </children>
                   </Pane>
-                  <Pane fx:id="foldersPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: yellow;" visible="false">
+                  <Pane fx:id="foldersPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: yellow;">
                      <children>
                         <Label text="FOLDERS" />
                      </children>
@@ -889,16 +924,24 @@
                                           </ImageView>
                                        </graphic>
                                        <HBox.margin>
-                                          <Insets right="270.0" />
+                                          <Insets right="115.0" />
                                        </HBox.margin>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor></Button>
-                                    <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Filtros:">
+                                    <Label prefHeight="19.0" prefWidth="41.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Filtros:">
                                        <font>
                                           <Font size="13.0" />
                                        </font>
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
                                     </Label>
+                                    <ComboBox fx:id="cbFilterSinodal" layoutX="384.0" layoutY="11.0" prefWidth="150.0" promptText="Sinodal">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </ComboBox>
                                     <ComboBox fx:id="cbFilterFolder" prefWidth="150.0" promptText="Folder">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
