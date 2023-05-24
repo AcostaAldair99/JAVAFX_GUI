@@ -3,10 +3,12 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -16,264 +18,974 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="576.0" prefWidth="1050.0" style="-fx-background-color: #02030A;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="576.0" prefWidth="1050.0" style="-fx-background-color: #ffff;" stylesheets="" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
 <children>
-      <VBox alignment="TOP_CENTER" prefHeight="576.0" prefWidth="256.0" style="-fx-background-color: #05071F;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox prefHeight="576.0" prefWidth="1050.0">
          <children>
-            <ImageView fitHeight="73.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/jimmy-fallon.png" />
-               </image>
-               <VBox.margin>
-                  <Insets bottom="10.0" top="50.0" />
-               </VBox.margin></ImageView>
-            <Label text="Jimmy Fallon" textFill="#e7e5e5">
-               <VBox.margin>
-                  <Insets bottom="20.0" />
-               </VBox.margin>
-            </Label>
-            <Button fx:id="btnOverview" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="259.0" stylesheets="@style.css" text="Overview" textFill="#e7e5e5">
-               <graphic>
-                  <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icons8_Home_32px.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <padding>
-                  <Insets left="50.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="btnOrders" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="259.0" stylesheets="@style.css" text="Orders">
-               <graphic>
-                  <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icons8_Open_Envelope_32px.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <padding>
-                  <Insets left="50.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="btnCustomers" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="259.0" stylesheets="@style.css" text="Customers">
-               <graphic>
-                  <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icons8_Person_32px.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <padding>
-                  <Insets left="50.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="btnMenus" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="259.0" stylesheets="@style.css" text="Menus">
-               <graphic>
-                  <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icons8_Xbox_Menu_32px.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <padding>
-                  <Insets left="50.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="btnPackages" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="259.0" stylesheets="@style.css" text="Packages">
-               <graphic>
-                  <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icons8_Box_32px.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <padding>
-                  <Insets left="50.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="btnSettings" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="259.0" stylesheets="@style.css" text="Settings">
-               <graphic>
-                  <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icons8_Slider__32px.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <padding>
-                  <Insets left="50.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="btnSignout" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="259.0" stylesheets="@style.css" text="Sign Out">
-               <graphic>
-                  <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icons8_Sign_Out_32px.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <padding>
-                  <Insets left="50.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-         </children>
-      </VBox>
-      <StackPane layoutX="258.0" prefHeight="576.0" prefWidth="793.0" style="-fx-background-color: #02030A;">
-         <children>
-            <Pane fx:id="pnlCustomer" prefHeight="200.0" prefWidth="200.0" />
-            <Pane fx:id="pnlOrders" prefHeight="200.0" prefWidth="200.0" />
-            <Pane fx:id="pnlMenus" prefHeight="200.0" prefWidth="200.0" />
-            <Pane fx:id="pnlOverview" prefHeight="554.0" prefWidth="793.0">
+            <VBox alignment="TOP_CENTER" prefHeight="577.0" prefWidth="176.0" styleClass="scroll-pane" stylesheets="">
                <children>
-                  <TextField layoutX="587.0" layoutY="56.0" prefHeight="27.0" prefWidth="183.0" promptText="search" style="-fx-background-color: #02030A; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" />
-                  <Label layoutX="57.0" layoutY="25.0" text="Restaurant Orders" textFill="#e7e5e5">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <HBox alignment="CENTER_LEFT" layoutX="45.0" layoutY="72.0" prefHeight="92.0" prefWidth="661.0" spacing="50.0">
-                     <children>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Label text="22000" textFill="#2a73ff">
-                                 <font>
-                                    <Font name="System Bold" size="26.0" />
-                                 </font>
-                              </Label>
-                              <Label text="Total Orders" textFill="#e7e5e5" />
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Label text="1500" textFill="#26bfbc">
-                                 <font>
-                                    <Font name="System Bold" size="26.0" />
-                                 </font>
-                              </Label>
-                              <Label text="Total delivered" textFill="#e7e5e5" />
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Label text="1000" textFill="#fa5f7e">
-                                 <font>
-                                    <Font name="System Bold" size="26.0" />
-                                 </font>
-                              </Label>
-                              <Label text="Peding Orders" textFill="#e7e5e5" />
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Label text="780" textFill="#de0000">
-                                 <font>
-                                    <Font name="System Bold" size="26.0" />
-                                 </font>
-                              </Label>
-                              <Label text="Orders on Hold" textFill="#e7e5e5" />
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" layoutX="45.0" layoutY="178.0" prefHeight="42.0" prefWidth="712.0" spacing="80.0" style="-fx-background-color: #02030A;">
-                     <children>
-                        <Label text="Company Name" textFill="#e7e5e5">
-                           <HBox.margin>
-                              <Insets left="50.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Label text="Airport" textFill="#e7e5e5">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Label>
-                        <Label text="Delivery Date" textFill="#e7e5e5">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Label>
-                        <Label text="Amount" textFill="#e7e5e5">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Label>
-                        <Label text="Status" textFill="#e7e5e5">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                  </HBox>
-                  <ScrollPane layoutX="14.0" layoutY="232.0" prefHeight="320.0" prefWidth="746.0" stylesheets="@style.css">
-                     <content>
-                        <VBox fx:id="pnItems" prefHeight="318.0" prefWidth="744.0" spacing="5.0" style="-fx-background-color: #02030A;">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </VBox>
-                     </content>
-                  </ScrollPane>
-                  <ImageView fitHeight="17.0" fitWidth="16.0" layoutX="749.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="73.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/icons8_Search_52px.png" />
+                        <Image url="https://img.icons8.com/plasticine/100/bear-footprint.png" />
                      </image>
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="50.0" />
+                     </VBox.margin>
                   </ImageView>
-                  <HBox layoutX="722.0" layoutY="-1.0" prefHeight="30.0" prefWidth="71.0">
-                     <children>
-                        <Button fx:id="btnMinizeWindow" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" stylesheets="@style.css" text="-" textFill="WHITE">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="btnCloseWindow" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleCloseAction" prefHeight="30.0" prefWidth="39.0" stylesheets="@style.css" text="x" textFill="WHITE">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                           <effect>
-                              <DropShadow />
-                           </effect>
-                        </Button>
-                     </children>
-                  </HBox>
+                  <Button fx:id="btnInicio" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="185.0" styleClass="buttonMenu" stylesheets="" text="INICIO" textFill="#e7e5e5">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets left="50.0" />
+                     </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;" styleClass="icon">
+                           <image>
+                              <Image url="https://img.icons8.com/android/24/null/home.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="btnActas" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="" text="CREAR ACTAS">
+                     <padding>
+                        <Insets left="50.0" />
+                     </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;" styleClass="icon">
+                           <image>
+                              <Image url="https://img.icons8.com/android/24/000000/document.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="btnSinoidales" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="" text="SINODALES">
+                     <padding>
+                        <Insets left="50.0" />
+                     </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;" styleClass="icon">
+                           <image>
+                              <Image url="https://img.icons8.com/android/24/000000/contacts.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="btnCeremonia" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="" text="CEREMONIAS">
+                     <padding>
+                        <Insets left="50.0" />
+                     </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;" styleClass="icon">
+                           <image>
+                              <Image url="https://img.icons8.com/android/24/null/clock.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="btnFolder" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="" text="FOLDERS">
+                     <padding>
+                        <Insets left="50.0" />
+                     </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;" styleClass="icon">
+                           <image>
+                              <Image url="https://img.icons8.com/android/24/000000/box.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="btnConfiguracion" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="" text="CONFIGURACIÓN">
+                     <padding>
+                        <Insets left="50.0" />
+                     </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                    
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;" styleClass="icon">
+                           <image>
+                              <Image url="https://img.icons8.com/android/24/null/settings.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                <Button fx:id="btnLogout" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="" text="CERRAR SESIÓN">
+                     <padding>
+                        <Insets left="50.0" />
+                     </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;" styleClass="icon">
+                           <image>
+                              <Image url="https://img.icons8.com/android/24/null/logout-rounded-left.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </children>
-            </Pane>
+            </VBox>
+            <StackPane fx:id="paneMain" prefHeight="576.0" prefWidth="874.0">
+               <children>
+                  <Pane fx:id="sinoidalesPane" prefHeight="576.0" prefWidth="879.0" style="-fx-background-color: white;">
+                     <children>
+                        <VBox prefHeight="576.0" prefWidth="874.0">
+                           <children>
+                              <Pane prefHeight="96.0" prefWidth="874.0">
+                                 <children>
+                                    <Button fx:id="btnAgregarSinoidal" layoutX="14.0" layoutY="49.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="" text="Agregar Sinodal">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor></Button>
+                                    <Label layoutX="14.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="" text="SINODALES">
+                                       <font>
+                                          <Font size="26.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="txtSearchSinodal" layoutX="522.0" layoutY="42.0" onKeyTyped="#searchSinodalInfo" prefHeight="30.0" prefWidth="243.0" promptText="Buscar" />
+                                    <ImageView fitHeight="17.0" fitWidth="26.0" layoutX="740.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/icons8_Search_52px.png" />
+                                       </image>
+                                    </ImageView>
+                                    <HBox layoutX="801.0" layoutY="-1.0" prefHeight="30.0" prefWidth="36.0" />
+                                    <Button fx:id="btnMinizeWindow1" layoutX="836.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@loginStyle.css" text="-">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="btnAgregarActa11" layoutX="772.0" layoutY="36.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="" text="Buscar" />
+                                 </children>
+                              </Pane>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="857.0">
+                                 <children>
+                                    <Button fx:id="btnReestablecerSinodales" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleClicks" styleClass="buttonRes" stylesheets="">
+                                       <graphic>
+                                          <ImageView fitHeight="17.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;" styleClass="icon">
+                                             <image>
+                                                <Image url="https://img.icons8.com/ios-filled/50/reply-arrow.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <HBox.margin>
+                                          <Insets right="590.0" />
+                                       </HBox.margin>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Button>
+                                    <Label style="-fx-background-color: white;" stylesheets="" text="Filtros:">
+                                       <font>
+                                          <Font size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox fx:id="cbFilterAreaSinodal" layoutX="447.0" layoutY="10.0" prefWidth="150.0" promptText="Area">
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </ComboBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets right="13.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <Pane prefHeight="463.0" prefWidth="874.0">
+                                 <children>
+                                    <TableView fx:id="tableSinoidales" layoutX="13.0" layoutY="8.0" prefHeight="440.0" prefWidth="849.0" />
+                                 </children>
+                              </Pane>
+                           </children>
+                        </VBox>
+                     </children></Pane>
+                  <Pane fx:id="addSinoidales" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                     <children>
+                        <VBox prefHeight="576.0" prefWidth="874.0">
+                           <children>
+                              <Pane prefHeight="88.0" prefWidth="874.0">
+                                 <children>
+                                    <Label fx:id="titleSinodal" layoutX="14.0" layoutY="24.0" style="-fx-background-color: white;" stylesheets="" text="CREAR SINODAL">
+                                       <font>
+                                          <Font size="26.0" />
+                                       </font>
+                                    </Label>
+                                    <Button fx:id="btnMinizeWindow11111" layoutX="835.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@loginStyle.css" text="-">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="491.0" prefWidth="874.0">
+                                 <children>
+                                    <HBox layoutX="2.0" prefHeight="478.0" prefWidth="871.0">
+                                       <children>
+                                          <VBox alignment="TOP_CENTER" prefHeight="300.0" prefWidth="435.0" styleClass="container" stylesheets="">
+                                             <children>
+                                                <Label prefHeight="20.0" prefWidth="331.0" style="-fx-background-color: white;" stylesheets="" text="Ingresa la información para crear un nuevo sinodal.">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                   <VBox.margin>
+                                                      <Insets top="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <HBox prefHeight="42.0" prefWidth="390.0">
+                                                   <children>
+                                                      <TextField fx:id="txtNombreSinoidal" prefHeight="40.0" prefWidth="222.0" promptText="Nombre del Sinodal" />
+                                                      <TextField fx:id="txtApellidosSinoidal" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="220.0" promptText="Apellidos del Sinodal">
+                                                         <HBox.margin>
+                                                            <Insets left="20.0" />
+                                                         </HBox.margin>
+                                                      </TextField>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets top="10.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                                <TextField fx:id="txtIdSinoidal" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="414.0" promptText="Matricula del Sinodal">
+                                                   <VBox.margin>
+                                                      <Insets bottom="20.0" top="20.0" />
+                                                   </VBox.margin>
+                                                </TextField>
+                                                <TextField fx:id="txtCoordinacionSinoidal" accessibleText="/^(\s*|\d+)$/" layoutX="10.0" layoutY="232.0" onAction="#handleClicks" prefHeight="40.0" prefWidth="418.0" promptText="Coordinación del Sinodal">
+                                                   <VBox.margin>
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin>
+                                                </TextField>
+                                                <HBox fx:id="hActasFirmadas" prefHeight="53.0" prefWidth="401.0" visible="false">
+                                                   <children>
+                                                      <Label style="-fx-background-color: white;" stylesheets="" text="Actas Firmadas:">
+                                                         <font>
+                                                            <Font size="24.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="lblNumberActas" layoutX="10.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="" text="# actas">
+                                                         <font>
+                                                            <Font size="24.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets left="5.0" />
+                                                         </HBox.margin>
+                                                      </Label>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets top="10.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                                <HBox prefHeight="75.0" prefWidth="401.0">
+                                                   <children>
+                                                      <Button fx:id="btnCrearSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu" stylesheets="" text="CREAR SINODAL">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </Button>
+                                                      <Button fx:id="btnActualizarSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu-update" stylesheets="" text="ACTUALIZAR">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" right="10.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button fx:id="btnDeleteSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu-danger" stylesheets="" text="ELIMINAR">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </Button>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets top="40.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                             </children>
+                                             <HBox.margin>
+                                                <Insets left="10.0" right="10.0" />
+                                             </HBox.margin>
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox prefHeight="490.0" prefWidth="440.0">
+                                             <children>
+                                                <VBox prefHeight="229.0" prefWidth="408.0" styleClass="container" stylesheets="">
+                                                   <children>
+                                                      <HBox prefHeight="48.0" prefWidth="352.0">
+                                                         <children>
+                                                            <TextField fx:id="txtTelefonoSinoidal" accessibleText="/^(\s*|\d+)$/" prefHeight="40.0" prefWidth="219.0" promptText="Telefono del Sinodal" />
+                                                            <Button fx:id="btnAgregarTelefono" mnemonicParsing="false" onAction="#handleClicks" prefHeight="32.0" prefWidth="62.0" styleClass="buttonMenu" stylesheets="">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                               <HBox.margin>
+                                                                  <Insets left="10.0" />
+                                                               </HBox.margin>
+                                                               <graphic>
+                                                                  <ImageView fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="https://img.icons8.com/ios/50/null/add--v1.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                            </Button>
+                                                            <Button fx:id="btnEliminarTelefono" layoutX="239.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="40.0" prefWidth="62.0" styleClass="buttonMenu-danger" stylesheets="">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                               <graphic>
+                                                                  <ImageView fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="https://img.icons8.com/dotty/80/null/filled-trash.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                               <HBox.margin>
+                                                                  <Insets left="10.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                      <ListView fx:id="listTelefonos" prefHeight="145.0" prefWidth="366.0">
+                                                         <VBox.margin>
+                                                            <Insets left="10.0" right="10.0" />
+                                                         </VBox.margin>
+                                                      </ListView>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+                                                   </padding>
+                                                </VBox>
+                                                <VBox prefHeight="235.0" prefWidth="408.0" styleClass="container" stylesheets="">
+                                                   <children>
+                                                      <HBox prefHeight="49.0" prefWidth="352.0">
+                                                         <children>
+                                                            <TextField fx:id="txtEmailSinoidal" accessibleText="/^(\s*|\d+)$/" prefHeight="40.0" prefWidth="235.0" promptText="Email del Sinodal" />
+                                                            <Button fx:id="btnAgregarEmail" mnemonicParsing="false" onAction="#handleClicks" prefHeight="32.0" prefWidth="62.0" styleClass="buttonMenu" stylesheets="">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                               <graphic>
+                                                                  <ImageView fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="https://img.icons8.com/ios/50/null/add--v1.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                               <HBox.margin>
+                                                                  <Insets left="10.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btnEliminarEmail" mnemonicParsing="false" onAction="#handleClicks" prefHeight="32.0" prefWidth="62.0" styleClass="buttonMenu-danger" stylesheets="">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                               <graphic>
+                                                                  <ImageView fitHeight="20.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="https://img.icons8.com/dotty/80/null/filled-trash.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                               <HBox.margin>
+                                                                  <Insets left="10.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets top="20.0" />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                      <ListView fx:id="listCorreos" prefHeight="140.0" prefWidth="388.0">
+                                                         <VBox.margin>
+                                                            <Insets left="10.0" right="10.0" />
+                                                         </VBox.margin>
+                                                      </ListView>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin>
+                                                   <padding>
+                                                      <Insets left="10.0" right="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                             <padding>
+                                                <Insets left="10.0" right="10.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </VBox>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="ceremoniasPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                     <children>
+                        <VBox prefHeight="576.0" prefWidth="874.0">
+                           <children>
+                              <Pane prefHeight="99.0" prefWidth="874.0">
+                                 <children>
+                                    <Label layoutY="58.0" style="-fx-background-color: white;" stylesheets="" text="CEREMONIAS">
+                                       <font>
+                                          <Font size="26.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField layoutX="516.0" layoutY="24.0" prefHeight="25.0" prefWidth="243.0" promptText="Buscar" />
+                                    <ImageView fitHeight="17.0" fitWidth="26.0" layoutX="742.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/icons8_Search_52px.png" />
+                                       </image>
+                                    </ImageView>
+                                    <HBox layoutX="801.0" layoutY="-1.0" prefHeight="30.0" prefWidth="36.0" />
+                                    <Button fx:id="btnMinizeWindow11" layoutX="836.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@loginStyle.css" text="-">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="btnAgregarActa111" layoutX="765.0" layoutY="21.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="" text="Buscar" />
+                                    <Label layoutX="437.0" layoutY="58.0" style="-fx-background-color: white;" stylesheets="" text="FOLDERS">
+                                       <font>
+                                          <Font size="26.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="478.0" prefWidth="874.0">
+                                 <children>
+                                    <HBox alignment="TOP_CENTER" prefHeight="462.0" prefWidth="871.0">
+                                       <children>
+                                          <VBox prefHeight="82.0" prefWidth="874.0">
+                                             <children>
+                                                <Label prefHeight="20.0" prefWidth="348.0" style="-fx-background-color: white;" stylesheets="" text="Ingresa la información para crear una nueva Ceremonia.">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <DatePicker fx:id="datePickerCeremonia" prefHeight="25.0" prefWidth="251.0" promptText="Ingresa la fecha de la Ceremonia">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                   <VBox.margin>
+                                                      <Insets top="5.0" />
+                                                   </VBox.margin>
+                                                </DatePicker>
+                                                <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="426.0">
+                                                   <children>
+                                                      <Button fx:id="btnCrearCeremonia" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="" text="Crear Ceremonia">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </Button>
+                                                      <Button fx:id="btnCrearCeremonia1" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-update" stylesheets="" text="Modificar Fecha">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" right="10.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button fx:id="btnCrearCeremonia11" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-danger" stylesheets="" text="Eliminar Ceremonia">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </Button>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets bottom="15.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                </HBox>
+                                                <TableView fx:id="tableCeremonias" prefHeight="344.0" prefWidth="426.0" stylesheets="">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor></TableView>
+                                             </children>
+                                             <HBox.margin>
+                                                <Insets left="10.0" right="10.0" />
+                                             </HBox.margin>
+                                          </VBox>
+                                          <VBox layoutX="20.0" layoutY="10.0" prefHeight="82.0" prefWidth="874.0">
+                                             <children>
+                                                <Label prefHeight="20.0" prefWidth="348.0" style="-fx-background-color: white;" stylesheets="" text="Selecciona un estante para crear una Carpeta.">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <ComboBox fx:id="cbEstantes" prefHeight="25.0" prefWidth="180.0" promptText="Selecciona un estante ">
+                                                   <VBox.margin>
+                                                      <Insets top="5.0" />
+                                                   </VBox.margin>
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                </ComboBox>
+                                                <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="426.0">
+                                                   <children>
+                                                      <Button fx:id="btnCrearFolder" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="" text="Crear Folder">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </Button>
+                                                      <Button fx:id="btnCrearCeremonia11" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-update" stylesheets="" text="Modificar Folder">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" right="10.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button fx:id="btnCrearCeremonia111" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-danger" stylesheets="" text="Eliminar Folder">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </Button>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets bottom="15.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                </HBox>
+                                                <TableView fx:id="tableFolders" prefHeight="343.0" prefWidth="385.0" stylesheets="">
+                                                   <VBox.margin>
+                                                      <Insets left="10.0" right="10.0" />
+                                                   </VBox.margin>
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor></TableView>
+                                             </children>
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </VBox>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="foldersPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: yellow;">
+                     <children>
+                        <Label text="FOLDERS" />
+                     </children>
+                  </Pane>
+                  <Pane fx:id="configuracionPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: orange;" visible="false">
+                     <children>
+                        <Label text="CONFIGURACION" />
+                     </children>
+                  </Pane>
+                  <Pane fx:id="actasPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                     <children>
+                        <VBox prefHeight="576.0" prefWidth="874.0">
+                           <children>
+                              <Pane prefHeight="88.0" prefWidth="874.0">
+                                 <children>
+                                    <Label fx:id="titleActa" layoutX="14.0" layoutY="24.0" style="-fx-background-color: white;" stylesheets="" text="CREAR ACTA">
+                                       <font>
+                                          <Font size="26.0" />
+                                       </font>
+                                    </Label>
+                                    <Button fx:id="btnMinizeWindow111" layoutX="835.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@loginStyle.css" text="-">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <HBox fx:id="hStatus" layoutX="14.0" layoutY="67.0" prefHeight="40.0" prefWidth="424.0" visible="false">
+                                       <children>
+                                          <Label prefHeight="34.0" prefWidth="71.0" style="-fx-background-color: white;" stylesheets="" text="STATUS:">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="lblStatus" layoutX="10.0" layoutY="10.0" prefHeight="34.0" prefWidth="353.0" style="-fx-background-color: white;" stylesheets="" text="AQUI VA EL STATUS">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </Pane>
+                              <Pane prefHeight="491.0" prefWidth="874.0">
+                                 <children>
+                                    <HBox prefHeight="490.0" prefWidth="874.0">
+                                       <children>
+                                          <VBox prefHeight="490.0" prefWidth="600.0" styleClass="container" stylesheets="">
+                                             <children>
+                                                <Label prefHeight="20.0" prefWidth="310.0" style="-fx-background-color: white;" stylesheets="" text="Ingresa la información para crear un acta nueva.">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <HBox alignment="TOP_CENTER" prefHeight="43.0" prefWidth="390.0">
+                                                   <children>
+                                                      <TextField fx:id="txtNameStudent" prefHeight="40.0" prefWidth="222.0" promptText="Nombre del Alumno">
+                                                         <HBox.margin>
+                                                            <Insets right="40.0" />
+                                                         </HBox.margin>
+                                                      </TextField>
+                                                      <TextField fx:id="txtApellidosStudent" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="222.0" promptText="Apellido del Alumno" />
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets top="10.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                                <TextField fx:id="txtIdStudent" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="414.0" promptText="Matricula del Alumno">
+                                                   <VBox.margin>
+                                                      <Insets bottom="20.0" top="20.0" />
+                                                   </VBox.margin>
+                                                </TextField>
+                                                <TextField fx:id="txtPlanStudent" accessibleText="/^(\s*|\d+)$/" layoutX="10.0" layoutY="60.0" prefHeight="40.0" prefWidth="723.0" promptText="Plan del Alumno">
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" top="20.0" />
+                                                   </VBox.margin>
+                                                </TextField>
+                                                <Label style="-fx-background-color: white;" stylesheets="" text="Selecciona la carrera del Alumno">
+                                                   <VBox.margin>
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <ComboBox fx:id="cbCarreras" prefHeight="25.0" prefWidth="218.0" promptText="Selecciona la Carrera del Alumno">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </ComboBox>
+                                                <HBox alignment="TOP_CENTER" prefHeight="56.0" prefWidth="390.0">
+                                                   <children>
+                                                      <VBox prefHeight="56.0" prefWidth="200.0">
+                                                         <children>
+                                                            <Label style="-fx-background-color: white;" stylesheets="" text="Selecciona una Ceremonia" />
+                                                            <ComboBox fx:id="cbCeremonias" prefHeight="25.0" prefWidth="177.0" promptText="Selecciona la Ceremonia">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                            </ComboBox>
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox prefHeight="56.0" prefWidth="177.0">
+                                                         <children>
+                                                            <Label style="-fx-background-color: white;" stylesheets="" text="Selecciona un Folder" />
+                                                            <ComboBox fx:id="cbFolders" prefHeight="25.0" prefWidth="172.0" promptText="Selecciona el Folder">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                            </ComboBox>
+                                                         </children>
+                                                         <HBox.margin>
+                                                            <Insets left="30.0" />
+                                                         </HBox.margin>
+                                                      </VBox>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets top="30.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                                <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Button fx:id="btnCrearActa" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="147.0" styleClass="buttonMenu" stylesheets="" text="CREAR">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </Button>
+                                                      <Button fx:id="btnActualizarActa" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="147.0" styleClass="buttonMenu-update" stylesheets="" text="ACTUALIZAR">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button fx:id="btnEliminarActa" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="147.0" styleClass="buttonMenu-danger" stylesheets="" text="ELIMINAR">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets top="30.0" />
+                                                   </VBox.margin>
+                                                </HBox>
+                                             </children>
+                                             <HBox.margin>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </HBox.margin>
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox prefHeight="490.0" prefWidth="634.0">
+                                             <children>
+                                                <VBox prefHeight="243.0" prefWidth="424.0" styleClass="container" stylesheets="">
+                                                   <children>
+                                                      <Label style="-fx-background-color: white;" stylesheets="" text="Asigna los sinodales de la Acta.">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" left="5.0" top="10.0" />
+                                                         </VBox.margin>
+                                                      </Label>
+                                                      <HBox prefHeight="46.0" prefWidth="424.0">
+                                                         <children>
+                                                            <ComboBox fx:id="cbSinoidales" prefHeight="35.0" prefWidth="262.0" promptText="Selecciona un sinoidal">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                            </ComboBox>
+                                                            <Button fx:id="btnAsignarSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu" stylesheets="" text="Agregar Sinodal">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                               <HBox.margin>
+                                                                  <Insets left="20.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                      <ListView fx:id="listSinoidales" prefHeight="100.0" prefWidth="392.0">
+                                                         <VBox.margin>
+                                                            <Insets left="10.0" right="10.0" top="10.0" />
+                                                         </VBox.margin>
+                                                      </ListView>
+                                                      <Button fx:id="btnEliminarSinoidal" alignment="CENTER" contentDisplay="RIGHT" disable="true" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu-danger" stylesheets="" text="Eliminar Sinodal" textAlignment="JUSTIFY">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" left="285.0" top="10.0" />
+                                                         </VBox.margin>
+                                                         <opaqueInsets>
+                                                            <Insets />
+                                                         </opaqueInsets>
+                                                      </Button>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" right="5.0" top="10.0" />
+                                                   </VBox.margin>
+                                                   <padding>
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" />
+                                                   </padding>
+                                                </VBox>
+                                                <VBox fx:id="vContainerSigns" prefHeight="213.0" prefWidth="424.0" styleClass="container" stylesheets="" visible="false">
+                                                   <children>
+                                                      <HBox alignment="CENTER" prefHeight="37.0" prefWidth="424.0" stylesheets="">
+                                                         <children>
+                                                            <Label prefHeight="20.0" prefWidth="146.0" style="-fx-background-color: white;" stylesheets="" text="FIRMAS SINODALES">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                               <HBox.margin>
+                                                                  <Insets left="5.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                            <Button fx:id="btnEliminarFirmaSinoidal" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu-danger" stylesheets="" text="Eliminar Firma">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                               <HBox.margin>
+                                                                  <Insets left="30.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                            <Button fx:id="btnAgregarFirmaSinoidal" layoutX="294.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu" stylesheets="" text="Agregar Firma">
+                                                               <cursor>
+                                                                  <Cursor fx:constant="HAND" />
+                                                               </cursor>
+                                                               <HBox.margin>
+                                                                  <Insets left="10.0" right="5.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                         <VBox.margin>
+                                                            <Insets top="10.0" />
+                                                         </VBox.margin>
+                                                      </HBox>
+                                                      <ListView fx:id="listFirmas" prefHeight="100.0" prefWidth="392.0">
+                                                         <VBox.margin>
+                                                            <Insets left="10.0" right="10.0" top="10.0" />
+                                                         </VBox.margin>
+                                                      </ListView>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" left="5.0" right="5.0" top="30.0" />
+                                                   </VBox.margin>
+                                                </VBox>
+                                             </children>
+                                             <opaqueInsets>
+                                                <Insets left="20.0" right="30.0" />
+                                             </opaqueInsets>
+                                             <HBox.margin>
+                                                <Insets left="20.0" />
+                                             </HBox.margin>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </VBox>
+                     </children></Pane>
+                  <Pane fx:id="inicioPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="" StackPane.alignment="CENTER">
+                     <children>
+                        <VBox prefHeight="576.0" prefWidth="874.0">
+                           <children>
+                              <Pane prefHeight="110.0" prefWidth="874.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="" text="ACTAS">
+                                       <font>
+                                          <Font size="26.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="txtSearch" layoutX="517.0" layoutY="43.0" onKeyTyped="#searchNamesActas" prefHeight="25.0" prefWidth="258.0" promptText="Buscar" />
+                                    <ImageView fitHeight="17.0" fitWidth="26.0" layoutX="749.0" layoutY="47.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/icons8_Search_52px.png" />
+                                       </image>
+                                    </ImageView>
+                                    <HBox layoutX="801.0" layoutY="-1.0" prefHeight="30.0" prefWidth="36.0" />
+                                    <Button fx:id="btnMinizeWindow" layoutX="836.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@loginStyle.css" text="-">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="btnAgregarActa" layoutX="14.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="106.0" styleClass="buttonMenu" stylesheets="" text="Agregar Acta">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor></Button>
+                                    <Button fx:id="btnBuscar" layoutX="783.0" layoutY="37.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="" text="Buscar" />
+                                 </children>
+                              </Pane>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="44.0" prefWidth="874.0">
+                                 <children>
+                                    <Button fx:id="btnReestablecer" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleClicks" styleClass="buttonRes" stylesheets="">
+                                       <graphic>
+                                          <ImageView fitHeight="17.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;" styleClass="icon">
+                                             <image>
+                                                <Image url="https://img.icons8.com/ios-filled/50/reply-arrow.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <HBox.margin>
+                                          <Insets right="115.0" />
+                                       </HBox.margin>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor></Button>
+                                    <Label prefHeight="19.0" prefWidth="41.0" style="-fx-background-color: white;" stylesheets="" text="Filtros:">
+                                       <font>
+                                          <Font size="13.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <ComboBox fx:id="cbFilterSinodal" layoutX="384.0" layoutY="11.0" prefWidth="150.0" promptText="Sinodal">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </ComboBox>
+                                    <ComboBox fx:id="cbFilterFolder" prefWidth="150.0" promptText="Folder">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin></ComboBox>
+                                    <ComboBox fx:id="cbFilterCeremonia" layoutX="372.0" layoutY="10.0" prefWidth="150.0" promptText="Ceremonia">
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </ComboBox>
+                                    <ComboBox fx:id="cbFilterEstatus" layoutX="447.0" layoutY="10.0" prefWidth="150.0" promptText="Estatus">
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </ComboBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets right="10.0" top="5.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <Pane prefHeight="467.0" prefWidth="874.0">
+                                 <children>
+                                    <TableView fx:id="tableActas" layoutX="13.0" prefHeight="440.0" prefWidth="849.0" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </Pane>
+                           </children>
+                        </VBox>
+                     </children>
+   				
+                  </Pane>
+               </children>
+            </StackPane>
          </children>
-      </StackPane>
+      </HBox>
    </children>
-   <effect>
-      <DropShadow color="#1b1eeb" />
-   </effect>
 </AnchorPane>

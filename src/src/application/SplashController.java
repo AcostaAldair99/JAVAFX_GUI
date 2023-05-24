@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -23,7 +24,7 @@ public class SplashController implements Initializable{
 	@FXML
 	private ProgressBar progressBar;
 	
-	private double progress;
+	private double progress=0;
 	
 	
 	@Override
@@ -38,10 +39,10 @@ public class SplashController implements Initializable{
 		@Override
 		public void run() {
 			try {
-				for(int i=0;i<10;i++) {
-					progress+=0.1;
+				for(int i=0;i<20;i++) {
+					progress+=0.05;
 					progressBar.setProgress(progress);
-					Thread.sleep(500);
+					Thread.sleep(100);
 				}
 				Platform.runLater(new Runnable() {
 					@Override
@@ -49,16 +50,18 @@ public class SplashController implements Initializable{
 						Parent root=null;
 						try {
 							root = FXMLLoader.load(getClass().getResource("Sample.fxml"));		
+							Scene es=new Scene(root);
+							es.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+							Stage st=new Stage();
+							st.setScene(es);
+							st.getIcons().add(new Image(getClass().getResource("logoLogin.png").toExternalForm()));
+							st.initStyle(StageStyle.UNDECORATED);
+							st.show();
+							rootPane.getScene().getWindow().hide();	
 						}catch(IOException e) {
 							e.printStackTrace();
 						}
-						Scene es=new Scene(root);
-						
-						Stage st=new Stage();
-						st.setScene(es);
-						st.initStyle(StageStyle.UNDECORATED);
-						st.show();
-						rootPane.getScene().getWindow().hide();		
+							
 					}
 				});
 			} catch (InterruptedException e) {
