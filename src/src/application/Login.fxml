@@ -13,14 +13,14 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="503.0" prefWidth="854.0" style="-fx-background-color: #fff;" stylesheets="@styles/loginStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.LoginController">
+<AnchorPane id="AnchorPane" prefHeight="503.0" prefWidth="854.0" style="-fx-background-color: #fff;" stylesheets="" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.LoginController">
     <children>
         <AnchorPane prefHeight="503.0" prefWidth="382.0" style="-fx-background-color: #218E58;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <ImageView fitHeight="117.0" fitWidth="122.0" layoutX="133.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../images/logoLogin.png" />
-                    </image>
+               <image>
+                  <Image url="@logoLogin.png" />
+               </image>
                 </ImageView>
                 <Label alignment="CENTER" layoutX="58.0" layoutY="261.0" prefHeight="23.0" prefWidth="268.0" text="ADMINISTRACIÓN DE ACTAS" textFill="WHITE">
                     <font>
@@ -36,8 +36,8 @@
         </AnchorPane>
         <Pane layoutX="487.0" layoutY="172.0" prefHeight="160.0" prefWidth="283.0" AnchorPane.bottomAnchor="171.0" AnchorPane.topAnchor="172.0">
             <children>
-                <TextField fx:id="txtUsername" layoutX="8.0" layoutY="14.0" prefHeight="34.0" prefWidth="275.0" promptText="Ingresa el Usuario" styleClass="inputs" stylesheets="@styles/loginStyle.css" />
-                <PasswordField fx:id="txtPassword" layoutX="7.0" layoutY="78.0" prefHeight="34.0" prefWidth="275.0" promptText="Ingresa la Contraseña" styleClass="inputs" stylesheets="@styles/loginStyle.css" />
+                <TextField fx:id="txtUsername" layoutX="8.0" layoutY="14.0" prefHeight="34.0" prefWidth="275.0" promptText="Ingresa el Usuario" styleClass="inputs" stylesheets="" />
+                <PasswordField fx:id="txtPassword" layoutX="7.0" layoutY="78.0" prefHeight="34.0" prefWidth="275.0" promptText="Ingresa la Contraseña" styleClass="inputs" stylesheets="" />
                 <Label fx:id="lblErrors" alignment="CENTER" layoutX="8.0" layoutY="118.0" prefHeight="23.0" prefWidth="275.0" textFill="#ff6354">
                     <font>
                         <Font name="Segoe UI" size="10.0" />
@@ -55,7 +55,7 @@
         </Label>
       <HBox layoutX="783.0" layoutY="-1.0" prefHeight="30.0" prefWidth="71.0">
          <children>
-            <Button fx:id="btnMinizeWindow" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@styles/loginStyle.css" text="-">
+            <Button fx:id="btnMinizeWindow" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="" text="-">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -63,7 +63,7 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <Button fx:id="btnCloseWindow" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleCloseAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@styles/loginStyle.css" text="x">
+            <Button fx:id="btnCloseWindow" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleCloseAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="" text="x">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -73,7 +73,7 @@
             </Button>
          </children>
       </HBox>
-          <Button fx:id="btnSignin" layoutX="560.0" layoutY="315.0" mnemonicParsing="false" onMouseClicked="#handleButtonAction" prefHeight="34.0" prefWidth="137.0" styleClass="button-login" stylesheets="@styles/loginStyle.css" text="Iniciar Sesión">
+          <Button fx:id="btnSignin" layoutX="560.0" layoutY="315.0" mnemonicParsing="false" onMouseClicked="#handleButtonAction" prefHeight="34.0" prefWidth="137.0" styleClass="button-login" stylesheets="" text="Iniciar Sesión">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

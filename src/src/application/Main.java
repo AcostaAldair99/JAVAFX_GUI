@@ -13,7 +13,10 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
-			primaryStage.setScene(new Scene(root));
+			Scene sc =new Scene(root);
+			
+			sc.getStylesheets().add(getClass().getResource("loginStyle.css").toExternalForm());
+			primaryStage.setScene(sc);
 	        primaryStage.setResizable(false);
 	        primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("logoLogin.png")));
 

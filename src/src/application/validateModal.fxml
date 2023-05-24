@@ -10,11 +10,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.validateModal">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.validateModal">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="400.0">
          <children>
-            <Pane prefHeight="65.0" prefWidth="400.0" style="-fx-background-color: #218E58;" stylesheets="@styles/style.css">
+            <Pane prefHeight="65.0" prefWidth="400.0" style="-fx-background-color: #218E58;" stylesheets="@style.css">
                <children>
                   <Label contentDisplay="CENTER" layoutX="23.0" layoutY="8.0" prefHeight="25.0" prefWidth="354.0" text="¿Seguro que quieres continuar?" textFill="WHITE">
                      <font>
@@ -38,12 +38,12 @@
             </PasswordField>
             <HBox alignment="TOP_CENTER" prefHeight="62.0" prefWidth="400.0">
                <children>
-                  <Button fx:id="cancelButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="130.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="CANCELAR">
+                  <Button fx:id="cancelButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="130.0" styleClass="buttonMenu-danger" stylesheets="@style.css" text="CANCELAR">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="validateButton" layoutX="145.0" layoutY="10.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="130.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="VALIDAR">
+                  <Button fx:id="validateButton" layoutX="145.0" layoutY="10.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="130.0" styleClass="buttonMenu" stylesheets="@style.css" text="VALIDAR">
                      <HBox.margin>
                         <Insets left="40.0" />
                      </HBox.margin>

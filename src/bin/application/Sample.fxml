@@ -18,11 +18,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="576.0" prefWidth="1050.0" style="-fx-background-color: #ffff;" stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="576.0" prefWidth="1050.0" style="-fx-background-color: #ffff;" stylesheets="" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
 <children>
       <HBox prefHeight="576.0" prefWidth="1050.0">
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="577.0" prefWidth="176.0" styleClass="scroll-pane" stylesheets="@styles/style.css">
+            <VBox alignment="TOP_CENTER" prefHeight="577.0" prefWidth="176.0" styleClass="scroll-pane" stylesheets="">
                <children>
                   <ImageView fitHeight="73.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -32,7 +32,7 @@
                         <Insets bottom="10.0" top="50.0" />
                      </VBox.margin>
                   </ImageView>
-                  <Button fx:id="btnInicio" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="185.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="INICIO" textFill="#e7e5e5">
+                  <Button fx:id="btnInicio" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="185.0" styleClass="buttonMenu" stylesheets="" text="INICIO" textFill="#e7e5e5">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -54,7 +54,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="btnActas" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="CREAR ACTAS">
+                  <Button fx:id="btnActas" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="" text="CREAR ACTAS">
                      <padding>
                         <Insets left="50.0" />
                      </padding>
@@ -69,7 +69,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="btnSinoidales" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="SINODALES">
+                  <Button fx:id="btnSinoidales" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="" text="SINODALES">
                      <padding>
                         <Insets left="50.0" />
                      </padding>
@@ -84,7 +84,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="btnCeremonia" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="CEREMONIAS">
+                  <Button fx:id="btnCeremonia" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="" text="CEREMONIAS">
                      <padding>
                         <Insets left="50.0" />
                      </padding>
@@ -100,7 +100,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="btnFolder" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="FOLDERS">
+                  <Button fx:id="btnFolder" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="" text="FOLDERS">
                      <padding>
                         <Insets left="50.0" />
                      </padding>
@@ -115,7 +115,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="btnConfiguracion" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="CONFIGURACIÓN">
+                  <Button fx:id="btnConfiguracion" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="" text="CONFIGURACIÓN">
                      <padding>
                         <Insets left="50.0" />
                      </padding>
@@ -131,7 +131,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                <Button fx:id="btnLogout" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="CERRAR SESIÓN">
+                <Button fx:id="btnLogout" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="" text="CERRAR SESIÓN">
                      <padding>
                         <Insets left="50.0" />
                      </padding>
@@ -156,11 +156,11 @@
                            <children>
                               <Pane prefHeight="96.0" prefWidth="874.0">
                                  <children>
-                                    <Button fx:id="btnAgregarSinoidal" layoutX="14.0" layoutY="49.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Sinodal">
+                                    <Button fx:id="btnAgregarSinoidal" layoutX="14.0" layoutY="49.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="" text="Agregar Sinodal">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor></Button>
-                                    <Label layoutX="14.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="SINODALES">
+                                    <Label layoutX="14.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="" text="SINODALES">
                                        <font>
                                           <Font size="26.0" />
                                        </font>
@@ -172,7 +172,7 @@
                                        </image>
                                     </ImageView>
                                     <HBox layoutX="801.0" layoutY="-1.0" prefHeight="30.0" prefWidth="36.0" />
-                                    <Button fx:id="btnMinizeWindow1" layoutX="836.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@styles/loginStyle.css" text="-">
+                                    <Button fx:id="btnMinizeWindow1" layoutX="836.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@loginStyle.css" text="-">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
@@ -180,12 +180,12 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="btnAgregarActa11" layoutX="772.0" layoutY="36.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Buscar" />
+                                    <Button fx:id="btnAgregarActa11" layoutX="772.0" layoutY="36.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="" text="Buscar" />
                                  </children>
                               </Pane>
                               <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="857.0">
                                  <children>
-                                    <Button fx:id="btnReestablecerSinodales" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleClicks" styleClass="buttonRes" stylesheets="@styles/style.css">
+                                    <Button fx:id="btnReestablecerSinodales" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleClicks" styleClass="buttonRes" stylesheets="">
                                        <graphic>
                                           <ImageView fitHeight="17.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;" styleClass="icon">
                                              <image>
@@ -200,7 +200,7 @@
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                     </Button>
-                                    <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Filtros:">
+                                    <Label style="-fx-background-color: white;" stylesheets="" text="Filtros:">
                                        <font>
                                           <Font size="13.0" />
                                        </font>
@@ -232,12 +232,12 @@
                            <children>
                               <Pane prefHeight="88.0" prefWidth="874.0">
                                  <children>
-                                    <Label fx:id="titleSinodal" layoutX="14.0" layoutY="24.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="CREAR SINODAL">
+                                    <Label fx:id="titleSinodal" layoutX="14.0" layoutY="24.0" style="-fx-background-color: white;" stylesheets="" text="CREAR SINODAL">
                                        <font>
                                           <Font size="26.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="btnMinizeWindow11111" layoutX="835.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@styles/loginStyle.css" text="-">
+                                    <Button fx:id="btnMinizeWindow11111" layoutX="835.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@loginStyle.css" text="-">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
@@ -251,9 +251,9 @@
                                  <children>
                                     <HBox layoutX="2.0" prefHeight="478.0" prefWidth="871.0">
                                        <children>
-                                          <VBox alignment="TOP_CENTER" prefHeight="300.0" prefWidth="435.0" styleClass="container" stylesheets="@styles/style.css">
+                                          <VBox alignment="TOP_CENTER" prefHeight="300.0" prefWidth="435.0" styleClass="container" stylesheets="">
                                              <children>
-                                                <Label prefHeight="20.0" prefWidth="331.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Ingresa la información para crear un nuevo sinodal.">
+                                                <Label prefHeight="20.0" prefWidth="331.0" style="-fx-background-color: white;" stylesheets="" text="Ingresa la información para crear un nuevo sinodal.">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
@@ -286,12 +286,12 @@
                                                 </TextField>
                                                 <HBox fx:id="hActasFirmadas" prefHeight="53.0" prefWidth="401.0" visible="false">
                                                    <children>
-                                                      <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Actas Firmadas:">
+                                                      <Label style="-fx-background-color: white;" stylesheets="" text="Actas Firmadas:">
                                                          <font>
                                                             <Font size="24.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label fx:id="lblNumberActas" layoutX="10.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="# actas">
+                                                      <Label fx:id="lblNumberActas" layoutX="10.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="" text="# actas">
                                                          <font>
                                                             <Font size="24.0" />
                                                          </font>
@@ -306,12 +306,12 @@
                                                 </HBox>
                                                 <HBox prefHeight="75.0" prefWidth="401.0">
                                                    <children>
-                                                      <Button fx:id="btnCrearSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="CREAR SINODAL">
+                                                      <Button fx:id="btnCrearSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu" stylesheets="" text="CREAR SINODAL">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
                                                       </Button>
-                                                      <Button fx:id="btnActualizarSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu-update" stylesheets="@styles/style.css" text="ACTUALIZAR">
+                                                      <Button fx:id="btnActualizarSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu-update" stylesheets="" text="ACTUALIZAR">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
@@ -319,7 +319,7 @@
                                                             <Insets left="10.0" right="10.0" />
                                                          </HBox.margin>
                                                       </Button>
-                                                      <Button fx:id="btnDeleteSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="ELIMINAR">
+                                                      <Button fx:id="btnDeleteSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="160.0" styleClass="buttonMenu-danger" stylesheets="" text="ELIMINAR">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
@@ -339,12 +339,12 @@
                                           </VBox>
                                           <VBox prefHeight="490.0" prefWidth="440.0">
                                              <children>
-                                                <VBox prefHeight="229.0" prefWidth="408.0" styleClass="container" stylesheets="@styles/style.css">
+                                                <VBox prefHeight="229.0" prefWidth="408.0" styleClass="container" stylesheets="">
                                                    <children>
                                                       <HBox prefHeight="48.0" prefWidth="352.0">
                                                          <children>
                                                             <TextField fx:id="txtTelefonoSinoidal" accessibleText="/^(\s*|\d+)$/" prefHeight="40.0" prefWidth="219.0" promptText="Telefono del Sinodal" />
-                                                            <Button fx:id="btnAgregarTelefono" mnemonicParsing="false" onAction="#handleClicks" prefHeight="32.0" prefWidth="62.0" styleClass="buttonMenu" stylesheets="@styles/style.css">
+                                                            <Button fx:id="btnAgregarTelefono" mnemonicParsing="false" onAction="#handleClicks" prefHeight="32.0" prefWidth="62.0" styleClass="buttonMenu" stylesheets="">
                                                                <cursor>
                                                                   <Cursor fx:constant="HAND" />
                                                                </cursor>
@@ -359,7 +359,7 @@
                                                                   </ImageView>
                                                                </graphic>
                                                             </Button>
-                                                            <Button fx:id="btnEliminarTelefono" layoutX="239.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="40.0" prefWidth="62.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css">
+                                                            <Button fx:id="btnEliminarTelefono" layoutX="239.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="40.0" prefWidth="62.0" styleClass="buttonMenu-danger" stylesheets="">
                                                                <cursor>
                                                                   <Cursor fx:constant="HAND" />
                                                                </cursor>
@@ -389,12 +389,12 @@
                                                       <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
                                                    </padding>
                                                 </VBox>
-                                                <VBox prefHeight="235.0" prefWidth="408.0" styleClass="container" stylesheets="@styles/style.css">
+                                                <VBox prefHeight="235.0" prefWidth="408.0" styleClass="container" stylesheets="">
                                                    <children>
                                                       <HBox prefHeight="49.0" prefWidth="352.0">
                                                          <children>
                                                             <TextField fx:id="txtEmailSinoidal" accessibleText="/^(\s*|\d+)$/" prefHeight="40.0" prefWidth="235.0" promptText="Email del Sinodal" />
-                                                            <Button fx:id="btnAgregarEmail" mnemonicParsing="false" onAction="#handleClicks" prefHeight="32.0" prefWidth="62.0" styleClass="buttonMenu" stylesheets="@styles/style.css">
+                                                            <Button fx:id="btnAgregarEmail" mnemonicParsing="false" onAction="#handleClicks" prefHeight="32.0" prefWidth="62.0" styleClass="buttonMenu" stylesheets="">
                                                                <cursor>
                                                                   <Cursor fx:constant="HAND" />
                                                                </cursor>
@@ -409,7 +409,7 @@
                                                                   <Insets left="10.0" />
                                                                </HBox.margin>
                                                             </Button>
-                                                            <Button fx:id="btnEliminarEmail" mnemonicParsing="false" onAction="#handleClicks" prefHeight="32.0" prefWidth="62.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css">
+                                                            <Button fx:id="btnEliminarEmail" mnemonicParsing="false" onAction="#handleClicks" prefHeight="32.0" prefWidth="62.0" styleClass="buttonMenu-danger" stylesheets="">
                                                                <cursor>
                                                                   <Cursor fx:constant="HAND" />
                                                                </cursor>
@@ -464,7 +464,7 @@
                            <children>
                               <Pane prefHeight="99.0" prefWidth="874.0">
                                  <children>
-                                    <Label layoutY="58.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="CEREMONIAS">
+                                    <Label layoutY="58.0" style="-fx-background-color: white;" stylesheets="" text="CEREMONIAS">
                                        <font>
                                           <Font size="26.0" />
                                        </font>
@@ -476,7 +476,7 @@
                                        </image>
                                     </ImageView>
                                     <HBox layoutX="801.0" layoutY="-1.0" prefHeight="30.0" prefWidth="36.0" />
-                                    <Button fx:id="btnMinizeWindow11" layoutX="836.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@styles/loginStyle.css" text="-">
+                                    <Button fx:id="btnMinizeWindow11" layoutX="836.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@loginStyle.css" text="-">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
@@ -484,8 +484,8 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="btnAgregarActa111" layoutX="765.0" layoutY="21.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Buscar" />
-                                    <Label layoutX="437.0" layoutY="58.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="FOLDERS">
+                                    <Button fx:id="btnAgregarActa111" layoutX="765.0" layoutY="21.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="" text="Buscar" />
+                                    <Label layoutX="437.0" layoutY="58.0" style="-fx-background-color: white;" stylesheets="" text="FOLDERS">
                                        <font>
                                           <Font size="26.0" />
                                        </font>
@@ -498,7 +498,7 @@
                                        <children>
                                           <VBox prefHeight="82.0" prefWidth="874.0">
                                              <children>
-                                                <Label prefHeight="20.0" prefWidth="348.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Ingresa la información para crear una nueva Ceremonia.">
+                                                <Label prefHeight="20.0" prefWidth="348.0" style="-fx-background-color: white;" stylesheets="" text="Ingresa la información para crear una nueva Ceremonia.">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
@@ -513,12 +513,12 @@
                                                 </DatePicker>
                                                 <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="426.0">
                                                    <children>
-                                                      <Button fx:id="btnCrearCeremonia" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Crear Ceremonia">
+                                                      <Button fx:id="btnCrearCeremonia" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="" text="Crear Ceremonia">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
                                                       </Button>
-                                                      <Button fx:id="btnCrearCeremonia1" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-update" stylesheets="@styles/style.css" text="Modificar Fecha">
+                                                      <Button fx:id="btnCrearCeremonia1" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-update" stylesheets="" text="Modificar Fecha">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
@@ -526,7 +526,7 @@
                                                             <Insets left="10.0" right="10.0" />
                                                          </HBox.margin>
                                                       </Button>
-                                                      <Button fx:id="btnCrearCeremonia11" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="Eliminar Ceremonia">
+                                                      <Button fx:id="btnCrearCeremonia11" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-danger" stylesheets="" text="Eliminar Ceremonia">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
@@ -539,7 +539,7 @@
                                                       <Insets />
                                                    </opaqueInsets>
                                                 </HBox>
-                                                <TableView fx:id="tableCeremonias" prefHeight="344.0" prefWidth="426.0" stylesheets="@styles/style.css">
+                                                <TableView fx:id="tableCeremonias" prefHeight="344.0" prefWidth="426.0" stylesheets="">
                                                    <cursor>
                                                       <Cursor fx:constant="HAND" />
                                                    </cursor></TableView>
@@ -550,7 +550,7 @@
                                           </VBox>
                                           <VBox layoutX="20.0" layoutY="10.0" prefHeight="82.0" prefWidth="874.0">
                                              <children>
-                                                <Label prefHeight="20.0" prefWidth="348.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Selecciona un estante para crear una Carpeta.">
+                                                <Label prefHeight="20.0" prefWidth="348.0" style="-fx-background-color: white;" stylesheets="" text="Selecciona un estante para crear una Carpeta.">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
@@ -565,12 +565,12 @@
                                                 </ComboBox>
                                                 <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="426.0">
                                                    <children>
-                                                      <Button fx:id="btnCrearFolder" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Crear Folder">
+                                                      <Button fx:id="btnCrearFolder" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu" stylesheets="" text="Crear Folder">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
                                                       </Button>
-                                                      <Button fx:id="btnCrearCeremonia11" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-update" stylesheets="@styles/style.css" text="Modificar Folder">
+                                                      <Button fx:id="btnCrearCeremonia11" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-update" stylesheets="" text="Modificar Folder">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
@@ -578,7 +578,7 @@
                                                             <Insets left="10.0" right="10.0" />
                                                          </HBox.margin>
                                                       </Button>
-                                                      <Button fx:id="btnCrearCeremonia111" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="Eliminar Folder">
+                                                      <Button fx:id="btnCrearCeremonia111" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-danger" stylesheets="" text="Eliminar Folder">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
@@ -591,7 +591,7 @@
                                                       <Insets />
                                                    </opaqueInsets>
                                                 </HBox>
-                                                <TableView fx:id="tableFolders" prefHeight="343.0" prefWidth="385.0" stylesheets="@styles/style.css">
+                                                <TableView fx:id="tableFolders" prefHeight="343.0" prefWidth="385.0" stylesheets="">
                                                    <VBox.margin>
                                                       <Insets left="10.0" right="10.0" />
                                                    </VBox.margin>
@@ -627,12 +627,12 @@
                            <children>
                               <Pane prefHeight="88.0" prefWidth="874.0">
                                  <children>
-                                    <Label fx:id="titleActa" layoutX="14.0" layoutY="24.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="CREAR ACTA">
+                                    <Label fx:id="titleActa" layoutX="14.0" layoutY="24.0" style="-fx-background-color: white;" stylesheets="" text="CREAR ACTA">
                                        <font>
                                           <Font size="26.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="btnMinizeWindow111" layoutX="835.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@styles/loginStyle.css" text="-">
+                                    <Button fx:id="btnMinizeWindow111" layoutX="835.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@loginStyle.css" text="-">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
@@ -642,12 +642,12 @@
                                     </Button>
                                     <HBox fx:id="hStatus" layoutX="14.0" layoutY="67.0" prefHeight="40.0" prefWidth="424.0" visible="false">
                                        <children>
-                                          <Label prefHeight="34.0" prefWidth="71.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="STATUS:">
+                                          <Label prefHeight="34.0" prefWidth="71.0" style="-fx-background-color: white;" stylesheets="" text="STATUS:">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="lblStatus" layoutX="10.0" layoutY="10.0" prefHeight="34.0" prefWidth="353.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="AQUI VA EL STATUS">
+                                          <Label fx:id="lblStatus" layoutX="10.0" layoutY="10.0" prefHeight="34.0" prefWidth="353.0" style="-fx-background-color: white;" stylesheets="" text="AQUI VA EL STATUS">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -660,9 +660,9 @@
                                  <children>
                                     <HBox prefHeight="490.0" prefWidth="874.0">
                                        <children>
-                                          <VBox prefHeight="490.0" prefWidth="600.0" styleClass="container" stylesheets="@styles/style.css">
+                                          <VBox prefHeight="490.0" prefWidth="600.0" styleClass="container" stylesheets="">
                                              <children>
-                                                <Label prefHeight="20.0" prefWidth="310.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Ingresa la información para crear un acta nueva.">
+                                                <Label prefHeight="20.0" prefWidth="310.0" style="-fx-background-color: white;" stylesheets="" text="Ingresa la información para crear un acta nueva.">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
@@ -690,7 +690,7 @@
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
                                                 </TextField>
-                                                <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Selecciona la carrera del Alumno">
+                                                <Label style="-fx-background-color: white;" stylesheets="" text="Selecciona la carrera del Alumno">
                                                    <VBox.margin>
                                                       <Insets top="20.0" />
                                                    </VBox.margin>
@@ -707,7 +707,7 @@
                                                    <children>
                                                       <VBox prefHeight="56.0" prefWidth="200.0">
                                                          <children>
-                                                            <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Selecciona una Ceremonia" />
+                                                            <Label style="-fx-background-color: white;" stylesheets="" text="Selecciona una Ceremonia" />
                                                             <ComboBox fx:id="cbCeremonias" prefHeight="25.0" prefWidth="177.0" promptText="Selecciona la Ceremonia">
                                                                <cursor>
                                                                   <Cursor fx:constant="HAND" />
@@ -717,7 +717,7 @@
                                                       </VBox>
                                                       <VBox prefHeight="56.0" prefWidth="177.0">
                                                          <children>
-                                                            <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Selecciona un Folder" />
+                                                            <Label style="-fx-background-color: white;" stylesheets="" text="Selecciona un Folder" />
                                                             <ComboBox fx:id="cbFolders" prefHeight="25.0" prefWidth="172.0" promptText="Selecciona el Folder">
                                                                <cursor>
                                                                   <Cursor fx:constant="HAND" />
@@ -735,12 +735,12 @@
                                                 </HBox>
                                                 <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                                                    <children>
-                                                      <Button fx:id="btnCrearActa" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="147.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="CREAR">
+                                                      <Button fx:id="btnCrearActa" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="147.0" styleClass="buttonMenu" stylesheets="" text="CREAR">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
                                                       </Button>
-                                                      <Button fx:id="btnActualizarActa" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="147.0" styleClass="buttonMenu-update" stylesheets="@styles/style.css" text="ACTUALIZAR">
+                                                      <Button fx:id="btnActualizarActa" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="147.0" styleClass="buttonMenu-update" stylesheets="" text="ACTUALIZAR">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
@@ -748,7 +748,7 @@
                                                             <Insets left="10.0" />
                                                          </HBox.margin>
                                                       </Button>
-                                                      <Button fx:id="btnEliminarActa" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="147.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="ELIMINAR">
+                                                      <Button fx:id="btnEliminarActa" mnemonicParsing="false" onAction="#handleClicks" prefHeight="49.0" prefWidth="147.0" styleClass="buttonMenu-danger" stylesheets="" text="ELIMINAR">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
@@ -771,9 +771,9 @@
                                           </VBox>
                                           <VBox prefHeight="490.0" prefWidth="634.0">
                                              <children>
-                                                <VBox prefHeight="243.0" prefWidth="424.0" styleClass="container" stylesheets="@styles/style.css">
+                                                <VBox prefHeight="243.0" prefWidth="424.0" styleClass="container" stylesheets="">
                                                    <children>
-                                                      <Label style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Asigna los sinodales de la Acta.">
+                                                      <Label style="-fx-background-color: white;" stylesheets="" text="Asigna los sinodales de la Acta.">
                                                          <font>
                                                             <Font size="14.0" />
                                                          </font>
@@ -788,7 +788,7 @@
                                                                   <Cursor fx:constant="HAND" />
                                                                </cursor>
                                                             </ComboBox>
-                                                            <Button fx:id="btnAsignarSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Sinodal">
+                                                            <Button fx:id="btnAsignarSinoidal" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu" stylesheets="" text="Agregar Sinodal">
                                                                <cursor>
                                                                   <Cursor fx:constant="HAND" />
                                                                </cursor>
@@ -803,7 +803,7 @@
                                                             <Insets left="10.0" right="10.0" top="10.0" />
                                                          </VBox.margin>
                                                       </ListView>
-                                                      <Button fx:id="btnEliminarSinoidal" alignment="CENTER" contentDisplay="RIGHT" disable="true" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="Eliminar Sinodal" textAlignment="JUSTIFY">
+                                                      <Button fx:id="btnEliminarSinoidal" alignment="CENTER" contentDisplay="RIGHT" disable="true" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu-danger" stylesheets="" text="Eliminar Sinodal" textAlignment="JUSTIFY">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
@@ -822,11 +822,11 @@
                                                       <Insets bottom="5.0" left="5.0" right="5.0" />
                                                    </padding>
                                                 </VBox>
-                                                <VBox fx:id="vContainerSigns" prefHeight="213.0" prefWidth="424.0" styleClass="container" stylesheets="@styles/style.css" visible="false">
+                                                <VBox fx:id="vContainerSigns" prefHeight="213.0" prefWidth="424.0" styleClass="container" stylesheets="" visible="false">
                                                    <children>
-                                                      <HBox alignment="CENTER" prefHeight="37.0" prefWidth="424.0" stylesheets="@styles/style.css">
+                                                      <HBox alignment="CENTER" prefHeight="37.0" prefWidth="424.0" stylesheets="">
                                                          <children>
-                                                            <Label prefHeight="20.0" prefWidth="146.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="FIRMAS SINODALES">
+                                                            <Label prefHeight="20.0" prefWidth="146.0" style="-fx-background-color: white;" stylesheets="" text="FIRMAS SINODALES">
                                                                <font>
                                                                   <Font size="14.0" />
                                                                </font>
@@ -834,7 +834,7 @@
                                                                   <Insets left="5.0" />
                                                                </HBox.margin>
                                                             </Label>
-                                                            <Button fx:id="btnEliminarFirmaSinoidal" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu-danger" stylesheets="@styles/style.css" text="Eliminar Firma">
+                                                            <Button fx:id="btnEliminarFirmaSinoidal" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu-danger" stylesheets="" text="Eliminar Firma">
                                                                <cursor>
                                                                   <Cursor fx:constant="HAND" />
                                                                </cursor>
@@ -842,7 +842,7 @@
                                                                   <Insets left="30.0" />
                                                                </HBox.margin>
                                                             </Button>
-                                                            <Button fx:id="btnAgregarFirmaSinoidal" layoutX="294.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Firma">
+                                                            <Button fx:id="btnAgregarFirmaSinoidal" layoutX="294.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="127.0" styleClass="buttonMenu" stylesheets="" text="Agregar Firma">
                                                                <cursor>
                                                                   <Cursor fx:constant="HAND" />
                                                                </cursor>
@@ -880,13 +880,13 @@
                            </children>
                         </VBox>
                      </children></Pane>
-                  <Pane fx:id="inicioPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" StackPane.alignment="CENTER">
+                  <Pane fx:id="inicioPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="" StackPane.alignment="CENTER">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>
                               <Pane prefHeight="110.0" prefWidth="874.0">
                                  <children>
-                                    <Label layoutX="14.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="ACTAS">
+                                    <Label layoutX="14.0" layoutY="10.0" style="-fx-background-color: white;" stylesheets="" text="ACTAS">
                                        <font>
                                           <Font size="26.0" />
                                        </font>
@@ -898,7 +898,7 @@
                                        </image>
                                     </ImageView>
                                     <HBox layoutX="801.0" layoutY="-1.0" prefHeight="30.0" prefWidth="36.0" />
-                                    <Button fx:id="btnMinizeWindow" layoutX="836.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@styles/loginStyle.css" text="-">
+                                    <Button fx:id="btnMinizeWindow" layoutX="836.0" layoutY="-1.0" mnemonicParsing="false" onAction="#handleMinizeAction" prefHeight="30.0" prefWidth="39.0" style="-fx-background-color: white;" styleClass="buttonclose" stylesheets="@loginStyle.css" text="-">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
@@ -906,16 +906,16 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="btnAgregarActa" layoutX="14.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="106.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Agregar Acta">
+                                    <Button fx:id="btnAgregarActa" layoutX="14.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="106.0" styleClass="buttonMenu" stylesheets="" text="Agregar Acta">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor></Button>
-                                    <Button fx:id="btnBuscar" layoutX="783.0" layoutY="37.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="@styles/style.css" text="Buscar" />
+                                    <Button fx:id="btnBuscar" layoutX="783.0" layoutY="37.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="73.0" styleClass="buttonMenu" stylesheets="" text="Buscar" />
                                  </children>
                               </Pane>
                               <HBox alignment="CENTER_RIGHT" prefHeight="44.0" prefWidth="874.0">
                                  <children>
-                                    <Button fx:id="btnReestablecer" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleClicks" styleClass="buttonRes" stylesheets="@styles/style.css">
+                                    <Button fx:id="btnReestablecer" alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleClicks" styleClass="buttonRes" stylesheets="">
                                        <graphic>
                                           <ImageView fitHeight="17.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;" styleClass="icon">
                                              <image>
@@ -929,7 +929,7 @@
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor></Button>
-                                    <Label prefHeight="19.0" prefWidth="41.0" style="-fx-background-color: white;" stylesheets="@styles/style.css" text="Filtros:">
+                                    <Label prefHeight="19.0" prefWidth="41.0" style="-fx-background-color: white;" stylesheets="" text="Filtros:">
                                        <font>
                                           <Font size="13.0" />
                                        </font>

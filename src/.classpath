@@ -6,37 +6,37 @@
 			<attribute name="add-exports" value="src/models=src"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-19">
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-19">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX19">
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX19">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER">
+	<classpathentry exported="true" kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/projects/Servicio/JavaGUI/Actas GUI/src/external jars/json-20230227.jar">
+	<classpathentry exported="true" kind="lib" path="C:/projects/Servicio/JavaGUI/Actas GUI/src/external jars/json-20230227.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/projects/Servicio/JavaGUI/Actas GUI/src/external jars/jackson-core-2.14.0.jar">
+	<classpathentry exported="true" kind="lib" path="C:/projects/Servicio/JavaGUI/Actas GUI/src/external jars/jackson-core-2.14.0.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/projects/Servicio/JavaGUI/Actas GUI/src/external jars/jackson-annotations-2.14.2.jar">
+	<classpathentry exported="true" kind="lib" path="C:/projects/Servicio/JavaGUI/Actas GUI/src/external jars/jackson-annotations-2.14.2.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/projects/Servicio/JavaGUI/Actas GUI/src/external jars/jackson-databind-2.14.2.jar">
+	<classpathentry exported="true" kind="lib" path="C:/projects/Servicio/JavaGUI/Actas GUI/src/external jars/jackson-databind-2.14.2.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

@@ -1,0 +1,35 @@
+.inputs{
+	-fx-border-color:#218E58;
+}
+.button-login
+{
+-fx-background-color : #FFF;
+-fx-border-color: #218E58;
+-fx-text-fill:   #218E58;
+}
+.button-login:hover
+{
+-fx-background-color : #218E58 ;
+-fx-text-fill:  #FFF;
+}
+.button-login:pressed
+{
+-fx-background-color : #FFF ;
+-fx-text-fill: #218E58;
+-fx-border-color: #218E58;
+}
+
+.buttonclose{
+	-fx-background-color:transparent;
+	-fx-font-weight:bold;
+	-fx-text-fill : black;
+}
+.buttonclose:hover{
+	-fx-background-color:#ffff;
+	-fx-font-weight:bold;
+	-fx-text-fill:black;
+}
+
+
+
+

@@ -1,0 +1,16 @@
+module src {
+	requires javafx.controls;
+	requires javafx.fxml;
+	requires javafx.graphics;
+	requires java.net.http;
+	requires org.json;
+	requires com.fasterxml.jackson.core;
+	requires com.fasterxml.jackson.annotation;
+	requires com.fasterxml.jackson.databind;
+	requires javafx.base;
+	requires java.desktop;
+	exports models;
+	opens styles.loginStyle;
+	opens styles.style;
+	opens application to javafx.graphics, javafx.fxml;
+}

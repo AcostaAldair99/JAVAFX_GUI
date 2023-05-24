@@ -17,11 +17,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -30,7 +28,7 @@ import javafx.stage.Stage;
 public class LoginController{
 
 	//JSON OBJECT TO REQUEST AND RESPONSE
-	private JSONObject jsonReq,jsonRes;
+	private JSONObject jsonReq;
 	@FXML
     private Button btnCloseWindow;
 	
@@ -139,6 +137,7 @@ public class LoginController{
         //stage.setMaximized(true);
         stage.close();
         Scene scene = new Scene(FXMLLoader.load(getClass().getResource("SplashScreen.fxml")));
+        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
     }

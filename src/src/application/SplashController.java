@@ -51,8 +51,9 @@ public class SplashController implements Initializable{
 						try {
 							root = FXMLLoader.load(getClass().getResource("Sample.fxml"));		
 							Scene es=new Scene(root);
-							
+							es.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
 							Stage st=new Stage();
+							
 							st.setScene(es);
 							st.getIcons().add(new Image(this.getClass().getResourceAsStream("logoLogin.png")));
 							st.initStyle(StageStyle.UNDECORATED);
