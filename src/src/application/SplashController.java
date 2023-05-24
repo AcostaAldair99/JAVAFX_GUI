@@ -53,9 +53,8 @@ public class SplashController implements Initializable{
 							Scene es=new Scene(root);
 							es.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
 							Stage st=new Stage();
-							
 							st.setScene(es);
-							st.getIcons().add(new Image(this.getClass().getResourceAsStream("logoLogin.png")));
+							st.getIcons().add(new Image(getClass().getResource("logoLogin.png").toExternalForm()));
 							st.initStyle(StageStyle.UNDECORATED);
 							st.show();
 							rootPane.getScene().getWindow().hide();	

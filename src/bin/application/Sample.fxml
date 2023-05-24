@@ -26,7 +26,7 @@
                <children>
                   <ImageView fitHeight="73.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@logoLogin.png" />
+                        <Image url="https://img.icons8.com/plasticine/100/bear-footprint.png" />
                      </image>
                      <VBox.margin>
                         <Insets bottom="10.0" top="50.0" />

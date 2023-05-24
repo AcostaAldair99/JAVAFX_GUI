@@ -19,7 +19,7 @@
             <children>
                 <ImageView fitHeight="117.0" fitWidth="122.0" layoutX="133.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@logoLogin.png" />
+                  <Image url="https://img.icons8.com/plasticine/100/bear-footprint.png" />
                </image>
                 </ImageView>
                 <Label alignment="CENTER" layoutX="58.0" layoutY="261.0" prefHeight="23.0" prefWidth="268.0" text="ADMINISTRACIÓN DE ACTAS" textFill="WHITE">

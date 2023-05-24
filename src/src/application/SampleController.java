@@ -80,6 +80,8 @@ public class SampleController implements Initializable{
 	public String user;
 	public String action;
 	
+	private static final String domain = "http://127.0.0.1:4040/";
+	
 	@FXML
 	private VBox vContainerSigns;
 	
@@ -275,10 +277,10 @@ public class SampleController implements Initializable{
     			String id[] = newValue.split("-");
     			try {
     				tableActas.getItems().clear();
-    				List<Actas_Sinoidales> response = handleResponseActasSinoidales("http://localhost:4040/api/certificates/actasSinoidales/sinoidales/"+id[0]);
+    				List<Actas_Sinoidales> response = handleResponseActasSinoidales(domain+"api/certificates/actasSinoidales/sinoidales/"+id[0]);
 					if(response!=null) {
 						for(Actas_Sinoidales as:response) {
-							List<Actas> res = handleResponseActas("http://localhost:4040/api/certificates/acta/"+as.getId_actas_fk());
+							List<Actas> res = handleResponseActas(domain+"api/certificates/acta/"+as.getId_actas_fk());
 							tableActas.getItems().addAll(res);
 						}
 					}
@@ -309,9 +311,9 @@ public class SampleController implements Initializable{
     	//cbFilterEstatus.getItems().add("Estatus");
     	cbFilterSinodal.getItems().add("Sinodal");
     	
-    	List<Folder> folders = handleResponseFolder("http://127.0.0.1:4040/api/folders");
-    	List<Ceremonias> ceremonias=handleResponseCeremony("http://127.0.0.1:4040/api/ceremonies");
-    	List<Sinoidales> sinoidales=handleResponseSinoidales("http://127.0.0.1:4040/api/sinoidales");
+    	List<Folder> folders = handleResponseFolder(domain+"api/folders");
+    	List<Ceremonias> ceremonias=handleResponseCeremony(domain+"api/ceremonies");
+    	List<Sinoidales> sinoidales=handleResponseSinoidales(domain+"api/sinoidales");
 
     
     	for(Folder f : folders) {
@@ -664,7 +666,7 @@ public class SampleController implements Initializable{
     	        		JSONObject json = new JSONObject();
         	        	json.put("user", user);
         	        	json.put("pass", text1.getText());
-						HttpResponse<String> resp = postRequest(0,"http://127.0.0.1:4040/auth/signIn/validate",json);
+						HttpResponse<String> resp = postRequest(0,domain+"/auth/signIn/validate",json);
 						if(resp.statusCode()==201) {
 							return "auth";
 						}else {
@@ -700,7 +702,7 @@ public class SampleController implements Initializable{
         		JSONObject json = new JSONObject();
         		json.put("idCeremony", Integer.parseInt(cbCeremonias.getValue()));
         		json.put("idFolder", Integer.parseInt(cbFolders.getValue()));
-        		HttpResponse<String> rps = putRequest(0,"http://127.0.0.1:4040/api/certificates/updateActa/"+id_Acta,json);
+        		HttpResponse<String> rps = putRequest(0,domain+"api/certificates/updateActa/"+id_Acta,json);
         		if(rps == null || rps.statusCode()!=201) {
         			alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
             		alert.show();
@@ -711,12 +713,12 @@ public class SampleController implements Initializable{
         					i=listFirmas.getItems().size();
         				}
         				String id[] = ids.split("-");
-        				rps = putRequest(0,"http://127.0.0.1:4040/api/certificates/updateActasSignatures/"+id_Acta+"/"+id[0],json);
+        				rps = putRequest(0,domain+"api/certificates/updateActasSignatures/"+id_Acta+"/"+id[0],json);
         				if(rps == null || rps.statusCode()!=201) {
         					alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar las firmas del acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
                     		alert.show();
         				}else if(i>=listFirmas.getItems().size()){        					
-        					rps = putRequest(0,"http://127.0.0.1:4040/api/certificates/updateActa/addSignature/"+id_Acta+"/"+i,json);
+        					rps = putRequest(0,domain+"api/certificates/updateActa/addSignature/"+id_Acta+"/"+i,json);
         					if(rps==null || rps.statusCode()!=201) {
         						alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar las firmas del acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
                         		alert.show();
@@ -724,7 +726,7 @@ public class SampleController implements Initializable{
         					if(listSinoidales.getItems().size()!=0) {
         						
         						
-        						rps = deleteRequest(0,"http://127.0.0.1:4040/api/certificates/actasSinoidales/delete/"+id_Acta);
+        						rps = deleteRequest(0,domain+"api/certificates/actasSinoidales/delete/"+id_Acta);
             					j=1;
                     			if(rps == null || rps.statusCode()!=201) {
                     				alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
@@ -732,7 +734,7 @@ public class SampleController implements Initializable{
                     			}else {	
                     				for(String s:listSinoidales.getItems()) {
                     					String x[] =s.split("-");
-                            			rps = postRequest(0,"http://127.0.0.1:4040/api/certificates/addSinoidales/"+id_Acta+"/"+cbCeremonias.getValue()+"/"+x[0],json);
+                            			rps = postRequest(0,domain+"api/certificates/addSinoidales/"+id_Acta+"/"+cbCeremonias.getValue()+"/"+x[0],json);
                             			if(rps == null || rps.statusCode()!=201) {
                             				alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
                                     		alert.show();
@@ -773,12 +775,12 @@ public class SampleController implements Initializable{
     		Optional<String> result = d.showAndWait();
     		
         	if(result.get().matches("auth")) {
-        			res = deleteRequest(0,"http://127.0.0.1:4040/api/sinoidales/phones/delete/"+id_Sinoidal);
+        			res = deleteRequest(0,domain+"api/sinoidales/phones/delete/"+id_Sinoidal);
         			if(res == null || res.statusCode()!=201) {
         				alert=lc.runAlert(AlertType.ERROR, "ERROR Sinodal", "Hubo un error al momento de actualizar el sinodal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
                 		alert.show();
         			}else {
-        				res = deleteRequest(0,"http://127.0.0.1:4040/api/sinoidales/emails/delete/"+id_Sinoidal);
+        				res = deleteRequest(0,domain+"api/sinoidales/emails/delete/"+id_Sinoidal);
         				if(res == null || res.statusCode()!=201) {
             				alert=lc.runAlert(AlertType.ERROR, "ERROR Sinodal", "Hubo un error al momento de actualizar el sinodal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
                     		alert.show();
@@ -786,7 +788,7 @@ public class SampleController implements Initializable{
             				for(String src: listTelefonos.getItems()) {
     	        				js.clear();
     	        				js.put("phone", src);
-    	        				res = postRequest(0,"http://127.0.0.1:4040/api/sinoidales/addPhone/"+id_Sinoidal,js);
+    	        				res = postRequest(0,domain+"api/sinoidales/addPhone/"+id_Sinoidal,js);
     	        				if(res == null || res.statusCode() != 201) {
     	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinodal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
     	    	            		alert.show();
@@ -796,7 +798,7 @@ public class SampleController implements Initializable{
     	        			for(String src:listCorreos.getItems()) {
     	        				js.clear();
     	        				js.put("email", src);
-    	        				res = postRequest(0,"http://127.0.0.1:4040/api/sinoidales/addEmail/"+id_Sinoidal,js);
+    	        				res = postRequest(0,domain+"api/sinoidales/addEmail/"+id_Sinoidal,js);
     	        				if(res == null || res.statusCode() != 201) {
     	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINODAL", "Hubo un error al momento de crear el sinodal, verifica tu conexión a internet.\nStatus: "+res.statusCode());
     	    	            		alert.show();
@@ -826,7 +828,7 @@ public class SampleController implements Initializable{
         	if(result.get().matches("auth")) {
         		JSONObject j = new JSONObject();
         		j.put("case",cbEstantes.getValue());
-        		HttpResponse<String> res = postRequest(0,"http://127.0.0.1:4040/api/folders",j);
+        		HttpResponse<String> res = postRequest(0,domain+"api/folders",j);
         		if(res == null||res.statusCode() !=201) {
         			alert=lc.runAlert(AlertType.ERROR, "ERROR Folder", "Hubo un error al momento de crear el Folder, verifica tu conexión a internet.\nStatus: "+res.statusCode());
             		alert.show();
@@ -891,16 +893,16 @@ public class SampleController implements Initializable{
             		json.put("degree", cbCarreras.getValue());
             		json.put("signatures", 0);
             		ObservableList<String>sinoidalesAsign = listSinoidales.getItems();
-            		HttpResponse<String> res = postRequest(0,"http://127.0.0.1:4040/api/certificates",json);
+            		HttpResponse<String> res = postRequest(0,domain+"api/certificates",json);
             		String s[]=res.body().split("[.!:;?{}]");
             		if(res.statusCode() == 201) {
             			for(String a: sinoidalesAsign) {
                 			String[] x=a.split("-");
-                			res = postRequest(0,"http://127.0.0.1:4040/api/certificates/addSinoidales/"+s[2]+"/"+cbCeremonias.getValue()+"/"+x[0],json);
+                			res = postRequest(0,domain+"api/certificates/addSinoidales/"+s[2]+"/"+cbCeremonias.getValue()+"/"+x[0],json);
                 			//System.out.println(res);
                 		}
             			if(res.statusCode() == 201) {
-            				res = putRequest(0,"http://127.0.0.1:4040/api/folders/addActa/"+cbFolders.getValue(),json);
+            				res = putRequest(0,domain+"api/folders/addActa/"+cbFolders.getValue(),json);
             				if(res.statusCode()!=201) {
             					alert=lc.runAlert(AlertType.ERROR, "ERROR ACTA", "Hubo un error al momento de crear el acta, verifica tu conexión a internet\nStatus: "+res.statusCode());
                         		alert.show();
@@ -998,7 +1000,7 @@ public class SampleController implements Initializable{
 	        		//js.put("telephone", txtTelefonoSinoidal.getText());
 	        		js.put("disponibility",1);
 	        		js.put("isActive",1);
-	        		HttpResponse<String> response = postRequest(0,"http://127.0.0.1:4040/api/sinoidales",js);
+	        		HttpResponse<String> response = postRequest(0,domain+"api/sinoidales",js);
 	        		String s[]=response.body().split("[,.!:;?{}]");
 	        		if( response == null || response.statusCode()!=201) {
 	        			alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinodal, verifica tu conexión a internet.\nStatus: "+response.statusCode());
@@ -1007,7 +1009,7 @@ public class SampleController implements Initializable{
 	        			for(String src: listTelefonos.getItems()) {
 	        				
 	        				js.put("phone", src);
-	        				response = postRequest(0,"http://127.0.0.1:4040/api/sinoidales/addPhone/"+s[2],js);
+	        				response = postRequest(0,domain+"/api/sinoidales/addPhone/"+s[2],js);
 	        				if(response == null || response.statusCode() != 201) {
 	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinodal, verifica tu conexión a internet.\nStatus: "+response.statusCode());
 	    	            		alert.show();
@@ -1017,7 +1019,7 @@ public class SampleController implements Initializable{
 	        			for(String src:listCorreos.getItems()) {
 	        				js.clear();
 	        				js.put("email", src);
-	        				response = postRequest(0,"http://127.0.0.1:4040/api/sinoidales/addEmail/"+s[2],js);
+	        				response = postRequest(0,domain+"api/sinoidales/addEmail/"+s[2],js);
 	        				if(response == null || response.statusCode() != 201) {
 	        					alert=lc.runAlert(AlertType.ERROR, "ERROR SINOIDAL", "Hubo un error al momento de crear el sinodal, verifica tu conexión a internet.\nStatus: "+response.statusCode());
 	    	            		alert.show();
@@ -1049,12 +1051,12 @@ public class SampleController implements Initializable{
         	Optional<String> result = di.showAndWait();
         	
         	if(result.get().matches("auth")) {
-        		res = deleteRequest(0,"http://127.0.0.1:4040/api/certificates/actasSinoidales/delete/"+id_Acta);
+        		res = deleteRequest(0,domain+"api/certificates/actasSinoidales/delete/"+id_Acta);
         		if(res == null || res.statusCode() !=201) {
         			alert=lc.runAlert(AlertType.ERROR, "ERROR ELIMINAR ACTA", "Hubo un error al momento de eliminar el acta, verifica tu conexión a internet.\nStatus: "+res.statusCode());
         			alert.show();
         		}else {
-        			res = deleteRequest(0,"http://127.0.0.1:4040/api/certificates/"+id_Acta);
+        			res = deleteRequest(0,domain+"api/certificates/"+id_Acta);
         			if(res == null || res.statusCode() != 201) {
         				alert=lc.runAlert(AlertType.ERROR, "ERROR ELIMINAR ACTA", "Hubo un error al momento de eliminar el acta, verifica tu conexión a internet.\nStatus: "+res.statusCode());
                 		alert.show();
@@ -1136,7 +1138,7 @@ public class SampleController implements Initializable{
         		JSONObject json = new JSONObject();
         		json.put("date",datePickerCeremonia.getValue());
         		json.put("cicle", getCicle(datePickerCeremonia.getValue()));
-        		HttpResponse<String> res = postRequest(0,"http://127.0.0.1:4040/api/ceremonies",json);
+        		HttpResponse<String> res = postRequest(0,domain+"api/ceremonies",json);
         		if(res.statusCode()!=201) {
         			alert=lc.runAlert(AlertType.ERROR, "ERROR CEREMONIA", "Hubo un error al momento de crear la ceremonia, verifica tu conexión a internet\nStatus: "+res.statusCode());
             		alert.show();
@@ -1375,19 +1377,19 @@ public class SampleController implements Initializable{
     	//cbCeremonias.setPromptText("Selecciona la Ceremonia");
     	//cbSinoidales.setPromptText("Selecciona el sinoidal");
     	String sample;
-    	List<Sinoidales> sinoidales=handleResponseSinoidales("http://127.0.0.1:4040/api/sinoidales");
-    	List<Folder> folders = handleResponseFolder("http://127.0.0.1:4040/api/folders");
-    	List<Ceremonias> ceremonias=handleResponseCeremony("http://127.0.0.1:4040/api/ceremonies");
+    	List<Sinoidales> sinoidales=handleResponseSinoidales(domain+"api/sinoidales");
+    	List<Folder> folders = handleResponseFolder(domain+"api/folders");
+    	List<Ceremonias> ceremonias=handleResponseCeremony(domain+"api/ceremonies");
     	for(Folder f : folders) {
     		cbFolders.getItems().add(f.getId_folder().toString());
     	}
     	
     	for(Sinoidales s: sinoidales) {
-    		HttpResponse<String> rsp = getRequest(0,"http://localhost:4040/api/sinoidales/phone/"+s.getId_sinoidales());
+    		HttpResponse<String> rsp = getRequest(0,domain+"api/sinoidales/phone/"+s.getId_sinoidales());
     		if(rsp.statusCode()==201) {
     			String phone[]=rsp.body().split("[.!:;?{}\"]");
     			
-    			HttpResponse<String> rp = getRequest(0,"http://localhost:4040/api/sinoidales/email/"+s.getId_sinoidales());
+    			HttpResponse<String> rp = getRequest(0,domain+"api/sinoidales/email/"+s.getId_sinoidales());
     			if(rp.statusCode()==201) {
     				String email[] = rp.body().split("[!:;?{}\"]");
     				sample = s.getId_sinoidales()+"-"+s.getFirst_Name() + " " + s.getSecond_Name()+" || "+phone[5] + " || "+email[5];
@@ -1416,7 +1418,7 @@ public class SampleController implements Initializable{
     
     private void fillTableActas() throws JsonMappingException, JsonProcessingException, InterruptedException {
     	tableActas.getItems().clear();
-    	List<Actas> actas = handleResponseActas("http://127.0.0.1:4040/api/certificates");
+    	List<Actas> actas = handleResponseActas(domain+"api/certificates");
   		if(actas == null) {
   			lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
   		}else {
@@ -1431,7 +1433,7 @@ public class SampleController implements Initializable{
     
     private void fillTableSinoidales() throws JsonMappingException, JsonProcessingException, InterruptedException {
     	tableSinoidales.getItems().clear();
-    	List<Sinoidales> sinoidales=handleResponseSinoidales("http://127.0.0.1:4040/api/sinoidales");
+    	List<Sinoidales> sinoidales=handleResponseSinoidales(domain+"api/sinoidales");
     	for(Sinoidales s:sinoidales) {
   			tableSinoidales.getItems().add(s);	
   		}
@@ -1440,7 +1442,7 @@ public class SampleController implements Initializable{
     
     private void fillTableCeremony() throws JsonMappingException, JsonProcessingException, InterruptedException {
     	tableCeremonias.getItems().clear();
-    	List<Ceremonias> ceremonias=handleResponseCeremony("http://127.0.0.1:4040/api/ceremonies");
+    	List<Ceremonias> ceremonias=handleResponseCeremony(domain+"api/ceremonies");
     	for(Ceremonias s:ceremonias) {
   			s.setDate(splitData(s.getDate(), "T"));
   			tableCeremonias.getItems().add(s);
@@ -1449,7 +1451,7 @@ public class SampleController implements Initializable{
     
     private void filltableFolder() throws JsonMappingException, JsonProcessingException, InterruptedException {
     	tableFolders.getItems().clear();
-    	List<Folder> folders = handleResponseFolder("http://127.0.0.1:4040/api/folders");
+    	List<Folder> folders = handleResponseFolder(domain+"api/folders");
     	for(Folder f : folders) {
     		tableFolders.getItems().add(f);
     	}
@@ -1672,18 +1674,18 @@ public class SampleController implements Initializable{
                     	btnEliminarSinoidal.setDisable(false);
                     	try {
 							setComboboxActas();
-							List<Actas_Sinoidales> actas_sinoidales=handleResponseActasSinoidales("http://127.0.0.1:4040/api/certificates/actasSinoidales/"+selectedItem.getId_actas());
+							List<Actas_Sinoidales> actas_sinoidales=handleResponseActasSinoidales(domain+"api/certificates/actasSinoidales/"+selectedItem.getId_actas());
 					  		if(actas_sinoidales == null) {
 					  			lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
 					  		}else {
 					  			for(Actas_Sinoidales as:actas_sinoidales) {
-					  				List<Sinoidales> sinoidalesActa = handleResponseSinoidales("http://127.0.0.1:4040/api/sinoidales/search/"+as.getId_sinoidales_fk());
+					  				List<Sinoidales> sinoidalesActa = handleResponseSinoidales(domain+"api/sinoidales/search/"+as.getId_sinoidales_fk());
 					  				for(Sinoidales i : sinoidalesActa) {
-					  					HttpResponse<String> rsp = getRequest(0,"http://localhost:4040/api/sinoidales/phone/"+as.getId_sinoidales_fk());
+					  					HttpResponse<String> rsp = getRequest(0,domain+"api/sinoidales/phone/"+as.getId_sinoidales_fk());
 						  	    		if(rsp.statusCode()==201) {
 						  	    			String phone[]=rsp.body().split("[.!:;?{}\"]");
 						  	    			
-						  	    			HttpResponse<String> rp = getRequest(0,"http://localhost:4040/api/sinoidales/email/"+as.getId_sinoidales_fk());
+						  	    			HttpResponse<String> rp = getRequest(0,domain+"api/sinoidales/email/"+as.getId_sinoidales_fk());
 						  	    			if(rp.statusCode()==201) {
 						  	    				String email[] = rp.body().split("[!:;?{}\"]");
 						  	    				String sample = as.getId_sinoidales_fk()+"-"+i.getFirst_Name()+" "+i.getSecond_Name()+" || "+phone[5] + " || "+email[5];
@@ -1844,19 +1846,19 @@ public class SampleController implements Initializable{
                     	hActasFirmadas.setVisible(true);
                     	titleSinodal.setText("Editar Sinodal");
 						try {
-							List<Telephone> telephones = handleResponseTelephone("http://127.0.0.1:4040/api/sinoidales/phones/"+selectedItem.getId_sinoidales());
+							List<Telephone> telephones = handleResponseTelephone(domain+"api/sinoidales/phones/"+selectedItem.getId_sinoidales());
 	                    	for(Telephone t : telephones) {
 	                    		listTelefonos.getItems().add(t.getTelephone());
 	                    		
 	                    	}
-	                    	List<Email>emails = handleResponseEmail("http://127.0.0.1:4040/api/sinoidales/emails/"+selectedItem.getId_sinoidales());
+	                    	List<Email>emails = handleResponseEmail(domain+"api/sinoidales/emails/"+selectedItem.getId_sinoidales());
 							
 							for(Email em : emails) {
 	                    		listCorreos.getItems().add(em.getEmail());
 	                    		
 	                    	}
 							
-							HttpResponse<String> res = getRequest(0,"http://127.0.0.1:4040/api/certificates/signed/"+selectedItem.getId_sinoidales());
+							HttpResponse<String> res = getRequest(0,domain+"api/certificates/signed/"+selectedItem.getId_sinoidales());
 							if(res.statusCode() == 201) {
 								System.out.println(res.body());
 								String s[]=res.body().split("[.!:;?{}]");

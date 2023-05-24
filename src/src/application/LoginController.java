@@ -48,8 +48,9 @@ public class LoginController{
     private Button btnSignin;
 
     //URL
-	private static final String POST_URL = "http://127.0.0.1:4040/auth/signIn";
+	private static final String URL = "auth/signIn";
 	
+	private static final String domain = "http://127.0.0.1:4040/";
 	
     public static String token;
     
@@ -62,7 +63,7 @@ public class LoginController{
     	if(!jsonReq.isEmpty()) {
     		lblErrors.setText("");
     		
-    		HttpResponse<String> response=PostRequest(0,POST_URL);
+    		HttpResponse<String> response=PostRequest(0,domain+URL);
     		if(response == null) {
     			Alert alert=runAlert(AlertType.ERROR,"Error de Conexión","Revisa tu conexión a internet, no pudimos comunicarnos con el Servidor");
     			alert.showAndWait();
