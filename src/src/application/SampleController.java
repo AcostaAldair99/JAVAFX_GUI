@@ -710,57 +710,47 @@ public class SampleController implements Initializable{
         			alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
             		alert.show();
         		}else {
-        			i=1;
+        			i=1;	
         			for(String ids:listFirmas.getItems()) {
-        				if(ids.isBlank()) {
-        					i=listFirmas.getItems().size();
-        				}
         				String id[] = ids.split("-");
         				rps = putRequest(0,domain+"api/certificates/updateActasSignatures/"+id_Acta+"/"+id[0],json);
         				if(rps == null || rps.statusCode()!=201) {
         					alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar las firmas del acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
                     		alert.show();
-        				}else if(i>=listFirmas.getItems().size()){        					
-        					rps = putRequest(0,domain+"api/certificates/updateActa/addSignature/"+id_Acta+"/"+i,json);
-        					if(rps==null || rps.statusCode()!=201) {
-        						alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar las firmas del acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
-                        		alert.show();
-        					}else {
-        					if(listSinoidales.getItems().size()!=0) {
-        						
-        						
-        						rps = deleteRequest(0,domain+"api/certificates/actasSinoidales/delete/"+id_Acta);
-            					j=1;
-                    			if(rps == null || rps.statusCode()!=201) {
-                    				alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
-                            		alert.show();
-                    			}else {	
-                    				for(String s:listSinoidales.getItems()) {
-                    					String x[] =s.split("-");
-                            			rps = postRequest(0,domain+"api/certificates/addSinoidales/"+id_Acta+"/"+cbCeremonias.getValue()+"/"+x[0],json);
-                            			if(rps == null || rps.statusCode()!=201) {
-                            				alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
-                                    		alert.show();
-                            			}else if(j>=listSinoidales.getItems().size()) {
-                            				inicioPane.toFront();
-                            				fillTableActas();
-                            				alert=lc.runAlert(AlertType.INFORMATION, "Acta Actualizada", "El acta fue actualizada correctamente");
-                                    		alert.show();
-                            			}
-                            			j++;
-                    				}
-                    			}
-        					}else {
-        						inicioPane.toFront();
-                				fillTableActas();
-                				alert=lc.runAlert(AlertType.INFORMATION, "Acta Actualizada", "El acta fue actualizada correctamente");
-                        		alert.show();
-        						}
-        					}
         				}
+        			}
+        			
+        			if(listSinoidales.getItems().size() != 0) {
+        				rps = putRequest(0,domain+"api/certificates/updateActa/addSignature/"+id_Acta+"/"+listFirmas.getItems().size(),json);
+    					if(rps==null || rps.statusCode()!=201) {
+    						alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar las firmas del acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
+                    		alert.show();
+    					}else {
+    						rps = deleteRequest(0,domain+"api/certificates/actasSinoidales/delete/"+id_Acta);
+        					j=1;
+                			if(rps == null || rps.statusCode()!=201) {
+                				alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
+                        		alert.show();
+                			}else {	
+                				for(String s:listSinoidales.getItems()) {
+                					String x[] =s.split("-");
+                        			rps = postRequest(0,domain+"api/certificates/addSinoidales/"+id_Acta+"/"+cbCeremonias.getValue()+"/"+x[0],json);
+                        			if(rps == null || rps.statusCode()!=201) {
+                        				alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
+                                		alert.show();
+                        			}else if(j>=listSinoidales.getItems().size()) {
+                        				inicioPane.toFront();
+                        				fillTableActas();
+                        				alert=lc.runAlert(AlertType.INFORMATION, "Acta Actualizada", "El acta fue actualizada correctamente");
+                                		alert.show();
+                        			}
+                        			j++;
+                				}
+                			}
+    					}
+        			}
         				i++;
         			}
-        		}
         	}else if(result.get().matches("no auth")) {
         		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
     			alert.show();
@@ -1454,9 +1444,13 @@ public class SampleController implements Initializable{
     }
     
     private void filltableFolder() throws JsonMappingException, JsonProcessingException, InterruptedException {
+    	HttpResponse<String> res;
     	tableFolders.getItems().clear();
     	List<Folder> folders = handleResponseFolder(domain+"api/folders");
     	for(Folder f : folders) {
+    		res = getRequest(0,domain+"api/folder/count/"+f.getId_folder());
+    		String s[] = res.body().split("[.!:;?{}\"]");
+    		f.setActas_num(Integer.parseInt(s[4]));
     		tableFolders.getItems().add(f);
     	}
     }
