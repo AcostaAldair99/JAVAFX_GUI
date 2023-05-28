@@ -100,21 +100,6 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="btnFolder" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="" text="FOLDERS">
-                     <padding>
-                        <Insets left="50.0" />
-                     </padding>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <graphic>
-                        <ImageView fitHeight="22.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" style="visibility: true;" styleClass="icon">
-                           <image>
-                              <Image url="https://img.icons8.com/android/24/000000/box.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
                   <Button fx:id="btnConfiguracion" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="190.0" styleClass="buttonMenu" stylesheets="" text="CONFIGURACIÓN">
                      <padding>
                         <Insets left="50.0" />
@@ -518,7 +503,7 @@
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
                                                       </Button>
-                                                      <Button fx:id="btnCrearCeremonia1" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-update" stylesheets="" text="Modificar Fecha">
+                                                      <Button fx:id="btnModificarCeremonia" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-update" stylesheets="" text="Modificar Fecha">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
@@ -526,7 +511,7 @@
                                                             <Insets left="10.0" right="10.0" />
                                                          </HBox.margin>
                                                       </Button>
-                                                      <Button fx:id="btnCrearCeremonia11" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-danger" stylesheets="" text="Eliminar Ceremonia">
+                                                      <Button fx:id="btnEliminarCeremonia" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-danger" stylesheets="" text="Eliminar Ceremonia">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
@@ -570,7 +555,7 @@
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
                                                       </Button>
-                                                      <Button fx:id="btnCrearCeremonia11" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-update" stylesheets="" text="Modificar Folder">
+                                                      <Button fx:id="btnModificarFolder" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-update" stylesheets="" text="Modificar Folder">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
@@ -578,7 +563,7 @@
                                                             <Insets left="10.0" right="10.0" />
                                                          </HBox.margin>
                                                       </Button>
-                                                      <Button fx:id="btnCrearCeremonia111" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-danger" stylesheets="" text="Eliminar Folder">
+                                                      <Button fx:id="btnEliminarFolder" disable="true" mnemonicParsing="false" onAction="#handleClicks" prefHeight="37.0" prefWidth="133.0" styleClass="buttonMenu-danger" stylesheets="" text="Eliminar Folder">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>
@@ -611,7 +596,7 @@
                         </VBox>
                      </children>
                   </Pane>
-                  <Pane fx:id="foldersPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: yellow;">
+                  <Pane fx:id="foldersPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: yellow;" visible="false">
                      <children>
                         <Label text="FOLDERS" />
                      </children>
@@ -621,7 +606,7 @@
                         <Label text="CONFIGURACION" />
                      </children>
                   </Pane>
-                  <Pane fx:id="actasPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                  <Pane fx:id="actasPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" visible="false">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>
@@ -880,7 +865,7 @@
                            </children>
                         </VBox>
                      </children></Pane>
-                  <Pane fx:id="inicioPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="" StackPane.alignment="CENTER">
+                  <Pane fx:id="inicioPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="" visible="false" StackPane.alignment="CENTER">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>

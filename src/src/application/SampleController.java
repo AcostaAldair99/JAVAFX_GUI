@@ -42,6 +42,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 import models.Actas;
 import models.Actas_Sinoidales;
 import models.Ceremonias;
@@ -58,7 +59,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.time.Year;
 import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -107,10 +111,10 @@ public class SampleController implements Initializable{
 	private DatePicker datePickerCeremonia;
 	
 	@FXML
-	private Button btnCeremonia,btnCrearActa,btnAsignarSinoidal,btnEliminarSinoidal,btnCrearCeremonia;
+	private Button btnCeremonia,btnCrearActa,btnAsignarSinoidal,btnEliminarSinoidal,btnCrearCeremonia,btnModificarCeremonia,btnEliminarCeremonia;
     
 	@FXML
-	private Button btnFolder;
+	private Button btnFolder,btnModificarFolder,btnEliminarFolder;
 	
 	@FXML
 	private Button btnConfiguracion;
@@ -490,8 +494,85 @@ public class SampleController implements Initializable{
         	cbFilterAreaSinodal.getSelectionModel().select(0);
         	fillTableSinoidales();
         }
+        
+        if(actionEvent.getSource() == btnModificarFolder) {
+        	updateFolder();
+        }
+        
+        if(actionEvent.getSource() == btnEliminarFolder) {
+        	deleteFolder();
+        }
+        
+        if(actionEvent.getSource() == btnEliminarCeremonia) {
+        	deleteCeremonia();
+        }
+        
     }
+    
+    public void deleteCeremonia() {
+    	Ceremonias c = tableCeremonias.getSelectionModel().getSelectedItem();
+    	
+    }
+    
+    public void deleteFolder() throws IOException, InterruptedException {
+    	Folder f = tableFolders.getSelectionModel().getSelectedItem();
+    	if(f.getActas_num() == 0) {
+    		Dialog<String> validate = getValidateModal();
+        	Optional<String> result = validate.showAndWait();
+        	if(result.get().matches("auth")) {
+        		HttpResponse<String> res = deleteRequest(0,domain+"api/folders/"+f.getId_folder());
+        		if(res.statusCode() == 201) {
+        			setFormCeremonia();
+        			filltableFolder();
+        			alert=lc.runAlert(AlertType.INFORMATION, "Folder Eliminado", "Folder eliminado correctamente.");
+        			alert.show();
+        		}else {
+        			alert=lc.runAlert(AlertType.ERROR, "ERROR FOLDER", "Hubo un error al momento de eliminar la información\nError:"+res.statusCode());
+        			alert.show();
+        		}
+        	}else if(result.get().matches("no auth")) {
+        		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
+    			alert.show();
+        	}
+    	}else{
+    		alert=lc.runAlert(AlertType.INFORMATION, "ERROR FOLDER", "No se puede eliminar el folder ya que tiene actas asignadas.");
+			alert.show();
+    	}
+    	
+    	
+    	
+    }
+    
 
+    public void updateFolder() throws IOException, InterruptedException {
+    	if(validateComboBox(cbEstantes,"Estantes")) {
+    		Folder f = tableFolders.getSelectionModel().getSelectedItem();
+        	System.out.println("The id: "+f.getId_folder()+" the new case: "+ cbEstantes.getValue());
+        	JSONObject j = new JSONObject();
+        	Dialog<String> validate = getValidateModal();
+        	Optional<String> result = validate.showAndWait();
+        	if(result.get().matches("auth")) {
+        		HttpResponse<String> res = putRequest(0,domain+"api/folders/"+f.getId_folder()+"/"+cbEstantes.getValue(),j);
+        		if(res.statusCode() == 201) {
+        			setFormCeremonia();
+        			filltableFolder();
+        			alert=lc.runAlert(AlertType.INFORMATION, "Folder Actualizado", "Folder Actualizado con exito.");
+        			alert.show();
+        		}else {
+        			alert=lc.runAlert(AlertType.ERROR, "ERROR FOLDER", "Hubo un error al momento de actualizar la información\nError:"+res.statusCode());
+        			alert.show();
+        		}
+        	}else if(result.get().matches("no auth")) {
+        		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
+    			alert.show();
+        	}
+        	
+    	}
+    }
+    
+    
+    
+    
     public void searchSinodalInfo() throws JsonMappingException, JsonProcessingException, InterruptedException {
     	String filter = txtSearchSinodal.getText();
     	if(filter == null || filter.length() == 0 || filter.isBlank()) {
@@ -858,6 +939,15 @@ public class SampleController implements Initializable{
     	return false;
     }
     
+    private boolean checkCeremoniasList(String date) {
+    	for(Ceremonias c: tableCeremonias.getItems()) {
+    		if(c.getDate().contains(date)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
     private void createActa() throws InterruptedException, IOException{
     	if(validateTextField(txtNameStudent,"El valor del campo nombre es nulo o numerico","[a-zA-Z\u00f1\u00d1\s]+",255) && 
     			validateTextField(txtApellidosStudent,"El valor del campo apellidos es nulo o numerico","[a-zA-Z\u00f1\u00d1\s]+",255) &&
@@ -1124,26 +1214,35 @@ public class SampleController implements Initializable{
     
     
     private void createCeremonia() throws InterruptedException, IOException {
-    	if(datePickerCeremonia.getValue()!=null) {
-    		Dialog<String> di = getValidateModal();
-    		Optional<String> result = di.showAndWait();
-        	if(result.get().matches("auth")) {
-        		JSONObject json = new JSONObject();
-        		json.put("date",datePickerCeremonia.getValue());
-        		json.put("cicle", getCicle(datePickerCeremonia.getValue()));
-        		HttpResponse<String> res = postRequest(0,domain+"api/ceremonies",json);
-        		if(res.statusCode()!=201) {
-        			alert=lc.runAlert(AlertType.ERROR, "ERROR CEREMONIA", "Hubo un error al momento de crear la ceremonia, verifica tu conexión a internet\nStatus: "+res.statusCode());
-            		alert.show();
-        		}else {
-    				fillTableCeremony();
-        			alert=lc.runAlert(AlertType.ERROR, "CEREMONIA CREADA", "Se creo la ceremonia de manera exitosa !\nComienza a asignar actas a la nueva ceremonia");
-            		alert.show();
-        		}
-        	}else if(result.get().matches("no auth")) {
-        		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
-    			alert.show();
-        	}
+    	String date = datePickerCeremonia.getValue().toString();
+    	if(date != null) {
+    		if(!checkCeremoniasList(date)) {
+    			Dialog<String> di = getValidateModal();
+        		Optional<String> result = di.showAndWait();
+            	if(result.get().matches("auth")) {
+            		JSONObject json = new JSONObject();
+            		json.put("date",datePickerCeremonia.getValue());
+            		json.put("cicle", getCicle(datePickerCeremonia.getValue()));
+            		HttpResponse<String> res = postRequest(0,domain+"api/ceremonies",json);
+            		if(res.statusCode()!=201) {
+            			alert=lc.runAlert(AlertType.ERROR, "ERROR CEREMONIA", "Hubo un error al momento de crear la ceremonia, verifica tu conexión a internet\nStatus: "+res.statusCode());
+                		alert.show();
+            		}else {
+        				fillTableCeremony();
+            			alert=lc.runAlert(AlertType.ERROR, "CEREMONIA CREADA", "Se creo la ceremonia de manera exitosa !\nComienza a asignar actas a la nueva ceremonia");
+                		alert.show();
+                		datePickerCeremonia.setValue(null);
+            		}
+            	}else if(result.get().matches("no auth")) {
+            		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
+        			alert.show();
+            	}
+    		}else {
+    			alert=lc.runAlert(AlertType.ERROR, "ERROR FECHA", "Ingresa un valor en el campo fecha ya se encuentra registrado.");
+        		alert.show();
+    		}
+    		
+    		
     	}else {
     		alert=lc.runAlert(AlertType.ERROR, "ERROR FECHA", "Ingresa un valor en el campo fecha");
     		alert.show();
@@ -1151,11 +1250,13 @@ public class SampleController implements Initializable{
     }
     
 	private String getCicle(LocalDate date_limit){
-		ChronoLocalDate dt= LocalDate.parse("2023-06-01");
+		Year currentYear = Year.now();
+		String currentDateLimit = currentYear.toString()+"-06-01";
+		ChronoLocalDate dt= LocalDate.parse(currentDateLimit);
     	if(date_limit.isAfter(dt)) {
-    		return "ENE-JUN";
-    	}else {
     		return "AGO-DIC";
+    	}else {
+    		return "ENE-JUN";
     	}
     }
     
@@ -1250,6 +1351,12 @@ public class SampleController implements Initializable{
     }
     
     private void setFormCeremonia() {
+    	btnModificarCeremonia.setDisable(true);
+		btnEliminarCeremonia.setDisable(true);
+		btnModificarFolder.setDisable(true);
+		btnEliminarFolder.setDisable(true);
+		
+		
     	cbEstantes.getItems().clear();
     	for(int i=1;i<=10;i++) {
     		cbEstantes.getItems().add(String.valueOf(i));
@@ -1270,31 +1377,31 @@ public class SampleController implements Initializable{
 
         };
         datePickerCeremonia.setDayCellFactory(callB);
-    	
-       /* datePickerCeremonia.setConverter(new StringConverter<LocalDate>() {
-        	String patt = "yyyy-MM-dd";
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(patt);
-			@Override
-			public LocalDate fromString(String string) {
-				if (string != null && !string.isEmpty()) {
-		             return LocalDate.parse(string, dateFormatter);
-		         } else {
-		             return null;
-		         }
-				
-			}
-			
-			@Override
-			public String toString(LocalDate date) {
-				if (date != null) {
-		             return dateFormatter.format(date);
-		         } else {
-		             return "";
-		         }
-			}
-
-        });*/
         
+        datePickerCeremonia.setConverter(new StringConverter<LocalDate>()
+        {
+            private DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            @Override
+            public String toString(LocalDate localDate)
+            {
+                if(localDate==null)
+                    return "";
+                return dateTimeFormatter.format(localDate);
+            }
+
+            @Override
+            public LocalDate fromString(String dateString)
+            {
+                if(dateString==null || dateString.trim().isEmpty())
+                {
+                    return null;
+                }
+                return LocalDate.parse(dateString,dateTimeFormatter);
+            }
+        });
+
+        datePickerCeremonia.setValue(null);
     }
     
     private void deleteSelectedSinoidal() {
@@ -1858,7 +1965,7 @@ public class SampleController implements Initializable{
 							
 							HttpResponse<String> res = getRequest(0,domain+"api/certificates/signed/"+selectedItem.getId_sinoidales());
 							if(res.statusCode() == 201) {
-								System.out.println(res.body());
+								//System.out.println(res.body());
 								String s[]=res.body().split("[.!:;?{}]");
 								lblNumberActas.setText(s[2]);
 							}
@@ -1903,6 +2010,22 @@ public class SampleController implements Initializable{
 
   
     	tableCeremonias.getColumns().addAll(idCeremony,dateLimit,cicleColumn);
+    	
+    	tableCeremonias.addEventHandler(MouseEvent.MOUSE_CLICKED, (e)->{
+			if(e.getClickCount()==2) {
+				btnModificarCeremonia.setDisable(false);
+				btnEliminarCeremonia.setDisable(false);
+        		Ceremonias selectedItem = tableCeremonias.getSelectionModel().getSelectedItem();	
+        		String dateF = selectedItem.getDate().replace("-","/");
+        		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        		LocalDate date = LocalDate.parse(dateF, formatter);
+        		System.out.println(date); 
+        		
+        		datePickerCeremonia.setValue(date);
+			}
+		});
+    	
+    	
     }
 
 	@SuppressWarnings("unchecked")
@@ -1931,6 +2054,14 @@ public class SampleController implements Initializable{
 		actasNumColumn.setMinWidth(140);
 		
 		tableFolders.getColumns().addAll(idFolder,caseColumn,actasNumColumn);
+		tableFolders.addEventHandler(MouseEvent.MOUSE_CLICKED, (e)->{
+			if(e.getClickCount()==2) {
+				btnModificarFolder.setDisable(false);
+				btnEliminarFolder.setDisable(false);
+        		Folder selectedItem = tableFolders.getSelectionModel().getSelectedItem();
+        		cbEstantes.getSelectionModel().select(selectedItem.getId_case().toString());
+			}
+		});
 		
 	}
 	
