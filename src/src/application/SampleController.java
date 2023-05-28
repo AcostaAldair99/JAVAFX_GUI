@@ -274,20 +274,23 @@ public class SampleController implements Initializable{
     	
     	cbFilterSinodal.getSelectionModel().selectedItemProperty().addListener((options,oldValue,newValue)->{
     		if(newValue != null) {
-    			String id[] = newValue.split("-");
-    			try {
-    				tableActas.getItems().clear();
-    				List<Actas_Sinoidales> response = handleResponseActasSinoidales(domain+"api/certificates/actasSinoidales/sinoidales/"+id[0]);
-					if(response!=null) {
-						for(Actas_Sinoidales as:response) {
-							List<Actas> res = handleResponseActas(domain+"api/certificates/acta/"+as.getId_actas_fk());
-							tableActas.getItems().addAll(res);
-						}
-					}
-				} catch (InterruptedException | JsonProcessingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+    			if(newValue != "Sinodal") {
+    				String id[] = newValue.split("-");
+        			try {
+        				tableActas.getItems().clear();
+        				List<Actas_Sinoidales> response = handleResponseActasSinoidales(domain+"api/certificates/actasSinoidales/sinoidales/"+id[0]);
+    					if(response!=null) {
+    						for(Actas_Sinoidales as:response) {
+    							List<Actas> res = handleResponseActas(domain+"api/certificates/acta/"+as.getId_actas_fk());
+    							tableActas.getItems().addAll(res);
+    						}
+    					}
+    				} catch (InterruptedException | JsonProcessingException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}
+    			}
+    			
     		}
     	});    	
     	
@@ -666,7 +669,7 @@ public class SampleController implements Initializable{
     	        		JSONObject json = new JSONObject();
         	        	json.put("user", user);
         	        	json.put("pass", text1.getText());
-						HttpResponse<String> resp = postRequest(0,domain+"/auth/signIn/validate",json);
+						HttpResponse<String> resp = postRequest(0,domain+"auth/signIn/validate",json);
 						if(resp.statusCode()==201) {
 							return "auth";
 						}else {
@@ -1257,6 +1260,7 @@ public class SampleController implements Initializable{
     }
     
     private void setFormCeremonia() {
+    	cbEstantes.getItems().clear();
     	for(int i=1;i<=10;i++) {
     		cbEstantes.getItems().add(String.valueOf(i));
     	}
