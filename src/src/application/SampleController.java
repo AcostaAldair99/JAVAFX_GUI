@@ -1056,16 +1056,19 @@ public class SampleController implements Initializable{
                 			//System.out.println(res);
                 		}
             			if(res.statusCode() == 201) {
-            				res = putRequest(0,domain+"api/folders/addActa/"+cbFolders.getValue(),json);
+            				/*res = putRequest(0,domain+"api/folders/addActa/"+cbFolders.getValue(),json);
             				if(res.statusCode()!=201) {
             					alert=lc.runAlert(AlertType.ERROR, "ERROR ACTA", "Hubo un error al momento de crear el acta, verifica tu conexión a internet\nStatus: "+res.statusCode());
                         		alert.show();
-            				}else {
+            				}else {*/
             					inicioPane.toFront();
             					fillTableActas();
             					alert=lc.runAlert(AlertType.INFORMATION, "Acta Creada", "Nueva Acta Creada Exitosamente.");
                         		alert.show();
-            				}
+            				//}
+            			}else {
+            				alert=lc.runAlert(AlertType.ERROR, "ERROR ACTA", "Hubo un error al momento de crear el acta, verifica tu conexión a internet\nStatus: "+res.statusCode());
+                    		alert.show();
             			}
             		}else {
             			alert=lc.runAlert(AlertType.ERROR, "ERROR ACTA", "Hubo un error al momento de crear el acta, verifica tu conexión a internet\nStatus: "+res.statusCode());
@@ -1483,6 +1486,7 @@ public class SampleController implements Initializable{
     		Alert alert=lc.runAlert(AlertType.CONFIRMATION, "Eliminar Sinoidal", "¿Seguro que quieres desasignar esta acta al sinoidal?");
         	Optional<ButtonType> result = alert.showAndWait();
         	if (result.get() == ButtonType.OK){
+        		cbSinoidales.setDisable(false);
         		cbSinoidales.getItems().add(selected.getSelectedItem());
         		listSinoidales.getItems().remove(selected.getSelectedIndex());
         		if(listSinoidales.getItems().size() == 0 ) {
@@ -1897,21 +1901,25 @@ public class SampleController implements Initializable{
 					  				btnAgregarFirmaSinoidal.setDisable(true);
 					  				btnEliminarActa.setDisable(true);
 					  				cbCeremonias.setDisable(true);
-					  			}
-					  			
-					  			getStatus(listFirmas);
+			                    	btnCrearActa.setVisible(false);
+					  			}else {
+					  					
+					  				cbSinoidales.setDisable(true);
+						  	
+						  			cbFolders.getSelectionModel().select(String.valueOf(selectedItem.getId_Folder_fk()));
+			                    	cbCeremonias.getSelectionModel().select(selectedItem.getId_ceremony_fk().toString());
+			                    	cbCarreras.getSelectionModel().select(selectedItem.getDegree());
+			                    	cbCarreras.setDisable(true);
+			                    	btnActualizarActa.setVisible(true);
+			                    	btnEliminarActa.setVisible(true);
+			                    	btnCrearActa.setVisible(false);
+			                    	listSinoidales.setDisable(false);
+					  				btnAgregarFirmaSinoidal.setDisable(false);
 
-					  		
-					  			hStatus.setVisible(true);
+					  			} 	
+					  			getStatus(listFirmas);
 					  			vContainerSigns.setVisible(true);
-					  			cbFolders.getSelectionModel().select(String.valueOf(selectedItem.getId_Folder_fk()));
-		                    	cbCeremonias.getSelectionModel().select(selectedItem.getId_ceremony_fk().toString());
-		                    	cbCarreras.getSelectionModel().select(selectedItem.getDegree());
-		                    	cbCarreras.setDisable(true);
-		                    	btnActualizarActa.setVisible(true);
-		                    	btnEliminarActa.setVisible(true);
-		                    	btnCrearActa.setVisible(false);
-		                    	listSinoidales.setDisable(false);
+					  			hStatus.setVisible(true);
 					  		}
 						} catch (JsonProcessingException | InterruptedException e1) {
 							lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
@@ -2010,7 +2018,7 @@ public class SampleController implements Initializable{
                     	listTelefonos.getItems().clear();
                     	listCorreos.getItems().clear();
                     	addSinoidales.toFront();
-                    	//id_Sinoidal = selectedItem.getId_sinoidales();
+                    	id_Sinoidal = selectedItem.getId_sinoidales();
                     	txtNombreSinoidal.setText(selectedItem.getFirst_Name());
                     	txtApellidosSinoidal.setText(selectedItem.getSecond_Name());
                     	txtIdSinoidal.setText(selectedItem.getId_professor().toString());
