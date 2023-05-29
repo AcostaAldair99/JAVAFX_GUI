@@ -507,10 +507,84 @@ public class SampleController implements Initializable{
         	deleteCeremonia();
         }
         
+        if(actionEvent.getSource() == btnModificarCeremonia) {
+        	updateCeremonia();
+        }
     }
     
-    public void deleteCeremonia() {
-    	Ceremonias c = tableCeremonias.getSelectionModel().getSelectedItem();
+    public void updateCeremonia() throws IOException, InterruptedException {
+    	Dialog<String> validate = getValidateModal();
+    	Optional<String> result = validate.showAndWait();
+    	if(result.get().matches("auth")) {
+    		Ceremonias c = tableCeremonias.getSelectionModel().getSelectedItem();
+        	HttpResponse<String> htp = getRequest(0,domain+"api/ceremonies/gotAsigned/"+c.getId_ceremony());
+        	if(htp.statusCode() == 201) {
+        		String s[]=htp.body().split("[.!:;?{}]");
+        		int exist = Integer.parseInt(s[2]);
+        		if(exist == 0 ) {
+        			JSONObject json = new JSONObject();
+            		json.put("date",datePickerCeremonia.getValue());
+            		json.put("cicle", getCicle(datePickerCeremonia.getValue()));
+            		HttpResponse<String> a = putRequest(0,domain+"api/ceremonies/"+c.getId_ceremony(),json);
+            		if(a.statusCode() != 201) {
+            			alert=lc.runAlert(AlertType.ERROR, "ERROR CEREMONIA", "Error al momento de actualizar la información.\nStatus:"+a.statusCode());
+            			alert.show();
+            		}else {
+            			setFormCeremonia();
+            			fillTableCeremony();
+            			alert=lc.runAlert(AlertType.INFORMATION, "Ceremonia Actualizada", "Ceremonia actualizada correctamente.");
+            			alert.show();
+            		}
+            		
+        		}else {
+        			alert=lc.runAlert(AlertType.ERROR, "ERROR CEREMONIA", "No podemos modificar esta ceremonia ya que cuenta con actas ya finalizadas.");
+        			alert.show();
+        		}
+        	}else {
+        		alert=lc.runAlert(AlertType.ERROR, "ERROR CEREMONIA", "Error de conexión verifica tu internet.\nStatus:"+htp.statusCode());
+    			alert.show();
+        	}
+    	}else if(result.get().matches("no auth")) {
+    		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
+			alert.show();
+    	}
+    
+    }
+    
+    
+    public void deleteCeremonia() throws InterruptedException, IOException {
+    	Dialog<String> validate = getValidateModal();
+    	Optional<String> result = validate.showAndWait();
+    	if(result.get().matches("auth")) {
+    		Ceremonias c = tableCeremonias.getSelectionModel().getSelectedItem();
+        	HttpResponse<String> htp = getRequest(0,domain+"api/ceremonies/gotAsigned/"+c.getId_ceremony());
+        	if(htp.statusCode() == 201) {
+        		String s[]=htp.body().split("[.!:;?{}]");
+        		int exist = Integer.parseInt(s[2]);
+        		if(exist == 0 ) {
+        			HttpResponse<String> htpt = deleteRequest(0,domain+"api/ceremonies/"+c.getId_ceremony());
+            		if(htpt.statusCode() != 201) {
+            			alert=lc.runAlert(AlertType.ERROR, "ERROR CEREMONIA", "Error al momento de eliminar la información.\nStatus:"+htpt.statusCode());
+            			alert.show();
+            		}else {
+            			setFormCeremonia();
+            			fillTableCeremony();
+            			alert=lc.runAlert(AlertType.INFORMATION, "Ceremonia Eliminada", "Ceremonia eliminada correctamente.");
+            			alert.show();
+            		}
+        		}else {
+        			alert=lc.runAlert(AlertType.ERROR, "ERROR CEREMONIA", "No podemos eliminar esta ceremonia ya que cuenta con actas ya finalizadas.");
+        			alert.show();
+        		}
+        	}else {
+        		alert=lc.runAlert(AlertType.ERROR, "ERROR CEREMONIA", "Error de conexión verifica tu internet.\nStatus:"+htp.statusCode());
+    			alert.show();
+        	}
+    	}else if(result.get().matches("no auth")) {
+    		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
+			alert.show();
+    	}
+    	
     	
     }
     
@@ -1215,7 +1289,7 @@ public class SampleController implements Initializable{
     
     private void createCeremonia() throws InterruptedException, IOException {
     	String date = datePickerCeremonia.getValue().toString();
-    	if(date != null) {
+    	if(date != null || !date.isEmpty()) {
     		if(!checkCeremoniasList(date)) {
     			Dialog<String> di = getValidateModal();
         		Optional<String> result = di.showAndWait();
