@@ -449,7 +449,7 @@
                            <children>
                               <Pane prefHeight="99.0" prefWidth="874.0">
                                  <children>
-                                    <Label layoutY="58.0" style="-fx-background-color: white;" stylesheets="" text="CEREMONIAS">
+                                    <Label layoutX="14.0" layoutY="58.0" style="-fx-background-color: white;" stylesheets="" text="CEREMONIAS">
                                        <font>
                                           <Font size="26.0" />
                                        </font>
@@ -606,7 +606,7 @@
                         <Label text="CONFIGURACION" />
                      </children>
                   </Pane>
-                  <Pane fx:id="actasPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" visible="false">
+                  <Pane fx:id="actasPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>
@@ -865,7 +865,7 @@
                            </children>
                         </VBox>
                      </children></Pane>
-                  <Pane fx:id="inicioPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="" visible="false" StackPane.alignment="CENTER">
+                  <Pane fx:id="inicioPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" stylesheets="" StackPane.alignment="CENTER">
                      <children>
                         <VBox prefHeight="576.0" prefWidth="874.0">
                            <children>

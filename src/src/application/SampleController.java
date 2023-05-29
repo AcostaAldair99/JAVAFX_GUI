@@ -62,7 +62,6 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -852,7 +851,7 @@ public class SampleController implements Initializable{
     
    //Check update acta 
    private void updateActa( ) throws InterruptedException, IOException {
-    	int i,j;     	
+    	int j;     	
     	if(validateListSinodales("No se han asignado todos los 3 sinodales o firmas necesariass para crear el Acta")) {
     		Dialog<String> validate = getValidateModal();
         	Optional<String> result = validate.showAndWait();
@@ -865,7 +864,6 @@ public class SampleController implements Initializable{
         			alert=lc.runAlert(AlertType.ERROR, "ERROR Acta", "Hubo un error al momento de actualizar el acta, verifica tu conexión a internet.\nStatus: "+rps.statusCode());
             		alert.show();
         		}else {
-        			i=1;	
         			for(String ids:listFirmas.getItems()) {
         				String id[] = ids.split("-");
         				rps = putRequest(0,domain+"api/certificates/updateActasSignatures/"+id_Acta+"/"+id[0],json);
@@ -904,7 +902,6 @@ public class SampleController implements Initializable{
                 			}
     					}
         			}
-        				i++;
         			}
         	}else if(result.get().matches("no auth")) {
         		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
@@ -1288,7 +1285,6 @@ public class SampleController implements Initializable{
     
     
     private void createCeremonia() throws InterruptedException, IOException {
-    	String date;
     	if(datePickerCeremonia.getValue() != null) {
     		if(!datePickerCeremonia.getValue().toString().isBlank()) {
     			if(!checkCeremoniasList(datePickerCeremonia.getValue().toString())) {
@@ -1601,8 +1597,13 @@ public class SampleController implements Initializable{
   			lc.runAlert(AlertType.ERROR,"Error de Conexion","Revisa tu conexión");
   		}else {
   			for(Actas a:actas) {
-  	  			a.setDate_limit_fk(splitData(a.getDate_limit_fk(),"T"));
-  	  			tableActas.getItems().add(a);
+  				HttpResponse<String> data = getRequest(0,domain+"api/folder/stand/"+a.getId_Folder_fk());
+  				if(data.statusCode() == 201) {
+  	        		String s[]=data.body().split("[.!:;?{}]");
+  	        		a.setId_ceremony_fk(new BigInteger(s[2]));
+  	        		a.setDate_limit_fk(splitData(a.getDate_limit_fk(),"T"));
+  	  	  			tableActas.getItems().add(a);
+  				}
   	  		}
   		}
   		
@@ -1814,14 +1815,14 @@ public class SampleController implements Initializable{
     	});
     	
     	
-    	TableColumn  dateLimitColumn= new TableColumn("Fecha Limite");
+    	TableColumn  dateLimitColumn= new TableColumn("Fecha Ceremonia");
     	dateLimitColumn.setCellValueFactory(new PropertyValueFactory<>("date_limit_fk"));
     	dateLimitColumn.setStyle( "-fx-alignment: center;");
     	dateLimitColumn.setSortable(false);
     	dateLimitColumn.setResizable(false);
     	dateLimitColumn.setMinWidth(100);
     	
-    	TableColumn  ceremonyColumn= new TableColumn("# Ceremonia");
+    	TableColumn  ceremonyColumn= new TableColumn("Estante");
     	ceremonyColumn.setCellValueFactory(new PropertyValueFactory<>("id_ceremony_fk"));
     	ceremonyColumn.setStyle( "-fx-alignment: center;");
     	ceremonyColumn.setSortable(false);
