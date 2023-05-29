@@ -1288,35 +1288,38 @@ public class SampleController implements Initializable{
     
     
     private void createCeremonia() throws InterruptedException, IOException {
-    	String date = datePickerCeremonia.getValue().toString();
-    	if(date != null || !date.isEmpty()) {
-    		if(!checkCeremoniasList(date)) {
-    			Dialog<String> di = getValidateModal();
-        		Optional<String> result = di.showAndWait();
-            	if(result.get().matches("auth")) {
-            		JSONObject json = new JSONObject();
-            		json.put("date",datePickerCeremonia.getValue());
-            		json.put("cicle", getCicle(datePickerCeremonia.getValue()));
-            		HttpResponse<String> res = postRequest(0,domain+"api/ceremonies",json);
-            		if(res.statusCode()!=201) {
-            			alert=lc.runAlert(AlertType.ERROR, "ERROR CEREMONIA", "Hubo un error al momento de crear la ceremonia, verifica tu conexión a internet\nStatus: "+res.statusCode());
-                		alert.show();
-            		}else {
-        				fillTableCeremony();
-            			alert=lc.runAlert(AlertType.ERROR, "CEREMONIA CREADA", "Se creo la ceremonia de manera exitosa !\nComienza a asignar actas a la nueva ceremonia");
-                		alert.show();
-                		datePickerCeremonia.setValue(null);
-            		}
-            	}else if(result.get().matches("no auth")) {
-            		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
-        			alert.show();
-            	}
+    	String date;
+    	if(datePickerCeremonia.getValue() != null) {
+    		if(!datePickerCeremonia.getValue().toString().isBlank()) {
+    			if(!checkCeremoniasList(datePickerCeremonia.getValue().toString())) {
+        			Dialog<String> di = getValidateModal();
+            		Optional<String> result = di.showAndWait();
+                	if(result.get().matches("auth")) {
+                		JSONObject json = new JSONObject();
+                		json.put("date",datePickerCeremonia.getValue());
+                		json.put("cicle", getCicle(datePickerCeremonia.getValue()));
+                		HttpResponse<String> res = postRequest(0,domain+"api/ceremonies",json);
+                		if(res.statusCode()!=201) {
+                			alert=lc.runAlert(AlertType.ERROR, "ERROR CEREMONIA", "Hubo un error al momento de crear la ceremonia, verifica tu conexión a internet\nStatus: "+res.statusCode());
+                    		alert.show();
+                		}else {
+            				fillTableCeremony();
+                			alert=lc.runAlert(AlertType.ERROR, "CEREMONIA CREADA", "Se creo la ceremonia de manera exitosa !\nComienza a asignar actas a la nueva ceremonia");
+                    		alert.show();
+                    		datePickerCeremonia.setValue(null);
+                		}
+                	}else if(result.get().matches("no auth")) {
+                		alert=lc.runAlert(AlertType.INFORMATION, "NO VALIDADO", "El movimiento no fue validado, verifica tu contraseña.");
+            			alert.show();
+                	}
+        		}else {
+        			alert=lc.runAlert(AlertType.ERROR, "ERROR FECHA", "Ingresa un valor en el campo fecha ya se encuentra registrado.");
+            		alert.show();
+        		}
     		}else {
-    			alert=lc.runAlert(AlertType.ERROR, "ERROR FECHA", "Ingresa un valor en el campo fecha ya se encuentra registrado.");
+    			alert=lc.runAlert(AlertType.ERROR, "ERROR FECHA", "Ingresa un valor en el campo fecha");
         		alert.show();
     		}
-    		
-    		
     	}else {
     		alert=lc.runAlert(AlertType.ERROR, "ERROR FECHA", "Ingresa un valor en el campo fecha");
     		alert.show();
